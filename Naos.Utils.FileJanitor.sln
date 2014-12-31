@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.Utils.FileJanitor", "Naos.Utils.FileJanitor\Naos.Utils.FileJanitor.csproj", "{14C44B90-3132-4FC9-B69F-9A5FD87D6BC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.Utils.FileJanitor.Test", "..\Naos.Utils.FileJanitor.Test\Naos.Utils.FileJanitor.Test.csproj", "{BAF88789-58CD-44B8-B642-0919CE05F760}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.Utils.FileJanitor.Test", "Naos.Utils.FileJanitor.Test\Naos.Utils.FileJanitor.Test.csproj", "{BAF88789-58CD-44B8-B642-0919CE05F760}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
