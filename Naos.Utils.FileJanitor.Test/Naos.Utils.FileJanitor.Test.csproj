@@ -49,7 +49,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Naos.Utils.FileJanitor\Naos.Utils.FileJanitor\Naos.Utils.FileJanitor.csproj">
+    <ProjectReference Include="..\Naos.Utils.FileJanitor\Naos.Utils.FileJanitor.csproj">
       <Project>{14c44b90-3132-4fc9-b69f-9a5fd87d6bc3}</Project>
       <Name>Naos.Utils.FileJanitor</Name>
     </ProjectReference>
