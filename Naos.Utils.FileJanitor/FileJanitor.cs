@@ -46,13 +46,16 @@
                 File.Delete(fileToDelete);
             }
 
-            foreach (var directoryPath in Directory.GetDirectories(rootPath, "*", searchOptions))
+            if (deleteEmptyDirectories)
             {
-                var directory = new DirectoryInfo(directoryPath);
-                if (!directory.GetFiles().Any())
+                foreach (var directoryPath in Directory.GetDirectories(rootPath, "*", searchOptions))
                 {
-                    Console.WriteLine("Directory: " + directoryPath + " is being removed because it's empty.");
-                    directory.Delete(recursive);
+                    var directory = new DirectoryInfo(directoryPath);
+                    if (!directory.GetFiles().Any())
+                    {
+                        Console.WriteLine("Directory: " + directoryPath + " is being removed because it's empty.");
+                        directory.Delete(recursive);
+                    }
                 }
             }
         }
