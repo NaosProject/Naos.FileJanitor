@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Program.cs" company="Naos">
-//   Copyright 2014 Naos LLC
+//   Copyright 2015 Naos
 // </copyright>
 // <summary>
 //   The program.
