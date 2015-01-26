@@ -1,4 +1,10 @@
-﻿namespace Naos.Utils.FileJanitor
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="FileJanitorConsoleHarness.cs" company="Naos">
+//   Copyright 2015 Naos
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Naos.FileJanitor
 {
     using System;
     using System.Linq;
@@ -14,8 +20,7 @@
             [Required] [Aliases("")] [Description("The root path to evaluate (must be a directory).")] string rootPath,
             [Required] [Aliases("")] [Description("The time to retain files (in format dd:hh:mm).")] string retentionWindow,
             [DefaultValue(true)] [Aliases("")] [Description("Whether or not to evaluate files recursively on the path.")] bool recursive,
-            [DefaultValue(false)] [Aliases("")] [Description("Whether or not to delete directories that are or become empty during cleanup.")] bool
-                deleteEmptyDirectories,
+            [DefaultValue(false)] [Aliases("")] [Description("Whether or not to delete directories that are or become empty during cleanup.")] bool deleteEmptyDirectories,
             [DefaultValue(FileJanitor.DateRetrievalStrategy.LastUpdateDate)] [Aliases("")] [Description("The date retrieval strategy to use.")] FileJanitor.DateRetrievalStrategy dateRetrievalStrategy)
         {
             var retentionWindowTimeSpan = FileJanitorConsoleHarness.GetTimeSpanFromDayHourMinuteColonDelimited(retentionWindow);
