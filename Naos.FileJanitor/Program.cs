@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Naos.Utils.FileJanitor
+namespace Naos.FileJanitor
 {
     using System;
 

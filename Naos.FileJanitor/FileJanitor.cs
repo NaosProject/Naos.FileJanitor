@@ -1,4 +1,10 @@
-﻿namespace Naos.Utils.FileJanitor
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="FileJanitor.cs" company="Naos">
+//   Copyright 2015 Naos
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Naos.FileJanitor
 {
     using System;
     using System.Collections.Generic;
@@ -7,11 +13,23 @@
 
     public static class FileJanitor
     {
-        public enum DateRetrievalStrategy { 
-            CreateDate, 
+        public enum DateRetrievalStrategy
+        {
+            /// <summary>
+            /// Use the create date of the item when evaluating.
+            /// </summary>
+            CreateDate,
+
+            /// <summary>
+            /// Use the last update date of the item when evaluating.
+            /// </summary>
             LastUpdateDate,
+
+            /// <summary>
+            /// Use the last access date of the item when evaluating.
+            /// </summary>
             LastAccessDate
-        };
+        }
 
         public static void Cleanup(
             string rootPath, 

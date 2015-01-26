@@ -7,8 +7,8 @@
     <ProjectGuid>{14C44B90-3132-4FC9-B69F-9A5FD87D6BC3}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Naos.Utils.FileJanitor</RootNamespace>
-    <AssemblyName>Naos.Utils.FileJanitor</AssemblyName>
+    <RootNamespace>Naos.FileJanitor</RootNamespace>
+    <AssemblyName>Naos.FileJanitor</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
