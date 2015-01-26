@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Program.cs" company="Naos LLC">
+// <copyright file="Program.cs" company="Naos">
 //   Copyright 2014 Naos LLC
 // </copyright>
 // <summary>
