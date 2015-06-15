@@ -6,6 +6,7 @@
 
 namespace Naos.FileJanitor.MessageBus.Handlers
 {
+    using System.Collections.Generic;
     using System.IO;
 
     using Amazon;
@@ -20,7 +21,7 @@ namespace Naos.FileJanitor.MessageBus.Handlers
     /// <summary>
     /// Message handler to store files in S3.
     /// </summary>
-    public class StoreFileInS3MessageHandler : IHandleMessages<StoreFileInS3Message>
+    public class StoreFileInS3MessageHandler : IHandleMessages<StoreFileInS3Message>, IShareFilePath
     {
         /// <inheritdoc />
         public void Handle(StoreFileInS3Message message)
@@ -32,7 +33,12 @@ namespace Naos.FileJanitor.MessageBus.Handlers
                 var client = new AmazonS3Client(settings.UploadAccessKey, settings.UploadSecretKey, regionEndpoint);
                 var transferUtility = new TransferUtility(client);
                 transferUtility.Upload(message.FilePath, message.BucketName);
+
+                this.FilePath = message.FilePath;
             }
         }
+
+        /// <inheritdoc />
+        public string FilePath { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace Naos.FileJanitor.MessageBus.Contract
     /// <summary>
     /// Message object to put a file into S3.
     /// </summary>
-    public class StoreFileInS3Message : IMessage
+    public class StoreFileInS3Message : IMessage, IShareFilePath
     {
         /// <inheritdoc />
         public string Description { get; set; }

@@ -34,8 +34,9 @@
     <DocumentationFile>bin\Release\Naos.FileJanitor.MessageBus.Contract.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Naos.MessageBus.DataContract">
-      <HintPath>..\packages\Naos.MessageBus.DataContract.1.0.12-firstcut\lib\45\Naos.MessageBus.DataContract.dll</HintPath>
+    <Reference Include="Naos.MessageBus.DataContract, Version=1.0.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Naos.MessageBus.DataContract.1.0.14-firstcut\lib\45\Naos.MessageBus.DataContract.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -47,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileJanitorMessageHandlerSettings.cs" />
+    <Compile Include="IShareFilePath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DeleteFileMessage.cs" />
     <Compile Include="StoreFileInS3Message.cs" />
