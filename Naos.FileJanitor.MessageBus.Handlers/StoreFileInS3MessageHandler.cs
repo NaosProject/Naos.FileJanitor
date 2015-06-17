@@ -29,13 +29,23 @@ namespace Naos.FileJanitor.MessageBus.Handlers
             if (message.BucketName != null && message.FilePath != null && File.Exists(message.FilePath))
             {
                 var settings = Settings.Get<FileJanitorMessageHandlerSettings>();
-                var regionEndpoint = RegionEndpoint.GetBySystemName(message.Region);
-                var client = new AmazonS3Client(settings.UploadAccessKey, settings.UploadSecretKey, regionEndpoint);
-                var transferUtility = new TransferUtility(client);
-                transferUtility.Upload(message.FilePath, message.BucketName);
-
-                this.FilePath = message.FilePath;
+                this.Handle(message, settings);
             }
+        }
+
+        /// <summary>
+        /// Handles a StoreFileInS3Message.
+        /// </summary>
+        /// <param name="message">Message to handle.</param>
+        /// <param name="settings">Needed settings to handle messages.</param>
+        public void Handle(StoreFileInS3Message message, FileJanitorMessageHandlerSettings settings)
+        {
+            var regionEndpoint = RegionEndpoint.GetBySystemName(message.Region);
+            var client = new AmazonS3Client(settings.UploadAccessKey, settings.UploadSecretKey, regionEndpoint);
+            var transferUtility = new TransferUtility(client);
+            transferUtility.Upload(message.FilePath, message.BucketName);
+
+            this.FilePath = message.FilePath;
         }
 
         /// <inheritdoc />
