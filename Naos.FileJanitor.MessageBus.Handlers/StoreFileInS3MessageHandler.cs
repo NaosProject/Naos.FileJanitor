@@ -6,6 +6,7 @@
 
 namespace Naos.FileJanitor.MessageBus.Handlers
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
 
@@ -26,11 +27,18 @@ namespace Naos.FileJanitor.MessageBus.Handlers
         /// <inheritdoc />
         public void Handle(StoreFileInS3Message message)
         {
-            if (message.BucketName != null && message.FilePath != null && File.Exists(message.FilePath))
+            if (message.FilePath == null || !File.Exists(message.FilePath))
             {
-                var settings = Settings.Get<FileJanitorMessageHandlerSettings>();
-                this.Handle(message, settings);
+                throw new FileNotFoundException("Could not find specified filepath: " + (message.FilePath ?? "[NULL]"));
             }
+
+            if (string.IsNullOrEmpty(message.BucketName))
+            {
+                throw new ApplicationException("Must specify bucket name.");
+            }
+
+            var settings = Settings.Get<FileJanitorMessageHandlerSettings>();
+            this.Handle(message, settings);
         }
 
         /// <summary>

@@ -19,10 +19,12 @@ namespace Naos.FileJanitor.MessageBus.Handlers
         /// <inheritdoc />
         public void Handle(DeleteFileMessage message)
         {
-            if (message.FilePath != null && File.Exists(message.FilePath))
+            if (message.FilePath == null || !File.Exists(message.FilePath))
             {
-                File.Delete(message.FilePath);
+                throw new FileNotFoundException("Could not find specified filepath: " + (message.FilePath ?? "[NULL]"));
             }
+
+            File.Delete(message.FilePath);
         }
     }
 }
