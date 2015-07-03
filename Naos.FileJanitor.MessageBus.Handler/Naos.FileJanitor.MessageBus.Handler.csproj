@@ -7,8 +7,8 @@
     <ProjectGuid>{26DEC75C-C6D1-47A5-BE70-90BE96EC2E44}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Naos.FileJanitor.MessageBus.Handlers</RootNamespace>
-    <AssemblyName>Naos.FileJanitor.MessageBus.Handlers</AssemblyName>
+    <RootNamespace>Naos.FileJanitor.MessageBus.Handler</RootNamespace>
+    <AssemblyName>Naos.FileJanitor.MessageBus.Handler</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -21,7 +21,7 @@
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Naos.FileJanitor.MessageBus.Handlers.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Naos.FileJanitor.MessageBus.Handler.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,7 +31,7 @@
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Naos.FileJanitor.MessageBus.Handlers.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Naos.FileJanitor.MessageBus.Handler.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AWSSDK">
@@ -40,13 +40,13 @@
     <Reference Include="Its.Configuration">
       <HintPath>..\packages\Its.Configuration.0.10.1\lib\net40\Its.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.MessageBus.DataContract, Version=1.0.27.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Naos.MessageBus.DataContract.1.0.27\lib\45\Naos.MessageBus.DataContract.dll</HintPath>
+    <Reference Include="Naos.MessageBus.DataContract">
+      <HintPath>..\packages\Naos.MessageBus.DataContract.1.0.29\lib\45\Naos.MessageBus.DataContract.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Naos.MessageBus.HandlingContract, Version=1.0.27.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Naos.MessageBus.HandlingContract, Version=1.0.29.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Naos.MessageBus.HandlingContract.1.0.27\lib\45\Naos.MessageBus.HandlingContract.dll</HintPath>
+      <HintPath>..\packages\Naos.MessageBus.HandlingContract.1.0.29\lib\45\Naos.MessageBus.HandlingContract.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />

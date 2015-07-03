@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor", "Naos.Fi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor.Test", "Naos.FileJanitor.Test\Naos.FileJanitor.Test.csproj", "{BAF88789-58CD-44B8-B642-0919CE05F760}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor.MessageBus.Handlers", "Naos.FileJanitor.MessageBus.Handlers\Naos.FileJanitor.MessageBus.Handlers.csproj", "{26DEC75C-C6D1-47A5-BE70-90BE96EC2E44}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor.MessageBus.Handler", "Naos.FileJanitor.MessageBus.Handler\Naos.FileJanitor.MessageBus.Handler.csproj", "{26DEC75C-C6D1-47A5-BE70-90BE96EC2E44}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor.MessageBus.Contract", "Naos.FileJanitor.MessageBus.Contract\Naos.FileJanitor.MessageBus.Contract.csproj", "{DA09BAD8-0449-44E7-BAB5-2DA45C2E5DF2}"
 EndProject

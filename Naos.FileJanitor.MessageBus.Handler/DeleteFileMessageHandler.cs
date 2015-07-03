@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Naos.FileJanitor.MessageBus.Handlers
+namespace Naos.FileJanitor.MessageBus.Handler
 {
     using System.IO;
 
