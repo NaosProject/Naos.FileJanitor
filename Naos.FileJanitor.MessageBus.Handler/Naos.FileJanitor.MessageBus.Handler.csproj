@@ -34,19 +34,20 @@
     <DocumentationFile>bin\Release\Naos.FileJanitor.MessageBus.Handler.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AWSSDK">
-      <HintPath>..\packages\AWSSDK.2.3.41.0\lib\net45\AWSSDK.dll</HintPath>
+    <Reference Include="AWSSDK, Version=2.3.47.0, Culture=neutral, PublicKeyToken=9f476d3089b52be3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AWSSDK.2.3.47.0\lib\net45\AWSSDK.dll</HintPath>
     </Reference>
     <Reference Include="Its.Configuration">
       <HintPath>..\packages\Its.Configuration.0.10.1\lib\net40\Its.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.MessageBus.DataContract">
-      <HintPath>..\packages\Naos.MessageBus.DataContract.1.0.29\lib\45\Naos.MessageBus.DataContract.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Naos.MessageBus.HandlingContract, Version=1.0.29.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Naos.MessageBus.DataContract, Version=1.0.39.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Naos.MessageBus.HandlingContract.1.0.29\lib\45\Naos.MessageBus.HandlingContract.dll</HintPath>
+      <HintPath>..\packages\Naos.MessageBus.DataContract.1.0.39\lib\45\Naos.MessageBus.DataContract.dll</HintPath>
+    </Reference>
+    <Reference Include="Naos.MessageBus.HandlingContract, Version=1.0.39.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Naos.MessageBus.HandlingContract.1.0.39\lib\45\Naos.MessageBus.HandlingContract.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
