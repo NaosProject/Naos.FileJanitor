@@ -27,6 +27,11 @@ namespace Naos.FileJanitor.MessageBus.Contract
         public string BucketName { get; set; }
 
         /// <summary>
+        /// Gets or sets the key to use when storing the file.
+        /// </summary>
+        public string Key { get; set; }
+
+        /// <summary>
         /// Gets or sets the region the intended bucket lives in.
         /// </summary>
         public string Region { get; set; }

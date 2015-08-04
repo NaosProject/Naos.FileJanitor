@@ -7,7 +7,6 @@
 namespace Naos.FileJanitor.MessageBus.Handler
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
 
     using Amazon;
@@ -51,7 +50,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
             var regionEndpoint = RegionEndpoint.GetBySystemName(message.Region);
             var client = new AmazonS3Client(settings.UploadAccessKey, settings.UploadSecretKey, regionEndpoint);
             var transferUtility = new TransferUtility(client);
-            transferUtility.Upload(message.FilePath, message.BucketName);
+            transferUtility.Upload(message.FilePath, message.BucketName, message.Key);
 
             this.FilePath = message.FilePath;
         }
