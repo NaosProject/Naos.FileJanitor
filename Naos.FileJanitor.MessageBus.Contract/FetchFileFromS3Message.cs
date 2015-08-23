@@ -9,7 +9,7 @@ namespace Naos.FileJanitor.MessageBus.Contract
     using Naos.MessageBus.DataContract;
 
     /// <summary>
-    /// Message get a file from S3.
+    /// Message to get a file from S3.
     /// </summary>
     public class FetchFileFromS3Message : IMessage, IShareFilePath
     {
