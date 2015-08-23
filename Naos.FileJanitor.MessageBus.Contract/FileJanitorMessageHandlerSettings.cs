@@ -20,5 +20,15 @@ namespace Naos.FileJanitor.MessageBus.Contract
         /// Gets or sets the secret key of a user to upload files to S3.
         /// </summary>
         public string UploadSecretKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the access key of a user to download files from S3.
+        /// </summary>
+        public string DownloadAccessKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the secret key of a user to download files from S3.
+        /// </summary>
+        public string DownloadSecretKey { get; set; }
     }
 }
