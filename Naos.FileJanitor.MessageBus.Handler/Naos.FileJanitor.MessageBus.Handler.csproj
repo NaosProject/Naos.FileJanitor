@@ -41,6 +41,10 @@
     <Reference Include="Its.Configuration">
       <HintPath>..\packages\Its.Configuration.0.10.1\lib\net40\Its.Configuration.dll</HintPath>
     </Reference>
+    <Reference Include="Its.Log, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Its.Log.2.8.3\lib\net40\Its.Log.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Naos.MessageBus.DataContract, Version=1.0.67.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Naos.MessageBus.DataContract.1.0.67\lib\45\Naos.MessageBus.DataContract.dll</HintPath>
       <Private>True</Private>
