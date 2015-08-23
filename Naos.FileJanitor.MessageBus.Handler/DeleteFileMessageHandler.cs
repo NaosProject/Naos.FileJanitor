@@ -8,6 +8,8 @@ namespace Naos.FileJanitor.MessageBus.Handler
 {
     using System.IO;
 
+    using Its.Log.Instrumentation;
+
     using Naos.FileJanitor.MessageBus.Contract;
     using Naos.MessageBus.HandlingContract;
 
@@ -19,12 +21,16 @@ namespace Naos.FileJanitor.MessageBus.Handler
         /// <inheritdoc />
         public void Handle(DeleteFileMessage message)
         {
-            if (message.FilePath == null || !File.Exists(message.FilePath))
+            using (var log = Log.Enter(() => message))
             {
-                throw new FileNotFoundException("Could not find specified filepath: " + (message.FilePath ?? "[NULL]"));
-            }
+                if (message.FilePath == null || !File.Exists(message.FilePath))
+                {
+                    throw new FileNotFoundException("Could not find specified filepath: " + (message.FilePath ?? "[NULL]"));
+                }
 
-            File.Delete(message.FilePath);
+                log.Trace(() => "Deleting this file: " + message.FilePath);
+                File.Delete(message.FilePath);
+            }
         }
     }
 }

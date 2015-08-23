@@ -14,6 +14,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Amazon.S3.Transfer;
 
     using Its.Configuration;
+    using Its.Log.Instrumentation;
 
     using Naos.FileJanitor.MessageBus.Contract;
     using Naos.MessageBus.HandlingContract;
@@ -47,12 +48,18 @@ namespace Naos.FileJanitor.MessageBus.Handler
         /// <param name="settings">Needed settings to handle messages.</param>
         public void Handle(StoreFileInS3Message message, FileJanitorMessageHandlerSettings settings)
         {
-            var regionEndpoint = RegionEndpoint.GetBySystemName(message.Region);
-            var client = new AmazonS3Client(settings.UploadAccessKey, settings.UploadSecretKey, regionEndpoint);
-            var transferUtility = new TransferUtility(client);
-            transferUtility.Upload(message.FilePath, message.BucketName, message.Key);
+            using (var log = Log.Enter(() => message))
+            {
+                var regionEndpoint = RegionEndpoint.GetBySystemName(message.Region);
+                var client = new AmazonS3Client(settings.UploadAccessKey, settings.UploadSecretKey, regionEndpoint);
+                var transferUtility = new TransferUtility(client);
 
-            this.FilePath = message.FilePath;
+                log.Trace(() => "Uploading the file to the specified bucket");
+                transferUtility.Upload(message.FilePath, message.BucketName, message.Key);
+
+                log.Trace(() => "Completed uploading the file to the specified bucket");
+                this.FilePath = message.FilePath;
+            }
         }
 
         /// <inheritdoc />

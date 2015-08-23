@@ -11,7 +11,7 @@ namespace Naos.FileJanitor
 
     using CLAP;
 
-    using OBeautifulCode.Libs.Collections;
+    using OBeautifulCode.Collection;
 
     public class FileJanitorConsoleHarness
     {

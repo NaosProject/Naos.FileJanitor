@@ -11,6 +11,8 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using System.IO;
     using System.Linq;
 
+    using Its.Log.Instrumentation;
+
     using Naos.FileJanitor.MessageBus.Contract;
     using Naos.MessageBus.HandlingContract;
 
@@ -22,43 +24,48 @@ namespace Naos.FileJanitor.MessageBus.Handler
         /// <inheritdoc />
         public void Handle(CleanupDirectoryMessage message)
         {
-            if (!File.GetAttributes(message.DirectoryFullPath).HasFlag(FileAttributes.Directory))
+            using (var log = Log.Enter(() => message))
             {
-                throw new ArgumentException("Root path must be a directory.");
-            }
-
-            if (!Directory.Exists(message.DirectoryFullPath))
-            {
-                throw new ArgumentException("Root path: " + message.DirectoryFullPath + " does not exist.");
-            }
-
-            var searchOptions = message.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-
-            var files = Directory.GetFiles(
-                message.DirectoryFullPath,
-                "*",
-                searchOptions);
-
-            var cutoff = DateTime.UtcNow.Subtract(message.RetentionWindow);
-            var filesToDelete = FilterFilesToBeforeCutOff(files, cutoff, message.FileDateRetrievalStrategy);
-
-            foreach (var fileToDelete in filesToDelete)
-            {
-                Console.WriteLine("File: " + fileToDelete + " is being removed because it's outside of the retention window.");
-                File.Delete(fileToDelete);
-            }
-
-            if (message.DeleteEmptyDirectories)
-            {
-                foreach (var directoryPath in Directory.GetDirectories(message.DirectoryFullPath, "*", searchOptions))
+                if (!File.GetAttributes(message.DirectoryFullPath).HasFlag(FileAttributes.Directory))
                 {
-                    var directory = new DirectoryInfo(directoryPath);
-                    if (!directory.GetFiles().Any())
+                    throw new ArgumentException("Root path must be a directory.");
+                }
+
+                if (!Directory.Exists(message.DirectoryFullPath))
+                {
+                    throw new ArgumentException("Root path: " + message.DirectoryFullPath + " does not exist.");
+                }
+
+                var searchOptions = message.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+
+                log.Trace("Identifying all files that should be considered for cleanup.");
+                var files = Directory.GetFiles(message.DirectoryFullPath, "*", searchOptions);
+
+                log.Trace("Filtering to files that are outside the retention window.");
+                var cutoff = DateTime.UtcNow.Subtract(message.RetentionWindow);
+                var filesToDelete = FilterFilesToBeforeCutOff(files, cutoff, message.FileDateRetrievalStrategy);
+
+                foreach (var fileToDelete in filesToDelete)
+                {
+                    log.Trace(() => "File: " + fileToDelete + " is being removed because it's outside of the retention window.");
+                    File.Delete(fileToDelete);
+                }
+
+                if (message.DeleteEmptyDirectories)
+                {
+                    log.Trace("Removing any empty directories.");
+                    foreach (var directoryPath in Directory.GetDirectories(message.DirectoryFullPath, "*", searchOptions))
                     {
-                        Console.WriteLine("Directory: " + directoryPath + " is being removed because it's empty.");
-                        directory.Delete(message.Recursive);
+                        var directory = new DirectoryInfo(directoryPath);
+                        if (!directory.GetFiles().Any())
+                        {
+                            log.Trace(() => "Directory: " + directoryPath + " is being removed because it's empty.");
+                            directory.Delete(message.Recursive);
+                        }
                     }
                 }
+
+                log.Trace("Completed cleaning-up the directory.");
             }
         }
 
@@ -81,7 +88,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
                         compareDateUtc = file.CreationTimeUtc;
                         break;
                     default:
-                        throw new ArgumentException("Unsupported DateRetreivalStrategy: " + dateRetrievalStrategy);
+                        throw new ArgumentException("Unsupported DateRetrievalStrategy: " + dateRetrievalStrategy);
                 }
 
                 if (compareDateUtc < cutoffInUtc)
