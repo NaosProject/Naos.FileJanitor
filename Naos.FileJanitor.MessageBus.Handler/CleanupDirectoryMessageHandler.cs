@@ -47,7 +47,8 @@ namespace Naos.FileJanitor.MessageBus.Handler
 
                 foreach (var fileToDelete in filesToDelete)
                 {
-                    log.Trace(() => "File: " + fileToDelete + " is being removed because it's outside of the retention window.");
+                    var localFileToDelete = fileToDelete;
+                    log.Trace(() => "File: " + localFileToDelete + " is being removed because it's outside of the retention window.");
                     File.Delete(fileToDelete);
                 }
 
@@ -59,7 +60,8 @@ namespace Naos.FileJanitor.MessageBus.Handler
                         var directory = new DirectoryInfo(directoryPath);
                         if (!directory.GetFiles().Any())
                         {
-                            log.Trace(() => "Directory: " + directoryPath + " is being removed because it's empty.");
+                            var localDirectoryPath = directoryPath;
+                            log.Trace(() => "Directory: " + localDirectoryPath + " is being removed because it's empty.");
                             directory.Delete(message.Recursive);
                         }
                     }
