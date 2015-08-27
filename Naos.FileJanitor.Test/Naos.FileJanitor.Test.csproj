@@ -32,6 +32,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Naos.MessageBus.DataContract, Version=1.0.69.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Naos.MessageBus.DataContract.1.0.69\lib\45\Naos.MessageBus.DataContract.dll</HintPath>
+    </Reference>
+    <Reference Include="Naos.MessageBus.HandlingContract, Version=1.0.69.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Naos.MessageBus.HandlingContract.1.0.69\lib\45\Naos.MessageBus.HandlingContract.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -58,6 +66,14 @@
     <None Include="Settings.StyleCop" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Naos.FileJanitor.MessageBus.Contract\Naos.FileJanitor.MessageBus.Contract.csproj">
+      <Project>{DA09BAD8-0449-44E7-BAB5-2DA45C2E5DF2}</Project>
+      <Name>Naos.FileJanitor.MessageBus.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Naos.FileJanitor.MessageBus.Handler\Naos.FileJanitor.MessageBus.Handler.csproj">
+      <Project>{26DEC75C-C6D1-47A5-BE70-90BE96EC2E44}</Project>
+      <Name>Naos.FileJanitor.MessageBus.Handler</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Naos.FileJanitor\Naos.FileJanitor.csproj">
       <Project>{14c44b90-3132-4fc9-b69f-9a5fd87d6bc3}</Project>
       <Name>Naos.FileJanitor</Name>

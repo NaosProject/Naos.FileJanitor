@@ -96,7 +96,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
                 log.Trace(() => "Dowloading the file from the specified bucket => key: " + key);
                 transferUtility.Download(message.FilePath, message.BucketName, key);
 
-                log.Trace(() => "Completed uploading the file to the specified bucket");
+                log.Trace(() => "Completed downloading the file from the specified bucket");
                 this.FilePath = message.FilePath;
             }
         }
