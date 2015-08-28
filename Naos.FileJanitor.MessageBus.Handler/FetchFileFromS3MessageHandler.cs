@@ -93,11 +93,12 @@ namespace Naos.FileJanitor.MessageBus.Handler
                 }
 
                 var transferUtility = new TransferUtility(client);
-                log.Trace(() => "Dowloading the file from the specified bucket => key: " + key);
-                transferUtility.Download(message.FilePath, message.BucketName, key);
+                this.FilePath = message.FilePath.Replace("{Key}", key);
+                log.Trace(
+                    () => "Dowloading the file from the specified bucket => key: " + key + " filePath: " + this.FilePath);
+                transferUtility.Download(this.FilePath, message.BucketName, key);
 
                 log.Trace(() => "Completed downloading the file from the specified bucket");
-                this.FilePath = message.FilePath;
             }
         }
 
