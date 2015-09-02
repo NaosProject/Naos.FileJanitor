@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CleanupDirectoryMessage.cs" />
+    <Compile Include="ShareFileMessage.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="FileJanitorMessageHandlerSettings.cs" />
     <Compile Include="IShareFilePath.cs" />
