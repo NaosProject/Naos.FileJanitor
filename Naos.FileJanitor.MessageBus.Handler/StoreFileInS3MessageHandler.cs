@@ -51,14 +51,17 @@ namespace Naos.FileJanitor.MessageBus.Handler
             using (var log = Log.Enter(() => message))
             {
                 var regionEndpoint = RegionEndpoint.GetBySystemName(message.Region);
-                var client = new AmazonS3Client(settings.UploadAccessKey, settings.UploadSecretKey, regionEndpoint);
-                var transferUtility = new TransferUtility(client);
+                using (var client = new AmazonS3Client(settings.UploadAccessKey, settings.UploadSecretKey, regionEndpoint))
+                {
+                    using (var transferUtility = new TransferUtility(client))
+                    {
+                        log.Trace(() => "Uploading the file to the specified bucket");
+                        transferUtility.Upload(message.FilePath, message.BucketName, message.Key);
 
-                log.Trace(() => "Uploading the file to the specified bucket");
-                transferUtility.Upload(message.FilePath, message.BucketName, message.Key);
-
-                log.Trace(() => "Completed uploading the file to the specified bucket");
-                this.FilePath = message.FilePath;
+                        log.Trace(() => "Completed uploading the file to the specified bucket");
+                        this.FilePath = message.FilePath;
+                    }
+                }
             }
         }
 

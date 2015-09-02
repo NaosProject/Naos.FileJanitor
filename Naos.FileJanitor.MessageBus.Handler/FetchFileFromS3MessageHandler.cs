@@ -53,50 +53,59 @@ namespace Naos.FileJanitor.MessageBus.Handler
             using (var log = Log.Enter(() => message))
             {
                 var regionEndpoint = RegionEndpoint.GetBySystemName(message.Region);
-                var client = new AmazonS3Client(settings.DownloadAccessKey, settings.DownloadSecretKey, regionEndpoint);
-
-                var request = new ListObjectsRequest
-                                  {
-                                      BucketName = message.BucketName,
-                                      Prefix = message.KeyPrefixSearchPattern
-                                  };
-
-                var objects = client.ListObjects(request);
-                if (message.MultipleKeysFoundStrategy == MultipleKeysFoundStrategy.SingleMatchExpectedThrow
-                    && objects.S3Objects.Count > 1)
+                using (
+                    var client = new AmazonS3Client(
+                        settings.DownloadAccessKey,
+                        settings.DownloadSecretKey,
+                        regionEndpoint))
                 {
-                    throw new InvalidDataException(
-                        "Expected a single S3Object => Prefix Search: " + (message.KeyPrefixSearchPattern ?? "[NULL]")
-                        + ", Count: " + objects.S3Objects.Count);
-                }
+                    var request = new ListObjectsRequest
+                                      {
+                                          BucketName = message.BucketName,
+                                          Prefix = message.KeyPrefixSearchPattern
+                                      };
 
-                var keys = objects.S3Objects.Select(_ => _.Key).ToList();
-                switch (message.MultipleKeysFoundStrategy)
-                {
-                    case MultipleKeysFoundStrategy.FirstSortedAscending:
-                        keys = keys.OrderBy(_ => _).ToList();
-                        break;
-                    case MultipleKeysFoundStrategy.FirstSortedDescending:
-                        keys = keys.OrderByDescending(_ => _).ToList();
-                        break;
-                    default:
-                        throw new NotSupportedException(
-                            "Unsupported multiple found strategy => " + message.MultipleKeysFoundStrategy);
-                }
+                    var objects = client.ListObjects(request);
+                    if (message.MultipleKeysFoundStrategy == MultipleKeysFoundStrategy.SingleMatchExpectedThrow
+                        && objects.S3Objects.Count > 1)
+                    {
+                        throw new InvalidDataException(
+                            "Expected a single S3Object => Prefix Search: "
+                            + (message.KeyPrefixSearchPattern ?? "[NULL]") + ", Count: " + objects.S3Objects.Count);
+                    }
 
-                var key = keys.FirstOrDefault();
-                if (key == null)
-                {
-                    throw new FileNotFoundException(
-                        "Could not find an S3 Object => bucket: " + message.BucketName + ", KeyPrefixSearchPattern: "
-                        + message.KeyPrefixSearchPattern);
-                }
+                    var keys = objects.S3Objects.Select(_ => _.Key).ToList();
+                    switch (message.MultipleKeysFoundStrategy)
+                    {
+                        case MultipleKeysFoundStrategy.FirstSortedAscending:
+                            keys = keys.OrderBy(_ => _).ToList();
+                            break;
+                        case MultipleKeysFoundStrategy.FirstSortedDescending:
+                            keys = keys.OrderByDescending(_ => _).ToList();
+                            break;
+                        default:
+                            throw new NotSupportedException(
+                                "Unsupported multiple found strategy => " + message.MultipleKeysFoundStrategy);
+                    }
 
-                var transferUtility = new TransferUtility(client);
-                this.FilePath = message.FilePath.Replace("{Key}", key);
-                log.Trace(
-                    () => "Dowloading the file from the specified bucket => key: " + key + " filePath: " + this.FilePath);
-                transferUtility.Download(this.FilePath, message.BucketName, key);
+                    var key = keys.FirstOrDefault();
+                    if (key == null)
+                    {
+                        throw new FileNotFoundException(
+                            "Could not find an S3 Object => bucket: " + message.BucketName
+                            + ", KeyPrefixSearchPattern: " + message.KeyPrefixSearchPattern);
+                    }
+
+                    using (var transferUtility = new TransferUtility(client))
+                    {
+                        this.FilePath = message.FilePath.Replace("{Key}", key);
+                        log.Trace(
+                            () =>
+                            "Dowloading the file from the specified bucket => key: " + key + " filePath: "
+                            + this.FilePath);
+                        transferUtility.Download(this.FilePath, message.BucketName, key);
+                    }
+                }
 
                 log.Trace(() => "Completed downloading the file from the specified bucket");
             }
