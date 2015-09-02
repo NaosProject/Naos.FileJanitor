@@ -14,9 +14,9 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Naos.MessageBus.HandlingContract;
 
     /// <summary>
-    /// Message handler to store files in S3.
+    /// Message handler to delete a file.
     /// </summary>
-    public class DeleteFileMessageHandler : IHandleMessages<DeleteFileMessage>
+    public class DeleteFileMessageHandler : IHandleMessages<DeleteFileMessage>, IShareFilePath
     {
         /// <inheritdoc />
         public void Handle(DeleteFileMessage message)
@@ -30,7 +30,12 @@ namespace Naos.FileJanitor.MessageBus.Handler
 
                 log.Trace(() => "Deleting this file: " + message.FilePath);
                 File.Delete(message.FilePath);
+
+                this.FilePath = message.FilePath;
             }
         }
+
+        /// <inheritdoc />
+        public string FilePath { get; set; }
     }
 }
