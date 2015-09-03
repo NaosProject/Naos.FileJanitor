@@ -36,7 +36,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
             }
 
             var settings = Settings.Get<FileJanitorMessageHandlerSettings>();
-            await this.Handle(message, settings);
+            await this.HandleAsync(message, settings);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
         /// <param name="message">Message to handle.</param>
         /// <param name="settings">Needed settings to handle messages.</param>
         /// <returns>Task to support async await execution.</returns>
-        public async Task Handle(StoreFileInS3Message message, FileJanitorMessageHandlerSettings settings)
+        public async Task HandleAsync(StoreFileInS3Message message, FileJanitorMessageHandlerSettings settings)
         {
             using (var log = Log.Enter(() => new { Message = message, message.Region, message.BucketName, message.Key, message.FilePath }))
             {
