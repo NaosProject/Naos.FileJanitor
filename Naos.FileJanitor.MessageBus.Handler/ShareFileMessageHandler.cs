@@ -6,6 +6,8 @@
 
 namespace Naos.FileJanitor.MessageBus.Handler
 {
+    using System.Threading.Tasks;
+
     using Its.Log.Instrumentation;
 
     using Naos.FileJanitor.MessageBus.Contract;
@@ -17,12 +19,12 @@ namespace Naos.FileJanitor.MessageBus.Handler
     public class ShareFileMessageHandler : IHandleMessages<ShareFileMessage>, IShareFilePath
     {
         /// <inheritdoc />
-        public void Handle(ShareFileMessage message)
+        public async Task Handle(ShareFileMessage message)
         {
             using (var log = Log.Enter(() => new { Message = message, FilePathToShare = message.FilePathToShare }))
             {
                 log.Trace(() => "Sharing file: " + message.FilePathToShare);
-                this.FilePath = message.FilePathToShare;
+                this.FilePath = await Task.FromResult(message.FilePathToShare);
             }
         }
 

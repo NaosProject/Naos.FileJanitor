@@ -7,6 +7,7 @@
 namespace Naos.FileJanitor.MessageBus.Handler
 {
     using System.IO;
+    using System.Threading.Tasks;
 
     using Its.Log.Instrumentation;
 
@@ -19,19 +20,21 @@ namespace Naos.FileJanitor.MessageBus.Handler
     public class DeleteFileMessageHandler : IHandleMessages<DeleteFileMessage>, IShareFilePath
     {
         /// <inheritdoc />
-        public void Handle(DeleteFileMessage message)
+        public async Task Handle(DeleteFileMessage message)
         {
-            using (var log = Log.Enter(() => message))
+            using (var log = Log.Enter(() => new { Message = message, message.FilePath }))
             {
                 if (message.FilePath == null || !File.Exists(message.FilePath))
                 {
-                    throw new FileNotFoundException("Could not find specified filepath: " + (message.FilePath ?? "[NULL]"));
+                    throw new FileNotFoundException(
+                        "Could not find specified filepath: " + (message.FilePath ?? "[NULL]"));
                 }
 
-                log.Trace(() => "Deleting this file: " + message.FilePath);
-                File.Delete(message.FilePath);
-
                 this.FilePath = message.FilePath;
+
+                log.Trace(() => "Start deleting file.");
+                await Task.Run(() => File.Delete(message.FilePath));
+                log.Trace(() => "Finished deleting file.");
             }
         }
 

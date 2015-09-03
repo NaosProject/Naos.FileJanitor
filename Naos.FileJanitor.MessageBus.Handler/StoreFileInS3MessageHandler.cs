@@ -8,14 +8,12 @@ namespace Naos.FileJanitor.MessageBus.Handler
 {
     using System;
     using System.IO;
-
-    using Amazon;
-    using Amazon.S3;
-    using Amazon.S3.Transfer;
+    using System.Threading.Tasks;
 
     using Its.Configuration;
     using Its.Log.Instrumentation;
 
+    using Naos.AWS.Core;
     using Naos.FileJanitor.MessageBus.Contract;
     using Naos.MessageBus.HandlingContract;
 
@@ -25,7 +23,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     public class StoreFileInS3MessageHandler : IHandleMessages<StoreFileInS3Message>, IShareFilePath
     {
         /// <inheritdoc />
-        public void Handle(StoreFileInS3Message message)
+        public async Task Handle(StoreFileInS3Message message)
         {
             if (message.FilePath == null || !File.Exists(message.FilePath))
             {
@@ -38,7 +36,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
             }
 
             var settings = Settings.Get<FileJanitorMessageHandlerSettings>();
-            this.Handle(message, settings);
+            await this.Handle(message, settings);
         }
 
         /// <summary>
@@ -46,22 +44,16 @@ namespace Naos.FileJanitor.MessageBus.Handler
         /// </summary>
         /// <param name="message">Message to handle.</param>
         /// <param name="settings">Needed settings to handle messages.</param>
-        public void Handle(StoreFileInS3Message message, FileJanitorMessageHandlerSettings settings)
+        /// <returns>Task to support async await execution.</returns>
+        public async Task Handle(StoreFileInS3Message message, FileJanitorMessageHandlerSettings settings)
         {
-            using (var log = Log.Enter(() => message))
+            using (var log = Log.Enter(() => new { Message = message, message.Region, message.BucketName, message.Key, message.FilePath }))
             {
-                var regionEndpoint = RegionEndpoint.GetBySystemName(message.Region);
-                using (var client = new AmazonS3Client(settings.UploadAccessKey, settings.UploadSecretKey, regionEndpoint))
-                {
-                    using (var transferUtility = new TransferUtility(client))
-                    {
-                        log.Trace(() => "Uploading the file to the specified bucket");
-                        transferUtility.Upload(message.FilePath, message.BucketName, message.Key);
-
-                        log.Trace(() => "Completed uploading the file to the specified bucket");
-                        this.FilePath = message.FilePath;
-                    }
-                }
+                log.Trace(() => "Starting upload.");
+                var fileManager = new FileManager(settings.UploadAccessKey, settings.UploadSecretKey);
+                this.FilePath = message.FilePath;
+                await fileManager.UploadFileAsync(message.Region, message.BucketName, message.Key, this.FilePath);
+                log.Trace(() => "Finished upload.");
             }
         }
 

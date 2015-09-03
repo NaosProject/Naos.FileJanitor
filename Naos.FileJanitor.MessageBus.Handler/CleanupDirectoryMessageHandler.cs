@@ -10,6 +10,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Its.Log.Instrumentation;
 
@@ -22,10 +23,17 @@ namespace Naos.FileJanitor.MessageBus.Handler
     public class CleanupDirectoryMessageHandler : IHandleMessages<CleanupDirectoryMessage>
     {
         /// <inheritdoc />
-        public void Handle(CleanupDirectoryMessage message)
+        public async Task Handle(CleanupDirectoryMessage message)
+        {
+            await Task.Run(() => InternalHandle(message));
+        }
+
+        private static void InternalHandle(CleanupDirectoryMessage message)
         {
             using (var log = Log.Enter(() => message))
             {
+                log.Trace("Started cleaning-up the directory.");
+
                 if (!File.GetAttributes(message.DirectoryFullPath).HasFlag(FileAttributes.Directory))
                 {
                     throw new ArgumentException("Root path must be a directory.");
@@ -48,20 +56,24 @@ namespace Naos.FileJanitor.MessageBus.Handler
                 foreach (var fileToDelete in filesToDelete)
                 {
                     var localFileToDelete = fileToDelete;
-                    log.Trace(() => "File: " + localFileToDelete + " is being removed because it's outside of the retention window.");
+                    log.Trace(
+                        () =>
+                        "File: " + localFileToDelete + " is being removed because it's outside of the retention window.");
                     File.Delete(fileToDelete);
                 }
 
                 if (message.DeleteEmptyDirectories)
                 {
                     log.Trace("Removing any empty directories.");
-                    foreach (var directoryPath in Directory.GetDirectories(message.DirectoryFullPath, "*", searchOptions))
+                    foreach (
+                        var directoryPath in Directory.GetDirectories(message.DirectoryFullPath, "*", searchOptions))
                     {
                         var directory = new DirectoryInfo(directoryPath);
                         if (!directory.GetFiles().Any())
                         {
                             var localDirectoryPath = directoryPath;
-                            log.Trace(() => "Directory: " + localDirectoryPath + " is being removed because it's empty.");
+                            log.Trace(
+                                () => "Directory: " + localDirectoryPath + " is being removed because it's empty.");
                             directory.Delete(message.Recursive);
                         }
                     }
