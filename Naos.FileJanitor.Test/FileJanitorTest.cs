@@ -29,7 +29,7 @@ namespace Naos.FileJanitor.Test
             var handler = new ShareFileMessageHandler();
 
             // act
-            handler.Handle(message);
+            handler.HandleAsync(message).Wait();
 
             // assert
             Assert.Equal(message.FilePathToShare, handler.FilePath);

@@ -23,7 +23,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     public class CleanupDirectoryMessageHandler : IHandleMessages<CleanupDirectoryMessage>
     {
         /// <inheritdoc />
-        public async Task Handle(CleanupDirectoryMessage message)
+        public async Task HandleAsync(CleanupDirectoryMessage message)
         {
             await Task.Run(() => InternalHandle(message));
         }

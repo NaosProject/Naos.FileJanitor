@@ -20,7 +20,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     public class DeleteFileMessageHandler : IHandleMessages<DeleteFileMessage>, IShareFilePath
     {
         /// <inheritdoc />
-        public async Task Handle(DeleteFileMessage message)
+        public async Task HandleAsync(DeleteFileMessage message)
         {
             using (var log = Log.Enter(() => new { Message = message, message.FilePath }))
             {

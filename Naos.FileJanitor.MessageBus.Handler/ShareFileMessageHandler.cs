@@ -19,7 +19,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     public class ShareFileMessageHandler : IHandleMessages<ShareFileMessage>, IShareFilePath
     {
         /// <inheritdoc />
-        public async Task Handle(ShareFileMessage message)
+        public async Task HandleAsync(ShareFileMessage message)
         {
             using (var log = Log.Enter(() => new { Message = message, FilePathToShare = message.FilePathToShare }))
             {
