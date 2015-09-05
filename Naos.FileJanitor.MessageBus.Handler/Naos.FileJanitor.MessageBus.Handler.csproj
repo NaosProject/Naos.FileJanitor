@@ -34,39 +34,27 @@
     <DocumentationFile>bin\Release\Naos.FileJanitor.MessageBus.Handler.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AWSSDK.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+    <Reference Include="AWSSDK">
+      <HintPath>..\packages\AWSSDK.2.3.51.0\lib\net45\AWSSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="CuttingEdge.Conditions, Version=1.2.0.11174, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AWSSDK.Core.3.1.1.1\lib\net45\AWSSDK.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="AWSSDK.EC2">
-      <HintPath>..\packages\AWSSDK.EC2.3.1.1.0\lib\net45\AWSSDK.EC2.dll</HintPath>
-    </Reference>
-    <Reference Include="AWSSDK.Route53">
-      <HintPath>..\packages\AWSSDK.Route53.3.1.0.1\lib\net45\AWSSDK.Route53.dll</HintPath>
-    </Reference>
-    <Reference Include="AWSSDK.S3">
-      <HintPath>..\packages\AWSSDK.S3.3.1.2.1\lib\net45\AWSSDK.S3.dll</HintPath>
-    </Reference>
-    <Reference Include="AWSSDK.SecurityToken">
-      <HintPath>..\packages\AWSSDK.SecurityToken.3.1.0.1\lib\net45\AWSSDK.SecurityToken.dll</HintPath>
-    </Reference>
-    <Reference Include="CuttingEdge.Conditions">
       <HintPath>..\packages\CuttingEdge.Conditions.1.2.0.0\lib\NET35\CuttingEdge.Conditions.dll</HintPath>
     </Reference>
     <Reference Include="Its.Configuration">
       <HintPath>..\packages\Its.Configuration.0.10.1\lib\net40\Its.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Its.Log, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Its.Log.2.8.3\lib\net40\Its.Log.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Naos.AWS.Contract, Version=1.0.17.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Naos.AWS.Contract.1.0.17\lib\45\Naos.AWS.Contract.dll</HintPath>
+      <HintPath>..\packages\Its.Log.2.8.3\lib\net40\Its.Log.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.AWS.Core">
-      <HintPath>..\packages\Naos.AWS.Core.1.0.17\lib\45\Naos.AWS.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Naos.AWS.Contract, Version=1.0.19.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Naos.AWS.Contract.1.0.19-awssdk2\lib\45\Naos.AWS.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="Naos.AWS.Core, Version=1.0.19.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Naos.AWS.Core.1.0.19-awssdk2\lib\45\Naos.AWS.Core.dll</HintPath>
     </Reference>
     <Reference Include="Naos.MessageBus.DataContract, Version=1.0.75.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
