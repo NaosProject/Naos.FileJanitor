@@ -52,7 +52,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
             {
                 var fileManager = new FileManager(settings.DownloadAccessKey, settings.DownloadSecretKey);
 
-                var files = fileManager.ListFiles(message.Region, message.BucketName, message.KeyPrefixSearchPattern);
+                var files = await fileManager.ListFilesAsync(message.Region, message.BucketName, message.KeyPrefixSearchPattern);
                 if (message.MultipleKeysFoundStrategy == MultipleKeysFoundStrategy.SingleMatchExpectedThrow
                     && files.Count > 1)
                 {
@@ -84,12 +84,12 @@ namespace Naos.FileJanitor.MessageBus.Handler
                 }
 
                 this.FilePath = message.FilePath.Replace("{Key}", key);
-                log.Trace(
+                Log.Write(
                     () => "Dowloading the file from the specified bucket => key: " + key + " filePath: " + this.FilePath);
 
                 await fileManager.DownloadFileAsync(message.Region, message.BucketName, key, this.FilePath);
 
-                log.Trace(() => "Completed downloading the file from the specified bucket");
+                Log.Write(() => "Completed downloading the file from the specified bucket");
             }
         }
 
