@@ -12,7 +12,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Its.Log.Instrumentation;
 
     using Naos.FileJanitor.MessageBus.Contract;
-    using Naos.MessageBus.HandlingContract;
+    using Naos.MessageBus.Domain;
 
     /// <summary>
     /// Message handler to delete a file.

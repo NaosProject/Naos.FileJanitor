@@ -6,7 +6,7 @@
 
 namespace Naos.FileJanitor.MessageBus.Contract
 {
-    using Naos.MessageBus.DataContract;
+    using Naos.MessageBus.Domain;
 
     /// <summary>
     /// Message object to share a file path with remaining messages.

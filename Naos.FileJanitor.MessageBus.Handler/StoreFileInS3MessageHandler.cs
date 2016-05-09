@@ -15,7 +15,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
 
     using Naos.AWS.Core;
     using Naos.FileJanitor.MessageBus.Contract;
-    using Naos.MessageBus.HandlingContract;
+    using Naos.MessageBus.Domain;
 
     /// <summary>
     /// Message handler to store files in S3.
