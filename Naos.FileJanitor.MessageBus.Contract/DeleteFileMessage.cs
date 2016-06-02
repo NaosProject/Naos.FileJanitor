@@ -6,7 +6,7 @@
 
 namespace Naos.FileJanitor.MessageBus.Contract
 {
-    using Naos.MessageBus.DataContract;
+    using Naos.MessageBus.Domain;
 
     /// <summary>
     /// Message object to delete a file (created to support removing temp files after they've been moved to backup storage).

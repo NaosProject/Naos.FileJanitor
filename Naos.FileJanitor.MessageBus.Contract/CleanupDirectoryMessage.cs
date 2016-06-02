@@ -8,7 +8,7 @@ namespace Naos.FileJanitor.MessageBus.Contract
 {
     using System;
 
-    using Naos.MessageBus.DataContract;
+    using Naos.MessageBus.Domain;
 
     /// <summary>
     /// Message to describe a directory to get cleaned up per the specified policies.
