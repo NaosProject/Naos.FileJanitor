@@ -47,12 +47,17 @@ namespace Naos.FileJanitor.MessageBus.Handler
         /// <returns>Task to support async await execution.</returns>
         public async Task HandleAsync(StoreFileInS3Message message, FileJanitorMessageHandlerSettings settings)
         {
-            using (var log = Log.Enter(() => new { Message = message, message.Region, message.BucketName, message.Key, message.FilePath }))
+            var correlationId = Guid.NewGuid().ToString().ToUpperInvariant();
+            Log.Write($"Starting Store File; CorrelationId: { correlationId }, Region: {message.Region}, BucketName: {message.BucketName}, Key: {message.Key}, FilePath: {message.FilePath}");
+            using (var log = Log.Enter(() => new { CorrelationId = correlationId }))
             {
                 log.Trace(() => "Starting upload.");
+
                 var fileManager = new FileManager(settings.UploadAccessKey, settings.UploadSecretKey);
                 this.FilePath = message.FilePath;
-                await fileManager.UploadFileAsync(message.Region, message.BucketName, message.Key, this.FilePath);
+
+                await Retry.RunAsync(() => fileManager.UploadFileAsync(message.Region, message.BucketName, message.Key, this.FilePath));
+
                 log.Trace(() => "Finished upload.");
             }
         }

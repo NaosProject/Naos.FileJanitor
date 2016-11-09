@@ -48,17 +48,18 @@ namespace Naos.FileJanitor.MessageBus.Handler
         /// <returns>Task to support async await execution.</returns>
         public async Task HandleAsync(FetchFileFromS3Message message, FileJanitorMessageHandlerSettings settings)
         {
-            using (var log = Log.Enter(() => message))
+            var correlationId = Guid.NewGuid().ToString().ToUpperInvariant();
+            Log.Write($"Starting Fetch File; CorrelationId: { correlationId }, Region: {message.Region}, BucketName: {message.BucketName}, KeyPrefixSearchPattern: {message.KeyPrefixSearchPattern}, MultipleKeysFoundStrategy: {message.MultipleKeysFoundStrategy}, FilePath: {message.FilePath}");
+            using (var log = Log.Enter(() => new { CorrelationId = correlationId }))
             {
                 var fileManager = new FileManager(settings.DownloadAccessKey, settings.DownloadSecretKey);
 
-                var files = await fileManager.ListFilesAsync(message.Region, message.BucketName, message.KeyPrefixSearchPattern);
-                if (message.MultipleKeysFoundStrategy == MultipleKeysFoundStrategy.SingleMatchExpectedThrow
-                    && files.Count > 1)
+                var files = await Retry.RunAsync(() => fileManager.ListFilesAsync(message.Region, message.BucketName, message.KeyPrefixSearchPattern));
+
+                if (message.MultipleKeysFoundStrategy == MultipleKeysFoundStrategy.SingleMatchExpectedThrow && files.Count > 1)
                 {
                     throw new InvalidDataException(
-                        "Expected a single S3Object => Prefix Search: " + (message.KeyPrefixSearchPattern ?? "[NULL]")
-                        + ", Count: " + files.Count);
+                              "Expected a single S3Object => Prefix Search: " + (message.KeyPrefixSearchPattern ?? "[NULL]") + ", Count: " + files.Count);
                 }
 
                 var keys = files.Select(_ => _.KeyName).ToList();
@@ -71,8 +72,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
                         keys = keys.OrderByDescending(_ => _).ToList();
                         break;
                     default:
-                        throw new NotSupportedException(
-                            "Unsupported multiple found strategy => " + message.MultipleKeysFoundStrategy);
+                        throw new NotSupportedException("Unsupported multiple found strategy => " + message.MultipleKeysFoundStrategy);
                 }
 
                 var key = keys.FirstOrDefault();
@@ -84,12 +84,11 @@ namespace Naos.FileJanitor.MessageBus.Handler
                 }
 
                 this.FilePath = message.FilePath.Replace("{Key}", key);
-                Log.Write(
-                    () => "Dowloading the file from the specified bucket => key: " + key + " filePath: " + this.FilePath);
+                log.Trace(() => "Dowloading the file from the specified bucket => key: " + key + " filePath: " + this.FilePath);
 
-                await fileManager.DownloadFileAsync(message.Region, message.BucketName, key, this.FilePath);
+                await Retry.RunAsync(() => fileManager.DownloadFileAsync(message.Region, message.BucketName, key, this.FilePath));
 
-                Log.Write(() => "Completed downloading the file from the specified bucket");
+                log.Trace(() => "Completed downloading the file from the specified bucket");
             }
         }
 
