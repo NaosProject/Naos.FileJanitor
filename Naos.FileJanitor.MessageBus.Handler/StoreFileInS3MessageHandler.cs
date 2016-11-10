@@ -58,7 +58,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
         public async Task HandleAsync(StoreFileMessage message, FileJanitorMessageHandlerSettings settings)
         {
             var correlationId = Guid.NewGuid().ToString().ToUpperInvariant();
-            Log.Write($"Starting Store File; CorrelationId: { correlationId }, Region: {message.FileLocation.ContainerLocation}, BucketName: {message.FileLocation.Container}, Key: {message.FileLocation.Key}, FilePath: {message.FilePath}");
+            Log.Write(() => $"Starting Store File; CorrelationId: { correlationId }, Region: {message.FileLocation.ContainerLocation}, BucketName: {message.FileLocation.Container}, Key: {message.FileLocation.Key}, FilePath: {message.FilePath}");
             using (var log = Log.Enter(() => new { CorrelationId = correlationId }))
             {
                 log.Trace(() => "Starting upload.");

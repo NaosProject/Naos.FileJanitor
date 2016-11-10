@@ -58,7 +58,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
         public async Task HandleAsync(FetchFileMessage message, FileJanitorMessageHandlerSettings settings)
         {
             var correlationId = Guid.NewGuid().ToString().ToUpperInvariant();
-            Log.Write($"Starting Fetch File; CorrelationId: { correlationId }, Region: {message.FileLocation.ContainerLocation}, BucketName: {message.FileLocation.Container}, Key: {message.FileLocation.Key}, RawFilePath: {message.FilePath}");
+            Log.Write(() => $"Starting Fetch File; CorrelationId: { correlationId }, Region: {message.FileLocation.ContainerLocation}, BucketName: {message.FileLocation.Container}, Key: {message.FileLocation.Key}, RawFilePath: {message.FilePath}");
             using (var log = Log.Enter(() => new { CorrelationId = correlationId }))
             {
                 var fileManager = new FileManager(settings.DownloadAccessKey, settings.DownloadSecretKey);

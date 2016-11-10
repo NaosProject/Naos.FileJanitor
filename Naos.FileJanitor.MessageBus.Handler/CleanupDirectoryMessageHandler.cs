@@ -32,7 +32,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
         {
             using (var log = Log.Enter(() => message))
             {
-                log.Trace("Started cleaning-up the directory.");
+                log.Trace(() => "Started cleaning-up the directory.");
 
                 if (!File.GetAttributes(message.DirectoryFullPath).HasFlag(FileAttributes.Directory))
                 {
@@ -46,10 +46,10 @@ namespace Naos.FileJanitor.MessageBus.Handler
 
                 var searchOptions = message.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
 
-                log.Trace("Identifying all files that should be considered for cleanup.");
+                log.Trace(() => "Identifying all files that should be considered for cleanup.");
                 var files = Directory.GetFiles(message.DirectoryFullPath, "*", searchOptions);
 
-                log.Trace("Filtering to files that are outside the retention window.");
+                log.Trace(() => "Filtering to files that are outside the retention window.");
                 var cutoff = DateTime.UtcNow.Subtract(message.RetentionWindow);
                 var filesToDelete = FilterFilesToBeforeCutOff(files, cutoff, message.FileDateRetrievalStrategy);
 
@@ -64,7 +64,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
 
                 if (message.DeleteEmptyDirectories)
                 {
-                    log.Trace("Removing any empty directories.");
+                    log.Trace(() => "Removing any empty directories.");
                     foreach (
                         var directoryPath in Directory.GetDirectories(message.DirectoryFullPath, "*", searchOptions))
                     {
@@ -79,7 +79,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
                     }
                 }
 
-                log.Trace("Completed cleaning-up the directory.");
+                log.Trace(() => "Completed cleaning-up the directory.");
             }
         }
 

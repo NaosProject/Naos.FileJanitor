@@ -40,27 +40,27 @@ namespace Naos.FileJanitor.MessageBus.Handler
             }
 
             var correlationId = await Task.Run(() => Guid.NewGuid().ToString().ToUpperInvariant());
-            Log.Write($"Starting Abort if no change in file location; CorrelationId: {correlationId}, ContainerLocation: {message.FileLocation.ContainerLocation}, Container: {message.FileLocation.Container}, Key: {message.FileLocation.Key}, Topic: {message.TopicToCheckAffectedItemsFor}");
+            Log.Write(() => $"Starting Abort if no change in file location; CorrelationId: {correlationId}, ContainerLocation: {message.FileLocation.ContainerLocation}, Container: {message.FileLocation.Container}, Key: {message.FileLocation.Key}, Topic: {message.TopicToCheckAffectedItemsFor}");
             using (var log = Log.Enter(() => new { CorrelationId = correlationId }))
             {
                 // get status report
                 var matchingReport = message.TopicStatusReports.SingleOrDefault(_ => _.Topic.ToNamedTopic() == message.TopicToCheckAffectedItemsFor);
                 if (matchingReport == null)
                 {
-                    log.Trace($"Did not find matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name}");
+                    log.Trace(() => $"Did not find matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name}");
                 }
                 else
                 {
-                    log.Trace($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: {matchingReport.AffectsCompletedDateTimeUtc}");
+                    log.Trace(() => $"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: {matchingReport.AffectsCompletedDateTimeUtc}");
                     var searchToken = nameof(FileLocationAffectedItem.FileLocationAffectedItemMessage);
                     var matchingAffectedItem = matchingReport.AffectedItems?.SingleOrDefault(_ => (_.Id ?? string.Empty).ToUpperInvariant().Contains(searchToken.ToUpperInvariant()));
                     if (matchingAffectedItem == null)
                     {
-                        log.Trace($"Did not fine any affected items with expected token: {searchToken}");
+                        log.Trace(() => $"Did not fine any affected items with expected token: {searchToken}");
                     }
                     else
                     {
-                        log.Trace($"Found affected item: {matchingAffectedItem}");
+                        log.Trace(() => $"Found affected item: {matchingAffectedItem}");
                         var previousFileLocation = Serializer.Deserialize<FileLocationAffectedItem>(matchingAffectedItem.Id).FileLocation;
                         if (message.FileLocation == previousFileLocation)
                         {
@@ -68,7 +68,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
                         }
                         else
                         {
-                            log.Trace("Affected items did not match, NOT aborting.");
+                            log.Trace(() => "Affected items did not match, NOT aborting.");
                         }
                     }
                 }

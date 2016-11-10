@@ -49,7 +49,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
         public async Task HandleAsync(FindFileMessage message, FileJanitorMessageHandlerSettings settings)
         {
             var correlationId = Guid.NewGuid().ToString().ToUpperInvariant();
-            Log.Write($"Starting Find File; CorrelationId: { correlationId }, ContainerLocation/Region: {message.ContainerLocation}, Container/BucketName: {message.Container}, KeyPrefixSearchPattern: {message.KeyPrefixSearchPattern}, MultipleKeysFoundStrategy: {message.MultipleKeysFoundStrategy}");
+            Log.Write(() => $"Starting Find File; CorrelationId: { correlationId }, ContainerLocation/Region: {message.ContainerLocation}, Container/BucketName: {message.Container}, KeyPrefixSearchPattern: {message.KeyPrefixSearchPattern}, MultipleKeysFoundStrategy: {message.MultipleKeysFoundStrategy}");
             using (var log = Log.Enter(() => new { CorrelationId = correlationId }))
             {
                 var fileManager = new FileManager(settings.DownloadAccessKey, settings.DownloadSecretKey);
