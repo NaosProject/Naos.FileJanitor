@@ -106,7 +106,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CleanupDirectoryMessageHandler.cs" />
-    <Compile Include="ShareFileMessageHandler.cs" />
+    <Compile Include="AbortIfNoNewFileLocationForTopicMessageHandler.cs" />
+    <Compile Include="FindFileInS3MessageHandler.cs" />
+    <Compile Include="ShareFileLocationMessageHandler.cs" />
+    <Compile Include="ShareFilePathMessageHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DeleteFileMessageHandler.cs" />
     <Compile Include="FetchFileFromS3MessageHandler.cs" />

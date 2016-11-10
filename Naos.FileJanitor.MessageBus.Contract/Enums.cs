@@ -28,7 +28,7 @@ namespace Naos.FileJanitor.MessageBus.Contract
     }
 
     /// <summary>
-    /// Enumeration of the ways to handle multiple keys found in an S3 bucket.
+    /// Enumeration of the ways to handle multiple keys found in a container.
     /// </summary>
     public enum MultipleKeysFoundStrategy
     {

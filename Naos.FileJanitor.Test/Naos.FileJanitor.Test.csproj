@@ -77,6 +77,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbortIfNoNewFileLocationForTopicMessageHandlerTest.cs" />
+    <Compile Include="FileLocationTests.cs" />
     <Compile Include="FileJanitorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

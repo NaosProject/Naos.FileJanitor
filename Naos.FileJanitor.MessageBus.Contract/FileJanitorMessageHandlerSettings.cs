@@ -12,22 +12,22 @@ namespace Naos.FileJanitor.MessageBus.Contract
     public class FileJanitorMessageHandlerSettings
     {
         /// <summary>
-        /// Gets or sets the access key of a user to upload files to S3.
+        /// Gets or sets the access key of a user to upload files to storage.
         /// </summary>
         public string UploadAccessKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the secret key of a user to upload files to S3.
+        /// Gets or sets the secret key of a user to upload files to storage.
         /// </summary>
         public string UploadSecretKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the access key of a user to download files from S3.
+        /// Gets or sets the access key of a user to download files from storage.
         /// </summary>
         public string DownloadAccessKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the secret key of a user to download files from S3.
+        /// Gets or sets the secret key of a user to download files from storage.
         /// </summary>
         public string DownloadSecretKey { get; set; }
     }

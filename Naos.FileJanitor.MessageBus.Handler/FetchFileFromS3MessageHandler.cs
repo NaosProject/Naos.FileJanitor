@@ -8,7 +8,6 @@ namespace Naos.FileJanitor.MessageBus.Handler
 {
     using System;
     using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using Its.Configuration;
@@ -21,19 +20,29 @@ namespace Naos.FileJanitor.MessageBus.Handler
     /// <summary>
     /// Message handler to fetch a file from S3.
     /// </summary>
-    public class FetchFileFromS3MessageHandler : IHandleMessages<FetchFileFromS3Message>, IShareFilePath
+    public class FetchFileFromS3MessageHandler : IHandleMessages<FetchFileMessage>, IShareFilePath, IShareAffectedItems
     {
         /// <inheritdoc />
-        public async Task HandleAsync(FetchFileFromS3Message message)
+        public async Task HandleAsync(FetchFileMessage message)
         {
             if (message.FilePath == null)
             {
                 throw new FileNotFoundException("Could not use specified filepath: " + (message.FilePath ?? "[NULL]"));
             }
 
-            if (string.IsNullOrEmpty(message.BucketName))
+            if (message.FileLocation == null)
             {
-                throw new ApplicationException("Must specify bucket name.");
+                throw new ApplicationException("Must specify file location to fetch from.");
+            }
+
+            if (string.IsNullOrEmpty(message.FileLocation.ContainerLocation))
+            {
+                throw new ApplicationException("Must specify region (container location).");
+            }
+
+            if (string.IsNullOrEmpty(message.FileLocation.Container))
+            {
+                throw new ApplicationException("Must specify bucket name (container).");
             }
 
             var settings = Settings.Get<FileJanitorMessageHandlerSettings>();
@@ -46,53 +55,43 @@ namespace Naos.FileJanitor.MessageBus.Handler
         /// <param name="message">Message to handle.</param>
         /// <param name="settings">Needed settings to handle messages.</param>
         /// <returns>Task to support async await execution.</returns>
-        public async Task HandleAsync(FetchFileFromS3Message message, FileJanitorMessageHandlerSettings settings)
+        public async Task HandleAsync(FetchFileMessage message, FileJanitorMessageHandlerSettings settings)
         {
             var correlationId = Guid.NewGuid().ToString().ToUpperInvariant();
-            Log.Write($"Starting Fetch File; CorrelationId: { correlationId }, Region: {message.Region}, BucketName: {message.BucketName}, KeyPrefixSearchPattern: {message.KeyPrefixSearchPattern}, MultipleKeysFoundStrategy: {message.MultipleKeysFoundStrategy}, FilePath: {message.FilePath}");
+            Log.Write(() => $"Starting Fetch File; CorrelationId: { correlationId }, Region: {message.FileLocation.ContainerLocation}, BucketName: {message.FileLocation.Container}, Key: {message.FileLocation.Key}, RawFilePath: {message.FilePath}");
             using (var log = Log.Enter(() => new { CorrelationId = correlationId }))
             {
                 var fileManager = new FileManager(settings.DownloadAccessKey, settings.DownloadSecretKey);
 
-                var files = await Retry.RunAsync(() => fileManager.ListFilesAsync(message.Region, message.BucketName, message.KeyPrefixSearchPattern));
+                // shares path down because it can be augmented...
+                this.FilePath = message.FilePath.Replace("{Key}", message.FileLocation.Key);
+                log.Trace(() => $"Dowloading the file to replaced FilePath: {this.FilePath}");
 
-                if (message.MultipleKeysFoundStrategy == MultipleKeysFoundStrategy.SingleMatchExpectedThrow && files.Count > 1)
-                {
-                    throw new InvalidDataException(
-                              "Expected a single S3Object => Prefix Search: " + (message.KeyPrefixSearchPattern ?? "[NULL]") + ", Count: " + files.Count);
-                }
+                await
+                    Retry.RunAsync(
+                        () =>
+                            fileManager.DownloadFileAsync(
+                                message.FileLocation.ContainerLocation,
+                                message.FileLocation.Container,
+                                message.FileLocation.Key,
+                                this.FilePath));
 
-                var keys = files.Select(_ => _.KeyName).ToList();
-                switch (message.MultipleKeysFoundStrategy)
-                {
-                    case MultipleKeysFoundStrategy.FirstSortedAscending:
-                        keys = keys.OrderBy(_ => _).ToList();
-                        break;
-                    case MultipleKeysFoundStrategy.FirstSortedDescending:
-                        keys = keys.OrderByDescending(_ => _).ToList();
-                        break;
-                    default:
-                        throw new NotSupportedException("Unsupported multiple found strategy => " + message.MultipleKeysFoundStrategy);
-                }
+                var affectedItem = new FileLocationAffectedItem
+                                       {
+                                           FileLocationAffectedItemMessage = "Fetched file from location to path.",
+                                           FileLocation = message.FileLocation,
+                                           FilePath = this.FilePath
+                                       };
 
-                var key = keys.FirstOrDefault();
-                if (key == null)
-                {
-                    throw new FileNotFoundException(
-                        "Could not find an S3 Object => bucket: " + message.BucketName + ", KeyPrefixSearchPattern: "
-                        + message.KeyPrefixSearchPattern);
-                }
-
-                this.FilePath = message.FilePath.Replace("{Key}", key);
-                log.Trace(() => "Dowloading the file from the specified bucket => key: " + key + " filePath: " + this.FilePath);
-
-                await Retry.RunAsync(() => fileManager.DownloadFileAsync(message.Region, message.BucketName, key, this.FilePath));
-
-                log.Trace(() => "Completed downloading the file from the specified bucket");
+                this.AffectedItems = new[] { new AffectedItem { Id = Serializer.Serialize(affectedItem) } };
+                log.Trace(() => "Completed downloading the file");
             }
         }
 
         /// <inheritdoc />
         public string FilePath { get; set; }
+
+        /// <inheritdoc />
+        public AffectedItem[] AffectedItems { get; set; }
     }
 }

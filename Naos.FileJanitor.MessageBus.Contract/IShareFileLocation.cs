@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ShareFileMessage.cs" company="Naos">
+// <copyright file="IShareFileLocation.cs" company="Naos">
 //   Copyright 2015 Naos
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -9,16 +9,13 @@ namespace Naos.FileJanitor.MessageBus.Contract
     using Naos.MessageBus.Domain;
 
     /// <summary>
-    /// Message object to share a file path with remaining messages.
+    /// Interface to support sharing a file location between handlers and future messages.
     /// </summary>
-    public class ShareFileMessage : IMessage
+    public interface IShareFileLocation : IShare
     {
-        /// <inheritdoc />
-        public string Description { get; set; }
-
         /// <summary>
-        /// Gets or sets the path (in the context of the handling of the message) of file to share with rest of sequence.
+        /// Gets or sets details about a file.
         /// </summary>
-        public string FilePathToShare { get; set; }
+        FileLocation FileLocation { get; set; }
     }
 }
