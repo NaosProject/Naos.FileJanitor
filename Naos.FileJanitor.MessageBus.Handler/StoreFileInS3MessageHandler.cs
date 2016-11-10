@@ -20,19 +20,29 @@ namespace Naos.FileJanitor.MessageBus.Handler
     /// <summary>
     /// Message handler to store files in S3.
     /// </summary>
-    public class StoreFileInS3MessageHandler : IHandleMessages<StoreFileInS3Message>, IShareFilePath
+    public class StoreFileInS3MessageHandler : IHandleMessages<StoreFileMessage>, IShareAffectedItems
     {
         /// <inheritdoc />
-        public async Task HandleAsync(StoreFileInS3Message message)
+        public async Task HandleAsync(StoreFileMessage message)
         {
             if (message.FilePath == null || !File.Exists(message.FilePath))
             {
                 throw new FileNotFoundException("Could not find specified filepath: " + (message.FilePath ?? "[NULL]"));
             }
 
-            if (string.IsNullOrEmpty(message.BucketName))
+            if (message.FileLocation == null)
             {
-                throw new ApplicationException("Must specify bucket name.");
+                throw new ApplicationException("Must specify file location to fetch from.");
+            }
+
+            if (string.IsNullOrEmpty(message.FileLocation.ContainerLocation))
+            {
+                throw new ApplicationException("Must specify region (container location).");
+            }
+
+            if (string.IsNullOrEmpty(message.FileLocation.Container))
+            {
+                throw new ApplicationException("Must specify bucket name (container).");
             }
 
             var settings = Settings.Get<FileJanitorMessageHandlerSettings>();
@@ -40,29 +50,44 @@ namespace Naos.FileJanitor.MessageBus.Handler
         }
 
         /// <summary>
-        /// Handles a StoreFileInS3Message.
+        /// Handles a <see cref="StoreFileMessage"/>.
         /// </summary>
         /// <param name="message">Message to handle.</param>
         /// <param name="settings">Needed settings to handle messages.</param>
         /// <returns>Task to support async await execution.</returns>
-        public async Task HandleAsync(StoreFileInS3Message message, FileJanitorMessageHandlerSettings settings)
+        public async Task HandleAsync(StoreFileMessage message, FileJanitorMessageHandlerSettings settings)
         {
             var correlationId = Guid.NewGuid().ToString().ToUpperInvariant();
-            Log.Write($"Starting Store File; CorrelationId: { correlationId }, Region: {message.Region}, BucketName: {message.BucketName}, Key: {message.Key}, FilePath: {message.FilePath}");
+            Log.Write($"Starting Store File; CorrelationId: { correlationId }, Region: {message.FileLocation.ContainerLocation}, BucketName: {message.FileLocation.Container}, Key: {message.FileLocation.Key}, FilePath: {message.FilePath}");
             using (var log = Log.Enter(() => new { CorrelationId = correlationId }))
             {
                 log.Trace(() => "Starting upload.");
 
                 var fileManager = new FileManager(settings.UploadAccessKey, settings.UploadSecretKey);
-                this.FilePath = message.FilePath;
 
-                await Retry.RunAsync(() => fileManager.UploadFileAsync(message.Region, message.BucketName, message.Key, this.FilePath));
+                await
+                    Retry.RunAsync(
+                        () =>
+                            fileManager.UploadFileAsync(
+                                message.FileLocation.ContainerLocation,
+                                message.FileLocation.Container,
+                                message.FileLocation.Key,
+                                message.FilePath));
+
+                var affectedItem = new FileLocationAffectedItem
+                {
+                    FileLocationAffectedItemMessage = "Stored file from path to location.",
+                    FileLocation = message.FileLocation,
+                    FilePath = message.FilePath
+                };
+
+                this.AffectedItems = new[] { new AffectedItem { Id = Serializer.Serialize(affectedItem) } };
 
                 log.Trace(() => "Finished upload.");
             }
         }
 
         /// <inheritdoc />
-        public string FilePath { get; set; }
+        public AffectedItem[] AffectedItems { get; set; }
     }
 }

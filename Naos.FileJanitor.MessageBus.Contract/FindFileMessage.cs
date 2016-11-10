@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FetchFileFromS3Message.cs" company="Naos">
+// <copyright file="FindFileMessage.cs" company="Naos">
 //   Copyright 2015 Naos
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -9,27 +9,22 @@ namespace Naos.FileJanitor.MessageBus.Contract
     using Naos.MessageBus.Domain;
 
     /// <summary>
-    /// Message to get a file from S3.
+    /// Message object to find a file in storage using provided criteria and yield a <see cref="FileLocation"/> object.
     /// </summary>
-    public class FetchFileFromS3Message : IMessage, IShareFilePath
+    public class FindFileMessage : IMessage
     {
         /// <inheritdoc />
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the path (in the context of the handling of the message) of file downloaded from S3.
+        /// Gets or sets the storage location.
         /// </summary>
-        public string FilePath { get; set; }
+        public string ContainerLocation { get; set; }
 
         /// <summary>
-        /// Gets or sets the region the intended bucket lives in.
+        /// Gets or sets the storage container.
         /// </summary>
-        public string Region { get; set; }
-
-        /// <summary>
-        /// Gets or sets bucket name to look for the file in.
-        /// </summary>
-        public string BucketName { get; set; }
+        public string Container { get; set; }
 
         /// <summary>
         /// Gets or sets the search pattern for the key (multiples will be handled according to the strategy).

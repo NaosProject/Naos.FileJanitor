@@ -22,17 +22,37 @@ namespace Naos.FileJanitor.Test
         }
 
         [Fact]
-        public void ShareFileMessageHandlerHandle_PathOnMessage_PathShared()
+        public void ShareFilePathMessageHandlerHandle_PathOnMessage_PathShared()
         {
             // arrange
-            var message = new ShareFileMessage { FilePathToShare = "D:\\Monkey\\File.txt" };
-            var handler = new ShareFileMessageHandler();
+            var message = new ShareFilePathMessage { FilePathToShare = "D:\\Monkey\\File.txt" };
+            var handler = new ShareFilePathMessageHandler();
 
             // act
             handler.HandleAsync(message).Wait();
 
             // assert
             Assert.Equal(message.FilePathToShare, handler.FilePath);
+        }
+
+        [Fact]
+        public void ShareFileLocationMessageHandlerHandle_PropertiesOnMessage_PropertiesShared()
+        {
+            // arrange
+            var message = new ShareFileLocationMessage
+                              {
+                                  FileLocationToShare = new FileLocation { ContainerLocation = "region", Container = "bucket", Key = "key" }
+                              };
+
+            var handler = new ShareFileLocationMessageHandler();
+
+            // act
+            handler.HandleAsync(message).Wait();
+
+            // assert
+            Assert.Equal(message.FileLocationToShare.ContainerLocation, handler.FileLocation.ContainerLocation);
+            Assert.Equal(message.FileLocationToShare.Container, handler.FileLocation.Container);
+            Assert.Equal(message.FileLocationToShare.Key, handler.FileLocation.Key);
         }
     }
 }

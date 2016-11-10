@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ShareFileMessageHandler.cs" company="Naos">
+// <copyright file="ShareFilePathMessageHandler.cs" company="Naos">
 //   Copyright 2015 Naos
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Naos.FileJanitor.MessageBus.Handler
 {
+    using System;
     using System.Threading.Tasks;
 
     using Its.Log.Instrumentation;
@@ -14,17 +15,20 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Naos.MessageBus.Domain;
 
     /// <summary>
-    /// Message handler to share the provided file path with remaining messages.
+    /// Message handler for <see cref="ShareFilePathMessage"/>.
     /// </summary>
-    public class ShareFileMessageHandler : IHandleMessages<ShareFileMessage>, IShareFilePath
+    public class ShareFilePathMessageHandler : IHandleMessages<ShareFilePathMessage>, IShareFilePath
     {
         /// <inheritdoc />
-        public async Task HandleAsync(ShareFileMessage message)
+        public async Task HandleAsync(ShareFilePathMessage message)
         {
-            using (var log = Log.Enter(() => new { Message = message, FilePathToShare = message.FilePathToShare }))
+            var correlationId = Guid.NewGuid().ToString().ToUpperInvariant();
+            Log.Write(() => $"Sharing file path; CorrelationId: {correlationId}, FilePathToShare: {message.FilePathToShare}");
+            using (var log = Log.Enter(() => new { CorrelationId = correlationId }))
             {
-                log.Trace(() => "Sharing file: " + message.FilePathToShare);
+                log.Trace(() => "Sharing file path.");
                 this.FilePath = await Task.FromResult(message.FilePathToShare);
+                log.Trace(() => "Shared file path.");
             }
         }
 
