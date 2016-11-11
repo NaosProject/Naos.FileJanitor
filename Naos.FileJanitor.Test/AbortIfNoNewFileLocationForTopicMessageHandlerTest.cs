@@ -217,7 +217,7 @@ namespace Naos.FileJanitor.Test
 
             // assert
             Assert.NotNull(LogMessages.SingleOrDefault(_ => _.ToJson().Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
-            Assert.NotNull(LogMessages.SingleOrDefault(_ => _.ToJson().Contains("Did not fine any affected items with expected token: ")));
+            Assert.NotNull(LogMessages.SingleOrDefault(_ => _.ToJson().Contains("Did not find any affected items with expected token: ")));
         }
 
         [Fact]
