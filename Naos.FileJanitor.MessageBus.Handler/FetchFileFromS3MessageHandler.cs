@@ -83,7 +83,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
                                            FilePath = this.FilePath
                                        };
 
-                this.AffectedItems = new[] { new AffectedItem { Id = Serializer.Serialize(affectedItem) } };
+                this.AffectedItems = new[] { new AffectedItem { Id = affectedItem.ToJson() } };
                 log.Trace(() => "Completed downloading the file");
             }
         }

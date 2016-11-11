@@ -61,7 +61,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
                     else
                     {
                         log.Trace(() => $"Found affected item: {matchingAffectedItem}");
-                        var previousFileLocation = Serializer.Deserialize<FileLocationAffectedItem>(matchingAffectedItem.Id).FileLocation;
+                        var previousFileLocation = matchingAffectedItem.Id.FromJson<FileLocationAffectedItem>().FileLocation;
                         if (message.FileLocation == previousFileLocation)
                         {
                             throw new AbortParcelDeliveryException($"Found that the affected items for affects complete {matchingReport.AffectsCompletedDateTimeUtc} matched specified file location.");

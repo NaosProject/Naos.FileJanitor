@@ -46,7 +46,7 @@ namespace Naos.FileJanitor.Test
                                                FileLocation = new FileLocation { ContainerLocation = "containerLocation", Container = "container", Key = "key" },
                                                FilePath = "path"
                                            };
-            var affectedItemId = Serializer.Serialize(affectedItem);
+            var affectedItemId = affectedItem.ToJson();
             var affectsCompletedDateTimeUtc = DateTime.UtcNow;
 
             var message = new AbortIfNoNewFileLocationForTopicMessage
@@ -71,8 +71,8 @@ namespace Naos.FileJanitor.Test
             Thread.Sleep(50); // make sure all log messages get flushed
 
             // assert
-            Assert.NotNull(LogMessages.SingleOrDefault(_ => Serializer.Serialize(_).Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
-            Assert.NotNull(LogMessages.SingleOrDefault(_ => Serializer.Serialize(_).Contains("Found affected item: ")));
+            Assert.NotNull(LogMessages.SingleOrDefault(_ => _.ToJson().Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
+            Assert.NotNull(LogMessages.SingleOrDefault(_ => _.ToJson().Contains("Found affected item: ")));
             Assert.Equal(affectedItem.FileLocation, message.FileLocation);
 
             Assert.NotNull(ex);
@@ -88,13 +88,12 @@ namespace Naos.FileJanitor.Test
             var handler = new AbortIfNoNewFileLocationForTopicMessageHandler();
             var topic = new NamedTopic("topic");
             var affectedItem =
-                Serializer.Serialize(
-                    new FileLocationAffectedItem
-                        {
-                            FileLocationAffectedItemMessage = "did stuff",
-                            FileLocation = new FileLocation { ContainerLocation = "containerLocation", Container = "container", Key = "key1" },
-                            FilePath = "path"
-                        });
+                new FileLocationAffectedItem
+                    {
+                        FileLocationAffectedItemMessage = "did stuff",
+                        FileLocation = new FileLocation { ContainerLocation = "containerLocation", Container = "container", Key = "key1" },
+                        FilePath = "path"
+                    }.ToJson();
 
             var message = new AbortIfNoNewFileLocationForTopicMessage
                               {
@@ -116,9 +115,9 @@ namespace Naos.FileJanitor.Test
             Thread.Sleep(50); // make sure all log messages get flushed
 
             // assert
-            Assert.NotNull(LogMessages.SingleOrDefault(_ => Serializer.Serialize(_).Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
-            Assert.NotNull(LogMessages.SingleOrDefault(_ => Serializer.Serialize(_).Contains("Found affected item: ")));
-            Assert.NotNull(LogMessages.SingleOrDefault(_ => Serializer.Serialize(_).Contains("Affected items did not match, NOT aborting.")));
+            Assert.NotNull(LogMessages.SingleOrDefault(_ => _.ToJson().Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
+            Assert.NotNull(LogMessages.SingleOrDefault(_ => _.ToJson().Contains("Found affected item: ")));
+            Assert.NotNull(LogMessages.SingleOrDefault(_ => _.ToJson().Contains("Affected items did not match, NOT aborting.")));
         }
 
         [Fact]
@@ -128,13 +127,12 @@ namespace Naos.FileJanitor.Test
             var handler = new AbortIfNoNewFileLocationForTopicMessageHandler();
             var topic = new NamedTopic("topic");
             var affectedItem =
-                Serializer.Serialize(
-                    new FileLocationAffectedItem
-                        {
-                            FileLocationAffectedItemMessage = "did stuff",
-                            FileLocation = new FileLocation { ContainerLocation = "containerLocation", Container = "container1", Key = "key" },
-                            FilePath = "path"
-                        });
+                new FileLocationAffectedItem
+                    {
+                        FileLocationAffectedItemMessage = "did stuff",
+                        FileLocation = new FileLocation { ContainerLocation = "containerLocation", Container = "container1", Key = "key" },
+                        FilePath = "path"
+                    }.ToJson();
 
             var message = new AbortIfNoNewFileLocationForTopicMessage
                               {
@@ -156,9 +154,9 @@ namespace Naos.FileJanitor.Test
             Thread.Sleep(50); // make sure all log messages get flushed
 
             // assert
-            Assert.NotNull(LogMessages.SingleOrDefault(_ => Serializer.Serialize(_).Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
-            Assert.NotNull(LogMessages.SingleOrDefault(_ => Serializer.Serialize(_).Contains("Found affected item: ")));
-            Assert.NotNull(LogMessages.SingleOrDefault(_ => Serializer.Serialize(_).Contains("Affected items did not match, NOT aborting.")));
+            Assert.NotNull(LogMessages.SingleOrDefault(_ => _.ToJson().Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
+            Assert.NotNull(LogMessages.SingleOrDefault(_ => _.ToJson().Contains("Found affected item: ")));
+            Assert.NotNull(LogMessages.SingleOrDefault(_ => _.ToJson().Contains("Affected items did not match, NOT aborting.")));
         }
 
         [Fact]
@@ -168,13 +166,12 @@ namespace Naos.FileJanitor.Test
             var handler = new AbortIfNoNewFileLocationForTopicMessageHandler();
             var topic = new NamedTopic("topic");
             var affectedItem =
-                Serializer.Serialize(
-                    new FileLocationAffectedItem
-                        {
-                            FileLocationAffectedItemMessage = "did stuff",
-                            FileLocation = new FileLocation { ContainerLocation = "containerLocation1", Container = "container", Key = "key" },
-                            FilePath = "path"
-                        });
+                new FileLocationAffectedItem
+                    {
+                        FileLocationAffectedItemMessage = "did stuff",
+                        FileLocation = new FileLocation { ContainerLocation = "containerLocation1", Container = "container", Key = "key" },
+                        FilePath = "path"
+                    }.ToJson();
 
             var message = new AbortIfNoNewFileLocationForTopicMessage
                               {
@@ -196,9 +193,9 @@ namespace Naos.FileJanitor.Test
             Thread.Sleep(50); // make sure all log messages get flushed
 
             // assert
-            Assert.NotNull(LogMessages.SingleOrDefault(_ => Serializer.Serialize(_).Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
-            Assert.NotNull(LogMessages.SingleOrDefault(_ => Serializer.Serialize(_).Contains("Found affected item: ")));
-            Assert.NotNull(LogMessages.SingleOrDefault(_ => Serializer.Serialize(_).Contains("Affected items did not match, NOT aborting.")));
+            Assert.NotNull(LogMessages.SingleOrDefault(_ => _.ToJson().Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
+            Assert.NotNull(LogMessages.SingleOrDefault(_ => _.ToJson().Contains("Found affected item: ")));
+            Assert.NotNull(LogMessages.SingleOrDefault(_ => _.ToJson().Contains("Affected items did not match, NOT aborting.")));
         }
 
         [Fact]
@@ -219,8 +216,8 @@ namespace Naos.FileJanitor.Test
             Thread.Sleep(50); // make sure all log messages get flushed
 
             // assert
-            Assert.NotNull(LogMessages.SingleOrDefault(_ => Serializer.Serialize(_).Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
-            Assert.NotNull(LogMessages.SingleOrDefault(_ => Serializer.Serialize(_).Contains("Did not fine any affected items with expected token: ")));
+            Assert.NotNull(LogMessages.SingleOrDefault(_ => _.ToJson().Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
+            Assert.NotNull(LogMessages.SingleOrDefault(_ => _.ToJson().Contains("Did not fine any affected items with expected token: ")));
         }
 
         [Fact]
@@ -242,7 +239,7 @@ namespace Naos.FileJanitor.Test
             // assert
             Assert.NotNull(
                 LogMessages.SingleOrDefault(
-                    _ => Serializer.Serialize(_).Contains($"Did not find matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name}")));
+                    _ => _.ToJson().Contains($"Did not find matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name}")));
         }
 
         [Fact]
@@ -264,7 +261,7 @@ namespace Naos.FileJanitor.Test
             // assert
             Assert.NotNull(
                 LogMessages.SingleOrDefault(
-                    _ => Serializer.Serialize(_).Contains($"Did not find matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name}")));
+                    _ => _.ToJson().Contains($"Did not find matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name}")));
         }
 
         [Fact]
