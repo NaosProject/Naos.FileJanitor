@@ -56,11 +56,11 @@ namespace Naos.FileJanitor.MessageBus.Handler
                     var matchingAffectedItem = matchingReport.AffectedItems?.SingleOrDefault(_ => (_.Id ?? string.Empty).ToUpperInvariant().Contains(searchToken.ToUpperInvariant()));
                     if (matchingAffectedItem == null)
                     {
-                        log.Trace(() => $"Did not fine any affected items with expected token: {searchToken}");
+                        log.Trace(() => $"Did not find any affected items with expected token: {searchToken}");
                     }
                     else
                     {
-                        log.Trace(() => $"Found affected item: {matchingAffectedItem}");
+                        log.Trace(() => $"Found affected item: {matchingAffectedItem.Id}");
                         var previousFileLocation = matchingAffectedItem.Id.FromJson<FileLocationAffectedItem>().FileLocation;
                         if (message.FileLocation == previousFileLocation)
                         {

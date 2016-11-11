@@ -10,12 +10,15 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using System.IO;
     using System.Threading.Tasks;
 
+    using ByteSizeLib;
+
     using Its.Configuration;
     using Its.Log.Instrumentation;
 
     using Naos.AWS.Core;
     using Naos.FileJanitor.MessageBus.Contract;
     using Naos.MessageBus.Domain;
+    using Naos.Recipes.RunWithRetry;
 
     /// <summary>
     /// Message handler to store files in S3.
@@ -65,6 +68,14 @@ namespace Naos.FileJanitor.MessageBus.Handler
 
                 var fileManager = new FileManager(settings.UploadAccessKey, settings.UploadSecretKey);
 
+                var fileSize = ByteSize.FromBytes(new FileInfo(message.FilePath).Length);
+                var attemptWaitTimeMultiplier = TimeSpan.FromSeconds(fileSize.MegaBytes * 0.001);
+                var minimumAttemptWaitTimeMultiplier = TimeSpan.FromSeconds(5);
+                if (attemptWaitTimeMultiplier < minimumAttemptWaitTimeMultiplier)
+                {
+                    attemptWaitTimeMultiplier = minimumAttemptWaitTimeMultiplier;
+                }
+
                 await
                     Retry.RunAsync(
                         () =>
@@ -72,7 +83,9 @@ namespace Naos.FileJanitor.MessageBus.Handler
                                 message.FileLocation.ContainerLocation,
                                 message.FileLocation.Container,
                                 message.FileLocation.Key,
-                                message.FilePath));
+                                message.FilePath),
+                        3,
+                        attemptWaitTimeMultiplier);
 
                 var affectedItem = new FileLocationAffectedItem
                 {

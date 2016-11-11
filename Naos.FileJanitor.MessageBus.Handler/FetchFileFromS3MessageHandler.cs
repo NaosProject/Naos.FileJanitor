@@ -16,6 +16,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Naos.AWS.Core;
     using Naos.FileJanitor.MessageBus.Contract;
     using Naos.MessageBus.Domain;
+    using Naos.Recipes.RunWithRetry;
 
     /// <summary>
     /// Message handler to fetch a file from S3.
