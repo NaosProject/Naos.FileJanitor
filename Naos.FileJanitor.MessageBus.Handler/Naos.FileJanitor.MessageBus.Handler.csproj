@@ -54,10 +54,6 @@
       <HintPath>..\packages\AWSSDK.SecurityToken.3.3.0.2\lib\net45\AWSSDK.SecurityToken.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ByteSizeLib, Version=1.2.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ByteSize.1.2.3\lib\net45\ByteSizeLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="CuttingEdge.Conditions, Version=1.2.0.11174, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\CuttingEdge.Conditions.1.2.0.0\lib\NET35\CuttingEdge.Conditions.dll</HintPath>
@@ -113,6 +109,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include=".Naos.Recipes\Naos.Recipes.ByteSize.cs" />
     <Compile Include=".Naos.Recipes\Retry.cs" />
     <Compile Include="CleanupDirectoryMessageHandler.cs" />
     <Compile Include="AbortIfNoNewFileLocationForTopicMessageHandler.cs" />
