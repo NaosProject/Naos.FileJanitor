@@ -18,7 +18,8 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Naos.AWS.Core;
     using Naos.FileJanitor.MessageBus.Contract;
     using Naos.MessageBus.Domain;
-    using Naos.Recipes.RunWithRetry;
+
+    using Spritely.Redo;
 
     /// <summary>
     /// Message handler to store files in S3.
@@ -77,15 +78,16 @@ namespace Naos.FileJanitor.MessageBus.Handler
                 }
 
                 await
-                    Retry.RunAsync(
-                        () =>
-                            fileManager.UploadFileAsync(
-                                message.FileLocation.ContainerLocation,
-                                message.FileLocation.Container,
-                                message.FileLocation.Key,
-                                message.FilePath),
-                        3,
-                        attemptWaitTimeMultiplier);
+                    Using.LinearBackOff(attemptWaitTimeMultiplier)
+                        .WithMaxRetries(3)
+                        .Run(
+                            () =>
+                                fileManager.UploadFileAsync(
+                                    message.FileLocation.ContainerLocation,
+                                    message.FileLocation.Container,
+                                    message.FileLocation.Key,
+                                    message.FilePath))
+                        .Now();
 
                 var affectedItem = new FileLocationAffectedItem
                 {

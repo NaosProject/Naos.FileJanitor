@@ -17,7 +17,8 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Naos.AWS.Core;
     using Naos.FileJanitor.MessageBus.Contract;
     using Naos.MessageBus.Domain;
-    using Naos.Recipes.RunWithRetry;
+
+    using Spritely.Redo;
 
     /// <summary>
     /// Message handler to fetch a file from S3.
@@ -55,7 +56,12 @@ namespace Naos.FileJanitor.MessageBus.Handler
             {
                 var fileManager = new FileManager(settings.DownloadAccessKey, settings.DownloadSecretKey);
 
-                var files = await Retry.RunAsync(() => fileManager.ListFilesAsync(message.ContainerLocation, message.Container, message.KeyPrefixSearchPattern));
+                var files =
+                    await
+                        Using.LinearBackOff(TimeSpan.FromSeconds(5))
+                            .WithMaxRetries(3)
+                            .Run(() => fileManager.ListFilesAsync(message.ContainerLocation, message.Container, message.KeyPrefixSearchPattern))
+                            .Now();
 
                 if (message.MultipleKeysFoundStrategy == MultipleKeysFoundStrategy.SingleMatchExpectedThrow && files.Count > 1)
                 {

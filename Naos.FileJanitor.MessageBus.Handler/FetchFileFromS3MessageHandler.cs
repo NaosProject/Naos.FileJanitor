@@ -16,7 +16,8 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Naos.AWS.Core;
     using Naos.FileJanitor.MessageBus.Contract;
     using Naos.MessageBus.Domain;
-    using Naos.Recipes.RunWithRetry;
+
+    using Spritely.Redo;
 
     /// <summary>
     /// Message handler to fetch a file from S3.
@@ -69,13 +70,16 @@ namespace Naos.FileJanitor.MessageBus.Handler
                 log.Trace(() => $"Dowloading the file to replaced FilePath: {this.FilePath}");
 
                 await
-                    Retry.RunAsync(
-                        () =>
-                            fileManager.DownloadFileAsync(
-                                message.FileLocation.ContainerLocation,
-                                message.FileLocation.Container,
-                                message.FileLocation.Key,
-                                this.FilePath));
+                    Using.LinearBackOff(TimeSpan.FromSeconds(5))
+                        .WithMaxRetries(3)
+                        .Run(
+                            () =>
+                                fileManager.DownloadFileAsync(
+                                    message.FileLocation.ContainerLocation,
+                                    message.FileLocation.Container,
+                                    message.FileLocation.Key,
+                                    this.FilePath))
+                        .Now();
 
                 var affectedItem = new FileLocationAffectedItem
                                        {
