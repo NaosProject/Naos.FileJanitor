@@ -13,7 +13,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Its.Configuration;
     using Its.Log.Instrumentation;
 
-    using Naos.AWS.Core;
+    using Naos.AWS.S3;
     using Naos.FileJanitor.MessageBus.Contract;
     using Naos.MessageBus.Domain;
 

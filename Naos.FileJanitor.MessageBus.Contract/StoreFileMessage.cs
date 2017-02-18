@@ -6,6 +6,9 @@
 
 namespace Naos.FileJanitor.MessageBus.Contract
 {
+    using System.Collections.Generic;
+    using System.Security.Cryptography;
+
     using Naos.MessageBus.Domain;
 
     /// <summary>
@@ -25,5 +28,15 @@ namespace Naos.FileJanitor.MessageBus.Contract
         /// Gets or sets the target location.
         /// </summary>
         public FileLocation FileLocation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the hashing algorithms to compute, persist, and use in verification.
+        /// </summary>
+        public IReadOnlyCollection<HashAlgorithmName> HashingAlgorithms { get; set; }
+
+        /// <summary>
+        /// Gets or sets user defined meta data to save with the file.
+        /// </summary>
+        public IReadOnlyDictionary<string, string> UserDefinedMetadata { get; set; }
     }
 }

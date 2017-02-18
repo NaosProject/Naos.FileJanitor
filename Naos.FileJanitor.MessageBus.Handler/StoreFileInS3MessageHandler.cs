@@ -15,7 +15,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Its.Configuration;
     using Its.Log.Instrumentation;
 
-    using Naos.AWS.Core;
+    using Naos.AWS.S3;
     using Naos.FileJanitor.MessageBus.Contract;
     using Naos.MessageBus.Domain;
 
@@ -86,7 +86,9 @@ namespace Naos.FileJanitor.MessageBus.Handler
                                     message.FileLocation.ContainerLocation,
                                     message.FileLocation.Container,
                                     message.FileLocation.Key,
-                                    message.FilePath))
+                                    message.FilePath,
+                                    message.HashingAlgorithms,
+                                    message.UserDefinedMetadata))
                         .Now();
 
                 var affectedItem = new FileLocationAffectedItem
