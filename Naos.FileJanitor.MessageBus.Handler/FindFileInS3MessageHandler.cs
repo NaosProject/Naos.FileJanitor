@@ -60,7 +60,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
                     await
                         Using.LinearBackOff(TimeSpan.FromSeconds(5))
                             .WithMaxRetries(3)
-                            .Run(() => fileManager.ListFilesAsync(message.ContainerLocation, message.Container, message.KeyPrefixSearchPattern))
+                            .RunAsync(() => fileManager.ListFilesAsync(message.ContainerLocation, message.Container, message.KeyPrefixSearchPattern))
                             .Now();
 
                 if (message.MultipleKeysFoundStrategy == MultipleKeysFoundStrategy.SingleMatchExpectedThrow && files.Count > 1)

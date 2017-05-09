@@ -80,7 +80,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
                 await
                     Using.LinearBackOff(attemptWaitTimeMultiplier)
                         .WithMaxRetries(3)
-                        .Run(
+                        .RunAsync(
                             () =>
                                 fileManager.UploadFileAsync(
                                     message.FileLocation.ContainerLocation,

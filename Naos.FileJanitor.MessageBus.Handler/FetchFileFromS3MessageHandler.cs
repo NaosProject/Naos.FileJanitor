@@ -72,7 +72,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
                 await
                     Using.LinearBackOff(TimeSpan.FromSeconds(5))
                         .WithMaxRetries(3)
-                        .Run(
+                        .RunAsync(
                             () =>
                                 fileManager.DownloadFileAsync(
                                     message.FileLocation.ContainerLocation,
