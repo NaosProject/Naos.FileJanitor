@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FileLocationTests.cs" company="Naos">
-//   Copyright 2015 Naos
+//    Copyright (c) Naos 2017. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -8,8 +8,7 @@ namespace Naos.FileJanitor.Test
 {
     using System;
 
-    using Naos.FileJanitor.MessageBus.Contract;
-    using Naos.FileJanitor.MessageBus.Handler;
+    using Naos.FileJanitor.Domain;
 
     using Xunit;
 
@@ -43,7 +42,7 @@ namespace Naos.FileJanitor.Test
             var containerLocation = Guid.NewGuid().ToString().ToUpperInvariant();
             var container = Guid.NewGuid().ToString().ToUpperInvariant();
             var key = Guid.NewGuid().ToString();
-                        var first = new FileLocation { ContainerLocation = containerLocation, Container = container, Key = key };
+            var first = new FileLocation { ContainerLocation = containerLocation, Container = container, Key = key };
 
             var secondContainerLocation = Guid.NewGuid().ToString().ToUpperInvariant();
             var secondContainer = container;
@@ -64,7 +63,7 @@ namespace Naos.FileJanitor.Test
             var containerLocation = Guid.NewGuid().ToString().ToUpperInvariant();
             var container = Guid.NewGuid().ToString().ToUpperInvariant();
             var key = Guid.NewGuid().ToString();
-                        var first = new FileLocation { ContainerLocation = containerLocation, Container = container, Key = key };
+            var first = new FileLocation { ContainerLocation = containerLocation, Container = container, Key = key };
 
             var secondContainerLocation = containerLocation;
             var secondContainer = Guid.NewGuid().ToString().ToUpperInvariant();
@@ -85,7 +84,7 @@ namespace Naos.FileJanitor.Test
             var containerLocation = Guid.NewGuid().ToString().ToUpperInvariant();
             var container = Guid.NewGuid().ToString().ToUpperInvariant();
             var key = Guid.NewGuid().ToString();
-                        var first = new FileLocation { ContainerLocation = containerLocation, Container = container, Key = key };
+            var first = new FileLocation { ContainerLocation = containerLocation, Container = container, Key = key };
 
             var secondContainerLocation = containerLocation;
             var secondContainer = container;

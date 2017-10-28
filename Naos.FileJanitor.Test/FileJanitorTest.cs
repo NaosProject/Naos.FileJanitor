@@ -1,13 +1,14 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FileJanitorTest.cs" company="Naos">
-//   Copyright 2015 Naos
+//    Copyright (c) Naos 2017. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Naos.FileJanitor.Test
 {
-    using Naos.FileJanitor.MessageBus.Contract;
-    using Naos.FileJanitor.MessageBus.Handler;
+    using Naos.FileJanitor.Console;
+    using Naos.FileJanitor.Domain;
+    using Naos.FileJanitor.MessageBus.Scheduler;
 
     using Xunit;
 
@@ -17,7 +18,7 @@ namespace Naos.FileJanitor.Test
         public void GetTimeSpanFromDayHourMinuteColonDelimited_ValidData_ValidResult()
         {
             var raw = "00:04:00";
-            var parsed = FileJanitorConsoleHarness.GetTimeSpanFromDayHourMinuteColonDelimited(raw);
+            var parsed = CommandLineAbstraction.GetTimeSpanFromDayHourMinuteColonDelimited(raw);
             Assert.Equal(4, parsed.TotalHours);
         }
 
@@ -41,7 +42,7 @@ namespace Naos.FileJanitor.Test
             // arrange
             var message = new ShareFileLocationMessage
                               {
-                                  FileLocationToShare = new FileLocation { ContainerLocation = "region", Container = "bucket", Key = "key" }
+                                  FileLocationToShare = new FileLocation { ContainerLocation = "region", Container = "bucket", Key = "key" },
                               };
 
             var handler = new ShareFileLocationMessageHandler();

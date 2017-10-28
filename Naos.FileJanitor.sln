@@ -1,15 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor", "Naos.FileJanitor\Naos.FileJanitor.csproj", "{14C44B90-3132-4FC9-B69F-9A5FD87D6BC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor.Console", "Naos.FileJanitor.Console\Naos.FileJanitor.Console.csproj", "{14C44B90-3132-4FC9-B69F-9A5FD87D6BC3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor.Test", "Naos.FileJanitor.Test\Naos.FileJanitor.Test.csproj", "{BAF88789-58CD-44B8-B642-0919CE05F760}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor.MessageBus.Handler", "Naos.FileJanitor.MessageBus.Handler\Naos.FileJanitor.MessageBus.Handler.csproj", "{26DEC75C-C6D1-47A5-BE70-90BE96EC2E44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor.MessageBus.Contract", "Naos.FileJanitor.MessageBus.Contract\Naos.FileJanitor.MessageBus.Contract.csproj", "{DA09BAD8-0449-44E7-BAB5-2DA45C2E5DF2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor.MessageBus.Scheduler", "Naos.FileJanitor.MessageBus.Scheduler\Naos.FileJanitor.MessageBus.Scheduler.csproj", "{DA09BAD8-0449-44E7-BAB5-2DA45C2E5DF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor.MessageBus.Hangfire.Console", "Naos.FileJanitor.MessageBus.Hangfire.Console\Naos.FileJanitor.MessageBus.Hangfire.Console.csproj", "{75DA3E2B-450A-443D-B508-DD4A4FF0F4DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor.Domain", "Naos.FileJanitor.Domain\Naos.FileJanitor.Domain.csproj", "{54DC2338-D49F-4C72-A2CD-EABC6BE678AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor.Core", "Naos.FileJanitor.Core\Naos.FileJanitor.Core.csproj", "{B7823970-98D7-478D-8729-37C5582F9D78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +39,23 @@ Global
 		{DA09BAD8-0449-44E7-BAB5-2DA45C2E5DF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA09BAD8-0449-44E7-BAB5-2DA45C2E5DF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA09BAD8-0449-44E7-BAB5-2DA45C2E5DF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75DA3E2B-450A-443D-B508-DD4A4FF0F4DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75DA3E2B-450A-443D-B508-DD4A4FF0F4DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75DA3E2B-450A-443D-B508-DD4A4FF0F4DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75DA3E2B-450A-443D-B508-DD4A4FF0F4DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54DC2338-D49F-4C72-A2CD-EABC6BE678AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54DC2338-D49F-4C72-A2CD-EABC6BE678AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54DC2338-D49F-4C72-A2CD-EABC6BE678AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54DC2338-D49F-4C72-A2CD-EABC6BE678AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7823970-98D7-478D-8729-37C5582F9D78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7823970-98D7-478D-8729-37C5582F9D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7823970-98D7-478D-8729-37C5582F9D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7823970-98D7-478D-8729-37C5582F9D78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {38754702-A76E-4B90-81B3-C0B5EA8B761B}
 	EndGlobalSection
 EndGlobal

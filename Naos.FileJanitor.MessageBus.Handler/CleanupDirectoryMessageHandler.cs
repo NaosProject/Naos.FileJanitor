@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CleanupDirectoryMessageHandler.cs" company="Naos">
-//   Copyright 2015 Naos
+//    Copyright (c) Naos 2017. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -14,16 +14,17 @@ namespace Naos.FileJanitor.MessageBus.Handler
 
     using Its.Log.Instrumentation;
 
-    using Naos.FileJanitor.MessageBus.Contract;
+    using Naos.FileJanitor.Domain;
+    using Naos.FileJanitor.MessageBus.Scheduler;
     using Naos.MessageBus.Domain;
 
     /// <summary>
     /// Handler to handle CleanupDirectoryMessages.
     /// </summary>
-    public class CleanupDirectoryMessageHandler : IHandleMessages<CleanupDirectoryMessage>
+    public class CleanupDirectoryMessageHandler : MessageHandlerBase<CleanupDirectoryMessage>
     {
-        /// <inheritdoc />
-        public async Task HandleAsync(CleanupDirectoryMessage message)
+        /// <inheritdoc cref="MessageHandlerBase{T}" />
+        public override async Task HandleAsync(CleanupDirectoryMessage message)
         {
             await Task.Run(() => InternalHandle(message));
         }

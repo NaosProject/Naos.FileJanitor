@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FetchFileFromS3MessageHandler.cs" company="Naos">
-//   Copyright 2015 Naos
+//    Copyright (c) Naos 2017. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -14,18 +14,20 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Its.Log.Instrumentation;
 
     using Naos.AWS.S3;
-    using Naos.FileJanitor.MessageBus.Contract;
+    using Naos.FileJanitor.MessageBus.Scheduler;
     using Naos.MessageBus.Domain;
 
     using Spritely.Redo;
 
+    using static System.FormattableString;
+
     /// <summary>
     /// Message handler to fetch a file from S3.
     /// </summary>
-    public class FetchFileFromS3MessageHandler : IHandleMessages<FetchFileMessage>, IShareFilePath, IShareAffectedItems
+    public class FetchFileFromS3MessageHandler : MessageHandlerBase<FetchFileMessage>, IShareFilePath, IShareAffectedItems
     {
-        /// <inheritdoc />
-        public async Task HandleAsync(FetchFileMessage message)
+        /// <inheritdoc cref="MessageHandlerBase{T}" />
+        public override async Task HandleAsync(FetchFileMessage message)
         {
             if (message.FilePath == null)
             {
@@ -60,7 +62,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
         public async Task HandleAsync(FetchFileMessage message, FileJanitorMessageHandlerSettings settings)
         {
             var correlationId = Guid.NewGuid().ToString().ToUpperInvariant();
-            Log.Write(() => $"Starting Fetch File; CorrelationId: { correlationId }, Region: {message.FileLocation.ContainerLocation}, BucketName: {message.FileLocation.Container}, Key: {message.FileLocation.Key}, RawFilePath: {message.FilePath}");
+            Log.Write(() => Invariant($"Starting Fetch File; CorrelationId: {correlationId}, Region: {message.FileLocation.ContainerLocation}, BucketName: {message.FileLocation.Container}, Key: {message.FileLocation.Key}, RawFilePath: {message.FilePath}"));
             using (var log = Log.Enter(() => new { CorrelationId = correlationId }))
             {
                 var fileManager = new FileManager(settings.DownloadAccessKey, settings.DownloadSecretKey);
@@ -85,10 +87,13 @@ namespace Naos.FileJanitor.MessageBus.Handler
                                        {
                                            FileLocationAffectedItemMessage = "Fetched file from location to path.",
                                            FileLocation = message.FileLocation,
-                                           FilePath = this.FilePath
+                                           FilePath = this.FilePath,
                                        };
 
-                this.AffectedItems = new[] { new AffectedItem { Id = affectedItem.ToJson() } };
+                var serializer = this.SerializerFactory.BuildSerializer(FileLocationAffectedItem.ItemSerializationDescription);
+
+                this.AffectedItems = new[] { new AffectedItem { Id = serializer.SerializeToString(affectedItem) } };
+
                 log.Trace(() => "Completed downloading the file");
             }
         }

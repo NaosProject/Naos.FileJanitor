@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DeleteFileMessageHandler.cs" company="Naos">
-//   Copyright 2015 Naos
+//    Copyright (c) Naos 2017. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -11,16 +11,16 @@ namespace Naos.FileJanitor.MessageBus.Handler
 
     using Its.Log.Instrumentation;
 
-    using Naos.FileJanitor.MessageBus.Contract;
+    using Naos.FileJanitor.MessageBus.Scheduler;
     using Naos.MessageBus.Domain;
 
     /// <summary>
     /// Message handler to delete a file.
     /// </summary>
-    public class DeleteFileMessageHandler : IHandleMessages<DeleteFileMessage>, IShareFilePath
+    public class DeleteFileMessageHandler : MessageHandlerBase<DeleteFileMessage>, IShareFilePath
     {
-        /// <inheritdoc />
-        public async Task HandleAsync(DeleteFileMessage message)
+        /// <inheritdoc cref="MessageHandlerBase{T}" />
+        public override async Task HandleAsync(DeleteFileMessage message)
         {
             using (var log = Log.Enter(() => new { Message = message, message.FilePath }))
             {

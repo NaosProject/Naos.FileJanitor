@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="StoreFileInS3MessageHandler.cs" company="Naos">
-//   Copyright 2015 Naos
+//    Copyright (c) Naos 2017. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -16,7 +16,8 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Its.Log.Instrumentation;
 
     using Naos.AWS.S3;
-    using Naos.FileJanitor.MessageBus.Contract;
+    using Naos.FileJanitor.Domain;
+    using Naos.FileJanitor.MessageBus.Scheduler;
     using Naos.MessageBus.Domain;
 
     using Spritely.Redo;
@@ -24,10 +25,10 @@ namespace Naos.FileJanitor.MessageBus.Handler
     /// <summary>
     /// Message handler to store files in S3.
     /// </summary>
-    public class StoreFileInS3MessageHandler : IHandleMessages<StoreFileMessage>, IShareAffectedItems
+    public class StoreFileInS3MessageHandler : MessageHandlerBase<StoreFileMessage>, IShareAffectedItems
     {
-        /// <inheritdoc />
-        public async Task HandleAsync(StoreFileMessage message)
+        /// <inheritdoc cref="MessageHandlerBase{T}" />
+        public override async Task HandleAsync(StoreFileMessage message)
         {
             if (message.FilePath == null || !File.Exists(message.FilePath))
             {
@@ -62,7 +63,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
         public async Task HandleAsync(StoreFileMessage message, FileJanitorMessageHandlerSettings settings)
         {
             var correlationId = Guid.NewGuid().ToString().ToUpperInvariant();
-            Log.Write(() => $"Starting Store File; CorrelationId: { correlationId }, Region: {message.FileLocation.ContainerLocation}, BucketName: {message.FileLocation.Container}, Key: {message.FileLocation.Key}, FilePath: {message.FilePath}");
+            Log.Write(() => $"Starting Store File; CorrelationId: {correlationId}, Region: {message.FileLocation.ContainerLocation}, BucketName: {message.FileLocation.Container}, Key: {message.FileLocation.Key}, FilePath: {message.FilePath}");
             using (var log = Log.Enter(() => new { CorrelationId = correlationId }))
             {
                 log.Trace(() => "Starting upload.");
@@ -88,17 +89,19 @@ namespace Naos.FileJanitor.MessageBus.Handler
                                     message.FileLocation.Key,
                                     message.FilePath,
                                     message.HashingAlgorithms,
-                                    message.UserDefinedMetadata))
+                                    message.UserDefinedMetadata.ToReadOnlyDictionary()))
                         .Now();
 
                 var affectedItem = new FileLocationAffectedItem
                 {
                     FileLocationAffectedItemMessage = "Stored file from path to location.",
                     FileLocation = message.FileLocation,
-                    FilePath = message.FilePath
+                    FilePath = message.FilePath,
                 };
 
-                this.AffectedItems = new[] { new AffectedItem { Id = affectedItem.ToJson() } };
+                var serializer = this.SerializerFactory.BuildSerializer(FileLocationAffectedItem.ItemSerializationDescription);
+
+                this.AffectedItems = new[] { new AffectedItem { Id = serializer.SerializeToString(affectedItem) } };
 
                 log.Trace(() => "Finished upload.");
             }

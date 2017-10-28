@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FindFileInS3MessageHandler.cs" company="Naos">
-//   Copyright 2015 Naos
+//    Copyright (c) Naos 2017. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -15,18 +15,21 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Its.Log.Instrumentation;
 
     using Naos.AWS.S3;
-    using Naos.FileJanitor.MessageBus.Contract;
+    using Naos.FileJanitor.Domain;
+    using Naos.FileJanitor.MessageBus.Scheduler;
     using Naos.MessageBus.Domain;
 
     using Spritely.Redo;
 
+    using static System.FormattableString;
+
     /// <summary>
     /// Message handler to fetch a file from S3.
     /// </summary>
-    public class FindFileInS3MessageHandler : IHandleMessages<FindFileMessage>, IShareFileLocation
+    public class FindFileInS3MessageHandler : MessageHandlerBase<FindFileMessage>, IShareFileLocation
     {
-        /// <inheritdoc />
-        public async Task HandleAsync(FindFileMessage message)
+        /// <inheritdoc cref="MessageHandlerBase{T}" />
+        public override async Task HandleAsync(FindFileMessage message)
         {
             if (string.IsNullOrEmpty(message.ContainerLocation))
             {
@@ -51,7 +54,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
         public async Task HandleAsync(FindFileMessage message, FileJanitorMessageHandlerSettings settings)
         {
             var correlationId = Guid.NewGuid().ToString().ToUpperInvariant();
-            Log.Write(() => $"Starting Find File; CorrelationId: { correlationId }, ContainerLocation/Region: {message.ContainerLocation}, Container/BucketName: {message.Container}, KeyPrefixSearchPattern: {message.KeyPrefixSearchPattern}, MultipleKeysFoundStrategy: {message.MultipleKeysFoundStrategy}");
+            Log.Write(() => Invariant($"Starting Find File; CorrelationId: {correlationId}, ContainerLocation/Region: {message.ContainerLocation}, Container/BucketName: {message.Container}, KeyPrefixSearchPattern: {message.KeyPrefixSearchPattern}, MultipleKeysFoundStrategy: {message.MultipleKeysFoundStrategy}"));
             using (var log = Log.Enter(() => new { CorrelationId = correlationId }))
             {
                 var fileManager = new FileManager(settings.DownloadAccessKey, settings.DownloadSecretKey);

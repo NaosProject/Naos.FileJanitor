@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AbortIfNoNewFileLocationForTopicMessageHandler.cs" company="Naos">
-//   Copyright 2015 Naos
+//    Copyright (c) Naos 2017. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,17 +12,17 @@ namespace Naos.FileJanitor.MessageBus.Handler
 
     using Its.Log.Instrumentation;
 
-    using Naos.FileJanitor.MessageBus.Contract;
+    using Naos.FileJanitor.MessageBus.Scheduler;
     using Naos.MessageBus.Domain;
     using Naos.MessageBus.Domain.Exceptions;
 
     /// <summary>
     /// Message handler for <see cref="AbortIfNoNewFileLocationForTopicMessage"/>.
     /// </summary>
-    public class AbortIfNoNewFileLocationForTopicMessageHandler : IHandleMessages<AbortIfNoNewFileLocationForTopicMessage>
+    public class AbortIfNoNewFileLocationForTopicMessageHandler : MessageHandlerBase<AbortIfNoNewFileLocationForTopicMessage>
     {
-        /// <inheritdoc />
-        public async Task HandleAsync(AbortIfNoNewFileLocationForTopicMessage message)
+        /// <inheritdoc cref="MessageHandlerBase{T}" />
+        public override async Task HandleAsync(AbortIfNoNewFileLocationForTopicMessage message)
         {
             if (message.FileLocation == null)
             {
@@ -61,7 +61,8 @@ namespace Naos.FileJanitor.MessageBus.Handler
                     else
                     {
                         log.Trace(() => $"Found affected item: {matchingAffectedItem.Id}");
-                        var previousFileLocation = matchingAffectedItem.Id.FromJson<FileLocationAffectedItem>().FileLocation;
+                        var serializer = this.SerializerFactory.BuildSerializer(FileLocationAffectedItem.ItemSerializationDescription);
+                        var previousFileLocation = serializer.Deserialize<FileLocationAffectedItem>(matchingAffectedItem.Id).FileLocation;
                         if (message.FileLocation == previousFileLocation)
                         {
                             throw new AbortParcelDeliveryException($"Found that the affected items for affects complete {matchingReport.AffectsCompletedDateTimeUtc} matched specified file location.");
