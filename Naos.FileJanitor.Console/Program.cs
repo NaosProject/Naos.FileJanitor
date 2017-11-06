@@ -45,7 +45,7 @@ namespace Naos.FileJanitor.MessageBus.Hangfire.Console
                  *---------------------------------------------------------------------------*
                  * Must update the code below to use your custom abstraction class.          *
                  *---------------------------------------------------------------------------*/
-                var exitCode = Parser.Run<CommandLineAbstraction>(args);
+                var exitCode = Parser.Run<ConsoleAbstraction>(args);
                 return exitCode;
             }
             catch (Exception ex)
