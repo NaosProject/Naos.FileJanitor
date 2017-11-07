@@ -277,7 +277,7 @@ namespace Naos.FileJanitor.Test
             Thread.Sleep(50); // make sure all log messages get flushed
 
             // assert
-            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Message.Contains($"Did not find matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name}")));
+            Assert.NotNull(Logger.LoggedItems.FirstOrDefault(_ => _.Message.Contains($"Did not find matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name}")));
         }
 
         [Fact]
