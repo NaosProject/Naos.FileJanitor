@@ -164,7 +164,6 @@
     <Compile Include="DefaultMessageBusProgram.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HandlerFactory.cs" />
-    <Compile Include="HandlerFactory.Example.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -179,7 +178,6 @@
     <None Include=".config\ExampleProduction\MessageBusConnectionConfiguration.json" />
     <None Include=".config\ExampleProduction\MessageBusLaunchConfiguration.json" />
     <None Include="App.config" />
-    <None Include="ExampleMessageBusApp.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
