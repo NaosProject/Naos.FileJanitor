@@ -8,12 +8,14 @@ namespace Naos.FileJanitor.MessageBus.Handler
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Its.Configuration;
     using Its.Log.Instrumentation;
 
     using Naos.AWS.S3;
+    using Naos.FileJanitor.Domain;
     using Naos.FileJanitor.MessageBus.Scheduler;
     using Naos.MessageBus.Domain;
 
@@ -24,7 +26,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     /// <summary>
     /// Message handler to fetch a file from S3.
     /// </summary>
-    public class FetchFileFromS3MessageHandler : MessageHandlerBase<FetchFileMessage>, IShareFilePath, IShareAffectedItems
+    public class FetchFileFromS3MessageHandler : MessageHandlerBase<FetchFileMessage>, IShareFilePath, IShareAffectedItems, IShareUserDefinedMetadata
     {
         /// <inheritdoc cref="MessageHandlerBase{T}" />
         public override async Task HandleAsync(FetchFileMessage message)
@@ -71,6 +73,13 @@ namespace Naos.FileJanitor.MessageBus.Handler
                 this.FilePath = message.FilePath.Replace("{Key}", message.FileLocation.Key);
                 log.Trace(() => $"Dowloading the file to replaced FilePath: {this.FilePath}");
 
+                var metadata = await Using.LinearBackOff(TimeSpan.FromSeconds(5)).WithMaxRetries(3)
+                                   .RunAsync(
+                                       () => fileManager.GetFileMetadataAsync(
+                                           message.FileLocation.ContainerLocation,
+                                           message.FileLocation.Container,
+                                           message.FileLocation.Key)).Now();
+
                 await
                     Using.LinearBackOff(TimeSpan.FromSeconds(5))
                         .WithMaxRetries(3)
@@ -94,6 +103,8 @@ namespace Naos.FileJanitor.MessageBus.Handler
 
                 this.AffectedItems = new[] { new AffectedItem { Id = serializer.SerializeToString(affectedItem) } };
 
+                this.UserDefinedMetadata = metadata.Select(_ => new MetadataItem(_.Key, _.Value)).ToArray();
+
                 log.Trace(() => "Completed downloading the file");
             }
         }
@@ -103,5 +114,8 @@ namespace Naos.FileJanitor.MessageBus.Handler
 
         /// <inheritdoc />
         public AffectedItem[] AffectedItems { get; set; }
+
+        /// <inheritdoc />
+        public MetadataItem[] UserDefinedMetadata { get; set; }
     }
 }
