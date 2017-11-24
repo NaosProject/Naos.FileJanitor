@@ -6,20 +6,40 @@
 
 namespace Naos.FileJanitor.Test
 {
-    using Naos.FileJanitor.Console;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security.Cryptography;
+
+    using FluentAssertions;
+
     using Naos.FileJanitor.Domain;
     using Naos.FileJanitor.MessageBus.Scheduler;
+    using Naos.MessageBus.Domain;
+    using Naos.Serialization.Factory;
+
+    using OBeautifulCode.TypeRepresentation;
 
     using Xunit;
 
     public class FileJanitorTest
     {
         [Fact]
-        public void GetTimeSpanFromDayHourMinuteColonDelimited_ValidData_ValidResult()
+        public void RoundtripHashAlgorithmName()
         {
-            var raw = "00:04:00";
-            var parsed = ConsoleAbstraction.GetTimeSpanFromDayHourMinuteColonDelimited(raw);
-            Assert.Equal(4, parsed.TotalHours);
+            // Arrage
+            var expected = new[] { HashAlgorithmName.MD5, HashAlgorithmName.SHA1, };
+            var serializer = SerializerFactory.Instance.BuildSerializer(PostOffice.MessageSerializationDescription);
+
+            // Act
+            var actualString = serializer.SerializeToString(expected);
+            var actualObject = serializer.Deserialize<IReadOnlyCollection<HashAlgorithmName>>(actualString);
+
+            // Assert
+            actualString.Should().NotBeNullOrWhiteSpace();
+            actualObject.Should().NotBeNull();
+            actualObject.Count.Should().Be(expected.Length);
+            actualObject.First().Should().Be(expected.First());
+            actualObject.Last().Should().Be(expected.Last());
         }
 
         [Fact]

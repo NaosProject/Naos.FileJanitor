@@ -42,7 +42,7 @@ namespace Naos.FileJanitor.Console
         {
             CommonSetup(debug, environment);
 
-            var retentionWindowTimeSpan = GetTimeSpanFromDayHourMinuteColonDelimited(retentionWindow);
+            var retentionWindowTimeSpan = ParseTimeSpanFromDayHourMinuteColonDelimited(retentionWindow);
 
             PrintArguments(
                 new
@@ -61,46 +61,6 @@ namespace Naos.FileJanitor.Console
                 recursive,
                 deleteEmptyDirectories,
                 dateRetrievalStrategy);
-        }
-
-        /// <summary>
-        /// Parses a colon delimited day hour minute string into a valid <see cref="TimeSpan" />.
-        /// </summary>
-        /// <param name="textToParse">Text to parse.</param>
-        /// <returns>Parsed <see cref="TimeSpan" />.</returns>
-        public static TimeSpan GetTimeSpanFromDayHourMinuteColonDelimited(string textToParse)
-        {
-            var argException = new ArgumentException("Value: " + (textToParse ?? string.Empty) + " isn't a valid time, please use format dd:hh:mm.", textToParse);
-            if (string.IsNullOrEmpty(textToParse))
-            {
-                throw argException;
-            }
-
-            var split = textToParse.Split(':');
-            if (split.Length != 3)
-            {
-                throw argException;
-            }
-
-            var daysRaw = split[0];
-            if (!int.TryParse(daysRaw, out int days))
-            {
-                throw argException;
-            }
-
-            var hoursRaw = split[1];
-            if (!int.TryParse(hoursRaw, out int hours))
-            {
-                throw argException;
-            }
-
-            var minutesRaw = split[2];
-            if (!int.TryParse(minutesRaw, out int minutes))
-            {
-                throw argException;
-            }
-
-            return new TimeSpan(days, hours, minutes, 0);
         }
     }
 }

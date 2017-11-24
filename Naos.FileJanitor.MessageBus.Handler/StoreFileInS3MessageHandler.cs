@@ -8,6 +8,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
 {
     using System;
     using System.IO;
+    using System.Security.Cryptography;
     using System.Threading.Tasks;
 
     using ByteSizeLib;
@@ -86,10 +87,10 @@ namespace Naos.FileJanitor.MessageBus.Handler
                                 fileManager.UploadFileAsync(
                                     message.FileLocation.ContainerLocation,
                                     message.FileLocation.Container,
-                                    message.FileLocation.Key,
+                                    message.FileLocation.Key ?? Path.GetFileName(message.FilePath),
                                     message.FilePath,
-                                    message.HashingAlgorithms,
-                                    message.UserDefinedMetadata.ToReadOnlyDictionary()))
+                                    message.HashingAlgorithms ?? new HashAlgorithmName[0],
+                                    (message.UserDefinedMetadata ?? new MetadataItem[0]).ToReadOnlyDictionary()))
                         .Now();
 
                 var affectedItem = new FileLocationAffectedItem
