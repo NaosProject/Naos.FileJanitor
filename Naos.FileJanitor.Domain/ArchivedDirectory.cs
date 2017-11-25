@@ -7,6 +7,8 @@
 namespace Naos.FileJanitor.Domain
 {
     using System;
+    using System.Collections.Generic;
+    using System.Globalization;
     using System.Text;
 
     using Spritely.Recipes;
@@ -69,5 +71,32 @@ namespace Naos.FileJanitor.Domain
         /// Gets the date time in UTC that the file was created.
         /// </summary>
         public DateTime ArchivedDateTimeUtc { get; private set; }
+    }
+
+    /// <summary>
+    /// Extensions on <see cref="ArchivedDirectory" />
+    /// </summary>
+    public static class ArchivedDirectoryExtensions
+    {
+        /// <summary>
+        /// Extracts the properties into a collection of <see cref="MetadataItem" />'s.
+        /// </summary>
+        /// <param name="archivedDirectory"><see cref="ArchivedDirectory" /> to get properties from.</param>
+        /// <returns>Collection of <see cref="MetadataItem" />'s</returns>
+        public static IReadOnlyCollection<MetadataItem> ToMetadataItemCollection(this ArchivedDirectory archivedDirectory)
+        {
+            new { archivedDirectory }.Must().NotBeNull().OrThrowFirstFailure();
+
+            var ret = new[]
+                          {
+                              new MetadataItem(nameof(ArchivedDirectory.DirectoryArchiveKind), archivedDirectory.DirectoryArchiveKind.ToString()),
+                              new MetadataItem(nameof(ArchivedDirectory.ArchiveCompressionKind), archivedDirectory.ArchiveCompressionKind.ToString()),
+                              new MetadataItem(nameof(ArchivedDirectory.IncludeBaseDirectory), archivedDirectory.IncludeBaseDirectory.ToString()),
+                              new MetadataItem(nameof(ArchivedDirectory.EntryNameEncoding), archivedDirectory.EntryNameEncoding.ToString()),
+                              new MetadataItem(nameof(ArchivedDirectory.ArchivedDateTimeUtc), DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)),
+                          };
+
+            return ret;
+        }
     }
 }

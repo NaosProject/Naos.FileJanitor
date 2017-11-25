@@ -6,11 +6,8 @@
 
 namespace Naos.FileJanitor.MessageBus.Handler
 {
-    using System;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
 
     using Its.Log.Instrumentation;
@@ -29,7 +26,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     /// </summary>
     public class ArchiveDirectoryMessageHandler : MessageHandlerBase<ArchiveDirectoryMessage>, IShareFilePath, IShareUserDefinedMetadata
     {
-        /// <inheritdoc cref="MessageHandlerBase{T}" />
+        /// <inheritdoc />
         public override async Task HandleAsync(ArchiveDirectoryMessage message)
         {
             using (var log = Log.Enter(() => new { Message = message, message.FilePath }))
@@ -49,15 +46,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
 
                 this.FilePath = await Task.FromResult(message.TargetFilePath); // share compressed file
 
-                this.UserDefinedMetadata = message.UserDefinedMetadata.Concat(
-                    new[]
-                        {
-                            new MetadataItem(nameof(ArchivedDirectory.DirectoryArchiveKind), archivedDirectory.DirectoryArchiveKind.ToString()),
-                            new MetadataItem(nameof(ArchivedDirectory.ArchiveCompressionKind), archivedDirectory.ArchiveCompressionKind.ToString()),
-                            new MetadataItem(nameof(ArchivedDirectory.IncludeBaseDirectory), archivedDirectory.IncludeBaseDirectory.ToString()),
-                            new MetadataItem(nameof(ArchivedDirectory.EntryNameEncoding), archivedDirectory.EntryNameEncoding.ToString()),
-                            new MetadataItem(nameof(ArchivedDirectory.ArchivedDateTimeUtc), DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)),
-                        }).ToArray();
+                this.UserDefinedMetadata = (message.UserDefinedMetadata ?? new MetadataItem[0]).Concat(archivedDirectory.ToMetadataItemCollection()).ToArray();
 
                 log.Trace(() => Invariant($"Finished archiving directory to {message.TargetFilePath}."));
             }

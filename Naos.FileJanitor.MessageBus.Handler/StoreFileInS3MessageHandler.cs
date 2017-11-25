@@ -28,7 +28,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     /// </summary>
     public class StoreFileInS3MessageHandler : MessageHandlerBase<StoreFileMessage>, IShareAffectedItems
     {
-        /// <inheritdoc cref="MessageHandlerBase{T}" />
+        /// <inheritdoc />
         public override async Task HandleAsync(StoreFileMessage message)
         {
             if (message.FilePath == null || !File.Exists(message.FilePath))

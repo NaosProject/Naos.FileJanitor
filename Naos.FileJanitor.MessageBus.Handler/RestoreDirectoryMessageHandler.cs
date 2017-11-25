@@ -29,7 +29,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     /// </summary>
     public class RestoreDirectoryMessageHandler : MessageHandlerBase<RestoreDirectoryMessage>, IShareFilePath
     {
-        /// <inheritdoc cref="MessageHandlerBase{T}" />
+        /// <inheritdoc />
         public override async Task HandleAsync(RestoreDirectoryMessage message)
         {
             using (var log = Log.Enter(() => new { Message = message, message.FilePath }))

@@ -21,7 +21,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     /// </summary>
     public class AbortIfNoNewFileLocationForTopicMessageHandler : MessageHandlerBase<AbortIfNoNewFileLocationForTopicMessage>
     {
-        /// <inheritdoc cref="MessageHandlerBase{T}" />
+        /// <inheritdoc />
         public override async Task HandleAsync(AbortIfNoNewFileLocationForTopicMessage message)
         {
             if (message.FileLocation == null)

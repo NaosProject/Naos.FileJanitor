@@ -28,7 +28,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     /// </summary>
     public class FindFileInS3MessageHandler : MessageHandlerBase<FindFileMessage>, IShareFileLocation
     {
-        /// <inheritdoc cref="MessageHandlerBase{T}" />
+        /// <inheritdoc />
         public override async Task HandleAsync(FindFileMessage message)
         {
             if (string.IsNullOrEmpty(message.ContainerLocation))

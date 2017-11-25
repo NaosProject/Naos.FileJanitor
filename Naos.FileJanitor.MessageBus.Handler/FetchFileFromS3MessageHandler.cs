@@ -28,7 +28,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     /// </summary>
     public class FetchFileFromS3MessageHandler : MessageHandlerBase<FetchFileMessage>, IShareFilePath, IShareAffectedItems, IShareUserDefinedMetadata
     {
-        /// <inheritdoc cref="MessageHandlerBase{T}" />
+        /// <inheritdoc />
         public override async Task HandleAsync(FetchFileMessage message)
         {
             if (message.FilePath == null)
