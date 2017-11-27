@@ -8,6 +8,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Security.Cryptography;
     using System.Threading.Tasks;
 
@@ -89,7 +90,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
                                     message.FileLocation.Container,
                                     message.FileLocation.Key ?? Path.GetFileName(message.FilePath),
                                     message.FilePath,
-                                    message.HashingAlgorithms ?? new HashAlgorithmName[0],
+                                    (message.HashingAlgorithmNames ?? new string[0]).Select(_ => string.IsNullOrWhiteSpace(_) ? default(HashAlgorithmName) : new HashAlgorithmName(_)).ToList(),
                                     (message.UserDefinedMetadata ?? new MetadataItem[0]).ToReadOnlyDictionary()))
                         .Now();
 

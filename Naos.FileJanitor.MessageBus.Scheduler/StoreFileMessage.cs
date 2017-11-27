@@ -33,7 +33,7 @@ namespace Naos.FileJanitor.MessageBus.Scheduler
         /// <summary>
         /// Gets or sets the hashing algorithms to compute, persist, and use in verification.
         /// </summary>
-        public IReadOnlyCollection<HashAlgorithmName> HashingAlgorithms { get; set; }
+        public IReadOnlyCollection<string> HashingAlgorithmNames { get; set; }
 
         /// <summary>
         /// Gets or sets user defined meta data to save with the file.

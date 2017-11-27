@@ -6,42 +6,13 @@
 
 namespace Naos.FileJanitor.Test
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Security.Cryptography;
-
-    using FluentAssertions;
-
     using Naos.FileJanitor.Domain;
     using Naos.FileJanitor.MessageBus.Scheduler;
-    using Naos.MessageBus.Domain;
-    using Naos.Serialization.Factory;
-
-    using OBeautifulCode.TypeRepresentation;
 
     using Xunit;
 
     public class FileJanitorTest
     {
-        [Fact]
-        public void RoundtripHashAlgorithmName()
-        {
-            // Arrage
-            var expected = new[] { HashAlgorithmName.MD5, HashAlgorithmName.SHA1, };
-            var serializer = SerializerFactory.Instance.BuildSerializer(PostOffice.MessageSerializationDescription);
-
-            // Act
-            var actualString = serializer.SerializeToString(expected);
-            var actualObject = serializer.Deserialize<IReadOnlyCollection<HashAlgorithmName>>(actualString);
-
-            // Assert
-            actualString.Should().NotBeNullOrWhiteSpace();
-            actualObject.Should().NotBeNull();
-            actualObject.Count.Should().Be(expected.Length);
-            actualObject.First().Should().Be(expected.First());
-            actualObject.Last().Should().Be(expected.Last());
-        }
-
         [Fact]
         public void ShareFilePathMessageHandlerHandle_PathOnMessage_PathShared()
         {
