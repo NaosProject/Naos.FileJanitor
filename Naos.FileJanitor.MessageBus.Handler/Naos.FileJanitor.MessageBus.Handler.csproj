@@ -100,7 +100,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include=".recipes\Naos.ByteSize\Naos.Recipes.ByteSize.cs" />
     <Compile Include=".recipes\Naos.RunWithRetry\Run.cs" />
     <Compile Include=".recipes\Spritely.MustValidation\MakeRule.cs" />
     <Compile Include=".recipes\Spritely.MustValidation\MustExtensions.cs" />

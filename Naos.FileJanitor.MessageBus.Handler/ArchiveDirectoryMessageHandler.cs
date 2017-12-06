@@ -42,7 +42,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
                 var archiver = ArchiverFactory.Instance.BuildArchiver(message.DirectoryArchiveKind, message.ArchiveCompressionKind);
                 new { archiver }.Must().NotBeNull().OrThrowFirstFailure();
 
-                var archivedDirectory = await archiver.ArchiveDirectory(message.FilePath, message.TargetFilePath);
+                var archivedDirectory = await archiver.ArchiveDirectoryAsync(message.FilePath, message.TargetFilePath);
 
                 this.FilePath = await Task.FromResult(message.TargetFilePath); // share compressed file
 

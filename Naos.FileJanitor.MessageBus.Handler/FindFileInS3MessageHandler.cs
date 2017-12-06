@@ -15,10 +15,12 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Its.Log.Instrumentation;
 
     using Naos.AWS.S3;
+    using Naos.FileJanitor.Core;
     using Naos.FileJanitor.Domain;
     using Naos.FileJanitor.MessageBus.Scheduler;
     using Naos.MessageBus.Domain;
 
+    using Spritely.Recipes;
     using Spritely.Redo;
 
     using static System.FormattableString;
@@ -53,47 +55,24 @@ namespace Naos.FileJanitor.MessageBus.Handler
         /// <returns>Task to support async await execution.</returns>
         public async Task HandleAsync(FindFileMessage message, FileJanitorMessageHandlerSettings settings)
         {
+            new { message }.Must().NotBeNull().OrThrowFirstFailure();
+            new { settings }.Must().NotBeNull().OrThrowFirstFailure();
+
             var correlationId = Guid.NewGuid().ToString().ToUpperInvariant();
-            Log.Write(() => Invariant($"Starting Find File; CorrelationId: {correlationId}, ContainerLocation/Region: {message.ContainerLocation}, Container/BucketName: {message.Container}, KeyPrefixSearchPattern: {message.KeyPrefixSearchPattern}, MultipleKeysFoundStrategy: {message.MultipleKeysFoundStrategy}"));
+            var containerLocation = message.ContainerLocation;
+            var container = message.Container;
+            var downloadAccessKey = settings.DownloadAccessKey;
+            var downloadSecretKey = settings.DownloadSecretKey;
+            var keyPrefixSearchPattern = message.KeyPrefixSearchPattern;
+            var multipleKeysFoundStrategy = message.MultipleKeysFoundStrategy;
+
+            Log.Write(() => Invariant($"Starting Find File; CorrelationId: {correlationId}, ContainerLocation/Region: {containerLocation}, Container/BucketName: {container}, KeyPrefixSearchPattern: {keyPrefixSearchPattern}, MultipleKeysFoundStrategy: {multipleKeysFoundStrategy}"));
             using (var log = Log.Enter(() => new { CorrelationId = correlationId }))
             {
-                var fileManager = new FileManager(settings.DownloadAccessKey, settings.DownloadSecretKey);
-
-                var files =
-                    await
-                        Using.LinearBackOff(TimeSpan.FromSeconds(5))
-                            .WithMaxRetries(3)
-                            .RunAsync(() => fileManager.ListFilesAsync(message.ContainerLocation, message.Container, message.KeyPrefixSearchPattern))
-                            .Now();
-
-                if (message.MultipleKeysFoundStrategy == MultipleKeysFoundStrategy.SingleMatchExpectedThrow && files.Count > 1)
-                {
-                    throw new InvalidDataException(
-                              "Expected a single S3Object => Prefix Search: " + (message.KeyPrefixSearchPattern ?? "[NULL]") + ", Count: " + files.Count);
-                }
-
-                var keys = files.Select(_ => _.KeyName).ToList();
-                switch (message.MultipleKeysFoundStrategy)
-                {
-                    case MultipleKeysFoundStrategy.FirstSortedAscending:
-                        keys = keys.OrderBy(_ => _).ToList();
-                        break;
-                    case MultipleKeysFoundStrategy.FirstSortedDescending:
-                        keys = keys.OrderByDescending(_ => _).ToList();
-                        break;
-                    default:
-                        throw new NotSupportedException("Unsupported multiple found strategy => " + message.MultipleKeysFoundStrategy);
-                }
-
-                var key = keys.FirstOrDefault();
-                if (key == null)
-                {
-                    throw new FileNotFoundException(
-                        $"Could not find an S3 Object => region: {message.ContainerLocation}, bucket: {message.Container}, KeyPrefixSearchPattern: {message.KeyPrefixSearchPattern}");
-                }
+                var fileManager = new FileManager(downloadAccessKey, downloadSecretKey);
 
                 // share the results
-                this.FileLocation = new FileLocation { ContainerLocation = message.ContainerLocation, Container = message.Container, Key = key };
+                this.FileLocation = await FileExchanger.FindFile(fileManager, containerLocation, container, keyPrefixSearchPattern, multipleKeysFoundStrategy);
 
                 log.Trace(() => "Completed finding file");
             }

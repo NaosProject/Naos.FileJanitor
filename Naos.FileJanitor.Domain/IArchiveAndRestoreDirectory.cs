@@ -41,7 +41,7 @@ namespace Naos.FileJanitor.Domain
         /// <param name="includeBaseDirectory">Optional value indicating whether or not to include the base directory when constructing the archive; DEFAULT is true.</param>
         /// <param name="entryNameEncoding">Optional encoding to use for the entry file names; DEFAULT is <see cref="Encoding.UTF8" />.</param>
         /// <returns><see cref="ArchivedDirectory" /> with details of the archive.</returns>
-        Task<ArchivedDirectory> ArchiveDirectory(string sourcePath, string targetFilePath, bool includeBaseDirectory = true, Encoding entryNameEncoding = null);
+        Task<ArchivedDirectory> ArchiveDirectoryAsync(string sourcePath, string targetFilePath, bool includeBaseDirectory = true, Encoding entryNameEncoding = null);
     }
 
     /// <summary>
@@ -55,6 +55,6 @@ namespace Naos.FileJanitor.Domain
         /// <param name="archivedDirectory">Description of the archive, including the file path.</param>
         /// <param name="targetPath">Target path to restore directory.</param>
         /// <returns>Task for async.</returns>
-        Task RestoreDirectory(ArchivedDirectory archivedDirectory, string targetPath);
+        Task RestoreDirectoryAsync(ArchivedDirectory archivedDirectory, string targetPath);
     }
 }

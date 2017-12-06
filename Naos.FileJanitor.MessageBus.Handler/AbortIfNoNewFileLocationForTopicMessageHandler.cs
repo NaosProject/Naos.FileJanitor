@@ -44,7 +44,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
             using (var log = Log.Enter(() => new { CorrelationId = correlationId }))
             {
                 // get status report
-                var matchingReport = message.TopicStatusReports.SingleOrDefault(_ => _.Topic.ToNamedTopic() == message.TopicToCheckAffectedItemsFor);
+                var matchingReport = message.TopicStatusReports.SingleOrDefault(_ => _.Topic.ToNamedTopic() == message.TopicToCheckAffectedItemsFor && _.Status == TopicStatus.WasAffected);
                 if (matchingReport == null)
                 {
                     log.Trace(() => $"Did not find matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name}");

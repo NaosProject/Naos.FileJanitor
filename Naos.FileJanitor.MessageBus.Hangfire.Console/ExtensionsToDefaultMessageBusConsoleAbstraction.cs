@@ -1,10 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConsoleAbstraction.cs" company="Naos">
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ExtensionsToDefaultMessageBusConsoleAbstraction.cs" company="Naos">
 //    Copyright (c) Naos 2017. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Naos.FileJanitor.Console
+namespace Naos.FileJanitor.MessageBus.Hangfire.Console
 {
     using System;
     using System.Collections.Generic;
@@ -13,12 +13,13 @@ namespace Naos.FileJanitor.Console
 
     using CLAP;
 
+    using Its.Configuration;
     using Its.Log.Instrumentation;
 
     using Naos.AWS.S3;
     using Naos.FileJanitor.Core;
     using Naos.FileJanitor.Domain;
-    using Naos.Logging.Domain;
+    using Naos.FileJanitor.MessageBus.Scheduler;
     using Naos.Recipes.Configuration.Setup;
     using Naos.Recipes.RunWithRetry;
     using Naos.Serialization.Factory;
@@ -28,9 +29,7 @@ namespace Naos.FileJanitor.Console
     /// <summary>
     /// Abstraction for use with <see cref="CLAP" /> to provide basic command line interaction.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1053:StaticHolderTypesShouldNotHaveConstructors", Justification = "Cannot be static for command line contract.")]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Hangfire", Justification = "Spelling/name is correct.")]
-    public class ConsoleAbstraction : ConsoleAbstractionBase
+    public partial class DefaultMessageBusConsoleAbstraction
     {
         /// <summary>
         /// Archive a directory into a file.
@@ -39,6 +38,7 @@ namespace Naos.FileJanitor.Console
         /// <param name="targetFilePath">File path to archive to (must NOT exist).</param>
         /// <param name="directoryArchiveKind">Kind of archive.</param>
         /// <param name="archiveCompressionKind">Kind of compression.</param>
+        /// <param name="environment">Sets the Its.Configuration precedence to use specific settings.</param>
         /// <param name="debug">Launches the debugger.</param>
         [Verb(Aliases = "archive", Description = "Archive a directory into a file.")]
         public static void Archive(
@@ -46,9 +46,10 @@ namespace Naos.FileJanitor.Console
             [Required] [Aliases("target")] [Description("File path to archive to (must NOT exist).")] string targetFilePath,
             [DefaultValue(DirectoryArchiveKind.DotNetZipFile)] [Aliases("")] [Description("Kind of archive.")] DirectoryArchiveKind directoryArchiveKind,
             [DefaultValue(ArchiveCompressionKind.Fastest)] [Aliases("")] [Description("Kind of compression.")] ArchiveCompressionKind archiveCompressionKind,
+            [Required] [Aliases("env")] [Description("Sets the Its.Configuration precedence to use specific settings.")] string environment,
             [Aliases("")] [Description("Launches the debugger.")] [DefaultValue(false)] bool debug)
         {
-            CommonSetup(debug, null, new LogProcessorSettings(new[] { new ConsoleLogConfiguration(LogContexts.All, LogContexts.None) }));
+            CommonSetup(debug, environment);
 
             var archiver = ArchiverFactory.Instance.BuildArchiver(directoryArchiveKind, archiveCompressionKind);
             var archivedDirectory = Run.TaskUntilCompletion(archiver.ArchiveDirectoryAsync(sourceDirectoryPath, targetFilePath, true, Encoding.UTF8));
@@ -63,6 +64,7 @@ namespace Naos.FileJanitor.Console
         /// <param name="targetDirectoryPath">Path to restore to (must be a directory AND not exist).</param>
         /// <param name="directoryArchiveKind">Kind of archive.</param>
         /// <param name="archiveCompressionKind">Kind of compression.</param>
+        /// <param name="environment">Sets the Its.Configuration precedence to use specific settings.</param>
         /// <param name="debug">Launches the debugger.</param>
         [Verb(Aliases = "restore", Description = "Restores a file into a directory.")]
         public static void Restore(
@@ -70,9 +72,10 @@ namespace Naos.FileJanitor.Console
             [Required] [Aliases("target")] [Description("Path to restore to (must be a directory AND not exist).")] string targetDirectoryPath,
             [DefaultValue(DirectoryArchiveKind.DotNetZipFile)] [Aliases("")] [Description("Kind of archive.")] DirectoryArchiveKind directoryArchiveKind,
             [DefaultValue(ArchiveCompressionKind.Fastest)] [Aliases("")] [Description("Kind of compression.")] ArchiveCompressionKind archiveCompressionKind,
+            [Required] [Aliases("env")] [Description("Sets the Its.Configuration precedence to use specific settings.")] string environment,
             [Aliases("")] [Description("Launches the debugger.")] [DefaultValue(false)] bool debug)
         {
-            CommonSetup(debug, null, new LogProcessorSettings(new[] { new ConsoleLogConfiguration(LogContexts.All, LogContexts.None) }));
+            CommonSetup(debug, environment);
 
             var archiver = ArchiverFactory.Instance.BuildArchiver(directoryArchiveKind, archiveCompressionKind);
             var archivedDirectory = new ArchivedDirectory(directoryArchiveKind, archiveCompressionKind, sourceFilePath, true, Encoding.UTF8);
@@ -82,8 +85,6 @@ namespace Naos.FileJanitor.Console
         /// <summary>
         /// Store a file in S3.
         /// </summary>
-        /// <param name="uploadAccessKey">Access key to use with the FileManager.</param>
-        /// <param name="uploadSecretKey">Secret key to use with the FileManager.</param>
         /// <param name="filePath">File path to store (MUST be a file - cannot be used with directoryPath).</param>
         /// <param name="directoryPath">File path to store (MUST be a directory - cannot be used with filePath).</param>
         /// <param name="containerLocation">Location of container to use.</param>
@@ -93,25 +94,27 @@ namespace Naos.FileJanitor.Console
         /// <param name="hashingAlgorithmNames">HashAlogirthmNames to use; MD5, SHA1, SHA256, etc.</param>
         /// <param name="directoryArchiveKind">Kind of archive if directoryPath used.</param>
         /// <param name="archiveCompressionKind">Kind of compression if directoryPath used.</param>
+        /// <param name="environment">Sets the Its.Configuration precedence to use specific settings.</param>
         /// <param name="debug">Launches the debugger.</param>
         [Verb(Aliases = "store", Description = "Store a file in S3.")]
         public static void StoreFileOrDirectory(
-            [Required] [Aliases("access")] [Description("Access key to store the file.")] string uploadAccessKey,
-            [Required] [Aliases("secret")] [Description("Secret key to store the file.")] string uploadSecretKey,
             [Aliases("file")] [Description("File path to store (MUST be a file - cannot be used with directoryPath).")] string filePath,
             [Aliases("directory")] [Description("File path to store (MUST be a directory - cannot be used with filePath).")] string directoryPath,
             [Required] [Aliases("location")] [Description("Container location to store the file in.")] string containerLocation,
-            [Required] [Aliases("")] [Description("Container to store the file in.")] string container,
-            [Aliases("")] [Description("Key to store file as; default will be file OR directory name.")] [DefaultValue(null)] string key,
+            [Required] [Aliases("container")] [Description("Container to store the file in.")] string container,
+            [Aliases("key")] [Description("Key to store file as; default will be file OR directory name.")] [DefaultValue(null)] string key,
             [Aliases("metadata")] [Description("User defined metadata (array of MetadataItem's in Config File JSON).")] [DefaultValue(null)] string userDefinedMetadataJson,
             [Aliases("hash")] [Description("HashAlogirthmNames to use; MD5, SHA1, SHA256, etc.")] string[] hashingAlgorithmNames,
             [DefaultValue(DirectoryArchiveKind.DotNetZipFile)] [Aliases("")] [Description("Kind of archive if directoryPath used.")] DirectoryArchiveKind directoryArchiveKind,
             [DefaultValue(ArchiveCompressionKind.Fastest)] [Aliases("")] [Description("Kind of compression if directoryPath used.")] ArchiveCompressionKind archiveCompressionKind,
+            [Required] [Aliases("env")] [Description("Sets the Its.Configuration precedence to use specific settings.")] string environment,
             [Aliases("")] [Description("Launches the debugger.")] [DefaultValue(false)] bool debug)
         {
-            CommonSetup(debug, null, new LogProcessorSettings(new[] { new ConsoleLogConfiguration(LogContexts.All, LogContexts.None) }));
+            CommonSetup(debug, environment);
 
-            var fileManager = new FileManager(uploadAccessKey, uploadSecretKey);
+            var settings = Settings.Get<FileJanitorMessageHandlerSettings>();
+
+            var fileManager = new FileManager(settings.UploadAccessKey, settings.UploadSecretKey);
 
             var serializer = SerializerFactory.Instance.BuildSerializer(Config.ConfigFileSerializationDescription);
             var userDefinedMetadata = string.IsNullOrWhiteSpace(userDefinedMetadataJson) ? null : serializer.Deserialize<IReadOnlyCollection<MetadataItem>>(userDefinedMetadataJson);
@@ -133,8 +136,6 @@ namespace Naos.FileJanitor.Console
         /// <summary>
         /// Removes old files.
         /// </summary>
-        /// <param name="downloadAccessKey">Access key to use with the FileManager.</param>
-        /// <param name="downloadSecretKey">Secret key to use with the FileManager.</param>
         /// <param name="targetPath">File path to fetch to (must be valid directory path if usin restore switch).</param>
         /// <param name="containerLocation">Location of container to use.</param>
         /// <param name="container">Container to use.</param>
@@ -142,23 +143,25 @@ namespace Naos.FileJanitor.Console
         /// <param name="prefix">Search prefix to use to file file (cannot be used with key).</param>
         /// <param name="multipleKeysFoundStrategy">Strategy on choosing file when used with prefix.</param>
         /// <param name="restoreArchive">Restore the archive to the target path as a directory (MUST be an archive file).</param>
+        /// <param name="environment">Sets the Its.Configuration precedence to use specific settings.</param>
         /// <param name="debug">Launches the debugger.</param>
         [Verb(Aliases = "fetch", Description = "Archive a directory into a file.")]
         public static void FetchFileOrArchive(
-            [Required] [Aliases("access")] [Description("Access key to use to fetch the file.")] string downloadAccessKey,
-            [Required] [Aliases("secret")] [Description("Secret key to use to fetch the file.")] string downloadSecretKey,
             [Required][Aliases("path")] [Description("File path to fetch to (must be valid directory path if using restore switch).")] string targetPath,
             [Required] [Aliases("location")] [Description("Container location to store the file in.")] string containerLocation,
-            [Required] [Aliases("")] [Description("Container to store the file in.")] string container,
-            [Aliases("")] [Description("Key of file to fetch (cannot be used with prefix).")] string key,
-            [Aliases("")] [Description("Search prefix to use to file file (cannot be used with key).")] string prefix,
+            [Required] [Aliases("container")] [Description("Container to store the file in.")] string container,
+            [Aliases("key")] [Description("Key of file to fetch (cannot be used with prefix).")] string key,
+            [Aliases("prefix")] [Description("Search prefix to use to file file (cannot be used with key).")] string prefix,
             [Aliases("")] [Description("Strategy on choosing file when used with prefix.")] [DefaultValue(MultipleKeysFoundStrategy.FirstSortedDescending)] MultipleKeysFoundStrategy multipleKeysFoundStrategy,
             [Aliases("restore")] [Description("Restore the archive to the target path as a directory (MUST be an archive file).")] [DefaultValue(false)] bool restoreArchive,
+            [Required] [Aliases("env")] [Description("Sets the Its.Configuration precedence to use specific settings.")] string environment,
             [Aliases("")] [Description("Launches the debugger.")] [DefaultValue(false)] bool debug)
         {
-            CommonSetup(debug, null, new LogProcessorSettings(new[] { new ConsoleLogConfiguration(LogContexts.All, LogContexts.None) }));
+            CommonSetup(debug, environment);
 
-            var fileManager = new FileManager(downloadAccessKey, downloadSecretKey);
+            var settings = Settings.Get<FileJanitorMessageHandlerSettings>();
+
+            var fileManager = new FileManager(settings.DownloadAccessKey, settings.DownloadSecretKey);
 
             if (!string.IsNullOrWhiteSpace(prefix) && string.IsNullOrWhiteSpace(key))
             {
@@ -198,6 +201,7 @@ namespace Naos.FileJanitor.Console
         /// <param name="recursive">Whether or not to evaluate files recursively on the path.</param>
         /// <param name="deleteEmptyDirectories">Whether or not to delete directories that are or become empty during cleanup.</param>
         /// <param name="dateRetrievalStrategy">The date retrieval strategy to use on files.</param>
+        /// <param name="environment">Sets the Its.Configuration precedence to use specific settings.</param>
         /// <param name="debug">Launches the debugger.</param>
         [Verb(Aliases = "clean", Description = "Removes old files.")]
         public static void Cleanup(
@@ -206,9 +210,10 @@ namespace Naos.FileJanitor.Console
             [DefaultValue(true)] [Aliases("")] [Description("Whether or not to evaluate files recursively on the path.")] bool recursive,
             [DefaultValue(false)] [Aliases("")] [Description("Whether or not to delete directories that are or become empty during cleanup.")] bool deleteEmptyDirectories,
             [DefaultValue(DateRetrievalStrategy.LastUpdateDate)] [Aliases("")] [Description("The date retrieval strategy to use on files.")] DateRetrievalStrategy dateRetrievalStrategy,
+            [Required] [Aliases("env")] [Description("Sets the Its.Configuration precedence to use specific settings.")] string environment,
             [Aliases("")] [Description("Launches the debugger.")] [DefaultValue(false)] bool debug)
         {
-            CommonSetup(debug, null, new LogProcessorSettings(new[] { new ConsoleLogConfiguration(LogContexts.All, LogContexts.None) }));
+            CommonSetup(debug, environment);
 
             var retentionWindowTimeSpan = ParseTimeSpanFromDayHourMinuteColonDelimited(retentionWindow);
 

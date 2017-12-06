@@ -15,6 +15,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Its.Log.Instrumentation;
 
     using Naos.AWS.S3;
+    using Naos.FileJanitor.Core;
     using Naos.FileJanitor.Domain;
     using Naos.FileJanitor.MessageBus.Scheduler;
     using Naos.MessageBus.Domain;
@@ -64,33 +65,22 @@ namespace Naos.FileJanitor.MessageBus.Handler
         public async Task HandleAsync(FetchFileMessage message, FileJanitorMessageHandlerSettings settings)
         {
             var correlationId = Guid.NewGuid().ToString().ToUpperInvariant();
-            Log.Write(() => Invariant($"Starting Fetch File; CorrelationId: {correlationId}, Region: {message.FileLocation.ContainerLocation}, BucketName: {message.FileLocation.Container}, Key: {message.FileLocation.Key}, RawFilePath: {message.FilePath}"));
+            var containerLocation = message.FileLocation.ContainerLocation;
+            var container = message.FileLocation.Container;
+            var key = message.FileLocation.Key;
+
+            Log.Write(() => Invariant($"Starting Fetch File; CorrelationId: {correlationId}, Region: {containerLocation}, BucketName: {container}, Key: {key}, RawFilePath: {message.FilePath}"));
             using (var log = Log.Enter(() => new { CorrelationId = correlationId }))
             {
                 var fileManager = new FileManager(settings.DownloadAccessKey, settings.DownloadSecretKey);
 
                 // shares path down because it can be augmented...
-                this.FilePath = message.FilePath.Replace("{Key}", message.FileLocation.Key);
+                this.FilePath = message.FilePath.Replace("{Key}", key);
                 log.Trace(() => $"Dowloading the file to replaced FilePath: {this.FilePath}");
 
-                var metadata = await Using.LinearBackOff(TimeSpan.FromSeconds(5)).WithMaxRetries(3)
-                                   .RunAsync(
-                                       () => fileManager.GetFileMetadataAsync(
-                                           message.FileLocation.ContainerLocation,
-                                           message.FileLocation.Container,
-                                           message.FileLocation.Key)).Now();
+                var metadata = await FileExchanger.FetchMetadata(fileManager, containerLocation, container, key);
 
-                await
-                    Using.LinearBackOff(TimeSpan.FromSeconds(5))
-                        .WithMaxRetries(3)
-                        .RunAsync(
-                            () =>
-                                fileManager.DownloadFileAsync(
-                                    message.FileLocation.ContainerLocation,
-                                    message.FileLocation.Container,
-                                    message.FileLocation.Key,
-                                    this.FilePath))
-                        .Now();
+                await FileExchanger.FetchFile(fileManager, containerLocation, container, key, this.FilePath);
 
                 var affectedItem = new FileLocationAffectedItem
                                        {

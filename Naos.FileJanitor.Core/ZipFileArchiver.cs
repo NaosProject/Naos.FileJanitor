@@ -46,7 +46,7 @@ namespace Naos.FileJanitor.Core
         public DirectoryArchiveKind DirectoryArchiveKind => DirectoryArchiveKind.DotNetZipFile;
 
         /// <inheritdoc cref="IArchiveDirectory" />
-        public async Task<ArchivedDirectory> ArchiveDirectory(string sourcePath, string targetFilePath, bool includeBaseDirectory = true, Encoding entryNameEncoding = null)
+        public async Task<ArchivedDirectory> ArchiveDirectoryAsync(string sourcePath, string targetFilePath, bool includeBaseDirectory = true, Encoding entryNameEncoding = null)
         {
             new { sourcePath }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
             new { targetFilePath }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
@@ -62,7 +62,7 @@ namespace Naos.FileJanitor.Core
         }
 
         /// <inheritdoc cref="IRestoreDirectory" />
-        public async Task RestoreDirectory(ArchivedDirectory archivedDirectory, string targetPath)
+        public async Task RestoreDirectoryAsync(ArchivedDirectory archivedDirectory, string targetPath)
         {
             new { archivedDirectory }.Must().NotBeNull().OrThrowFirstFailure();
             new { targetPath }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();

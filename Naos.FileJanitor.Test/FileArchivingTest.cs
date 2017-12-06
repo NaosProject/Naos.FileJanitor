@@ -43,9 +43,9 @@ namespace Naos.FileJanitor.Test
                 var archiver = ArchiverFactory.Instance.BuildArchiver(directoryArchiveKind, archiveCompressionKind);
 
                 // Act
-                var result = await archiver.ArchiveDirectory(directoryPathToArchive, archiveFilePath);
+                var result = await archiver.ArchiveDirectoryAsync(directoryPathToArchive, archiveFilePath);
                 var restorer = ArchiverFactory.Instance.BuildArchiver(result);
-                await restorer.RestoreDirectory(result, directoryPathToRestore);
+                await restorer.RestoreDirectoryAsync(result, directoryPathToRestore);
 
                 // Assert
                 File.Exists(archiveFilePath).Should().BeTrue();

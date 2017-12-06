@@ -36,6 +36,18 @@
     <DocumentationFile>bin\Release\Naos.FileJanitor.Core.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AWSSDK.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\packages\AWSSDK.Core.3.3.4.1\lib\net45\AWSSDK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="AWSSDK.S3, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\packages\AWSSDK.S3.3.3.1.1\lib\net45\AWSSDK.S3.dll</HintPath>
+    </Reference>
+    <Reference Include="Its.Log, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Its.Log.2.9.14\lib\net451\Its.Log.dll</HintPath>
+    </Reference>
+    <Reference Include="Naos.AWS.S3, Version=1.0.49.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.AWS.S3.1.0.49\lib\net461\Naos.AWS.S3.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
@@ -48,12 +60,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include=".recipes\Naos.ByteSize\Naos.Recipes.ByteSize.cs" />
+    <Compile Include=".recipes\Naos.RunWithRetry\Run.cs" />
     <Compile Include=".recipes\Spritely.MustValidation\MakeRule.cs" />
     <Compile Include=".recipes\Spritely.MustValidation\MustExtensions.cs" />
     <Compile Include=".recipes\Spritely.MustValidation\RuleExtensions.cs" />
     <Compile Include=".recipes\Spritely.MustValidation\Rules.cs" />
     <Compile Include=".recipes\Spritely.MustValidation\ValidatedNotNullAttribute.cs" />
+    <Compile Include=".recipes\Spritely.Redo\BackOffStrategy.cs" />
+    <Compile Include=".recipes\Spritely.Redo\RetriableAction.cs" />
+    <Compile Include=".recipes\Spritely.Redo\RetriableActionAsync.cs" />
+    <Compile Include=".recipes\Spritely.Redo\RetriableFunction.cs" />
+    <Compile Include=".recipes\Spritely.Redo\RetriableFunctionAsync.cs" />
+    <Compile Include=".recipes\Spritely.Redo\Using.cs" />
     <Compile Include="ArchiverFactory.cs" />
+    <Compile Include="FileExchanger.cs" />
     <Compile Include="FilePathJanitor.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,6 +86,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Analyzer Include="..\packages\AWSSDK.S3.3.3.1.1\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta004\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta004\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>

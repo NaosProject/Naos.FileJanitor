@@ -8,21 +8,17 @@ namespace Naos.FileJanitor.MessageBus.Handler
 {
     using System;
     using System.IO;
-    using System.Linq;
-    using System.Security.Cryptography;
     using System.Threading.Tasks;
-
-    using ByteSizeLib;
 
     using Its.Configuration;
     using Its.Log.Instrumentation;
 
     using Naos.AWS.S3;
-    using Naos.FileJanitor.Domain;
+    using Naos.FileJanitor.Core;
     using Naos.FileJanitor.MessageBus.Scheduler;
     using Naos.MessageBus.Domain;
 
-    using Spritely.Redo;
+    using Spritely.Recipes;
 
     /// <summary>
     /// Message handler to store files in S3.
@@ -64,41 +60,34 @@ namespace Naos.FileJanitor.MessageBus.Handler
         /// <returns>Task to support async await execution.</returns>
         public async Task HandleAsync(StoreFileMessage message, FileJanitorMessageHandlerSettings settings)
         {
+            new { message }.Must().NotBeNull().OrThrowFirstFailure();
+            new { settings }.Must().NotBeNull().OrThrowFirstFailure();
+
+            var filePath = message.FilePath;
+            var containerLocation = message.FileLocation.ContainerLocation;
+            var container = message.FileLocation.Container;
+            var key = message.FileLocation.Key;
+            var uploadSecretKey = settings.UploadSecretKey;
+            var uploadAccessKey = settings.UploadAccessKey;
+            var hashingAlgorithmNames = message.HashingAlgorithmNames;
+            var userDefinedMetadata = message.UserDefinedMetadata;
+
             var correlationId = Guid.NewGuid().ToString().ToUpperInvariant();
-            Log.Write(() => $"Starting Store File; CorrelationId: {correlationId}, Region: {message.FileLocation.ContainerLocation}, BucketName: {message.FileLocation.Container}, Key: {message.FileLocation.Key}, FilePath: {message.FilePath}");
+
+            Log.Write(() => $"Starting Store File; CorrelationId: {correlationId}, Region: {containerLocation}, BucketName: {container}, Key: {key}, FilePath: {filePath}");
             using (var log = Log.Enter(() => new { CorrelationId = correlationId }))
             {
                 log.Trace(() => "Starting upload.");
 
-                var fileManager = new FileManager(settings.UploadAccessKey, settings.UploadSecretKey);
+                var fileManager = new FileManager(uploadAccessKey, uploadSecretKey);
 
-                var fileSize = ByteSize.FromBytes(new FileInfo(message.FilePath).Length);
-                var attemptWaitTimeMultiplier = TimeSpan.FromSeconds(fileSize.MegaBytes * 0.001);
-                var minimumAttemptWaitTimeMultiplier = TimeSpan.FromSeconds(5);
-                if (attemptWaitTimeMultiplier < minimumAttemptWaitTimeMultiplier)
-                {
-                    attemptWaitTimeMultiplier = minimumAttemptWaitTimeMultiplier;
-                }
-
-                await
-                    Using.LinearBackOff(attemptWaitTimeMultiplier)
-                        .WithMaxRetries(3)
-                        .RunAsync(
-                            () =>
-                                fileManager.UploadFileAsync(
-                                    message.FileLocation.ContainerLocation,
-                                    message.FileLocation.Container,
-                                    message.FileLocation.Key ?? Path.GetFileName(message.FilePath),
-                                    message.FilePath,
-                                    (message.HashingAlgorithmNames ?? new string[0]).Select(_ => string.IsNullOrWhiteSpace(_) ? default(HashAlgorithmName) : new HashAlgorithmName(_)).ToList(),
-                                    (message.UserDefinedMetadata ?? new MetadataItem[0]).ToReadOnlyDictionary()))
-                        .Now();
+                await FileExchanger.StoreFile(fileManager, filePath, containerLocation, container, key, userDefinedMetadata, hashingAlgorithmNames);
 
                 var affectedItem = new FileLocationAffectedItem
                 {
                     FileLocationAffectedItemMessage = "Stored file from path to location.",
                     FileLocation = message.FileLocation,
-                    FilePath = message.FilePath,
+                    FilePath = filePath,
                 };
 
                 var serializer = this.SerializerFactory.BuildSerializer(FileLocationAffectedItem.ItemSerializationDescription);

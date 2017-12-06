@@ -92,7 +92,7 @@ namespace Naos.FileJanitor.Domain
                               new MetadataItem(nameof(ArchivedDirectory.DirectoryArchiveKind), archivedDirectory.DirectoryArchiveKind.ToString()),
                               new MetadataItem(nameof(ArchivedDirectory.ArchiveCompressionKind), archivedDirectory.ArchiveCompressionKind.ToString()),
                               new MetadataItem(nameof(ArchivedDirectory.IncludeBaseDirectory), archivedDirectory.IncludeBaseDirectory.ToString()),
-                              new MetadataItem(nameof(ArchivedDirectory.EntryNameEncoding), archivedDirectory.EntryNameEncoding.ToString()),
+                              new MetadataItem(nameof(ArchivedDirectory.EntryNameEncoding), archivedDirectory.EntryNameEncoding.WebName),
                               new MetadataItem(nameof(ArchivedDirectory.ArchivedDateTimeUtc), DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)),
                           };
 
