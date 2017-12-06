@@ -65,6 +65,7 @@ namespace Naos.FileJanitor.Test
                                                       Topic = new AffectedTopic(topic.Name),
                                                       AffectedItems = new[] { new AffectedItem { Id = affectedItemId } },
                                                       AffectsCompletedDateTimeUtc = affectsCompletedDateTimeUtc,
+                                                      Status = TopicStatus.WasAffected,
                                                   },
                                           },
                               };
@@ -114,6 +115,7 @@ namespace Naos.FileJanitor.Test
                                                   {
                                                       Topic = new AffectedTopic(topic.Name),
                                                       AffectedItems = new[] { new AffectedItem { Id = json } },
+                                                      Status = TopicStatus.WasAffected,
                                                   },
                                           },
                               };
@@ -157,6 +159,7 @@ namespace Naos.FileJanitor.Test
                                                   {
                                                       Topic = new AffectedTopic(topic.Name),
                                                       AffectedItems = new[] { new AffectedItem { Id = json } },
+                                                      Status = TopicStatus.WasAffected,
                                                   },
                                           },
                               };
@@ -200,6 +203,7 @@ namespace Naos.FileJanitor.Test
                                                   {
                                                       Topic = new AffectedTopic(topic.Name),
                                                       AffectedItems = new[] { new AffectedItem { Id = json } },
+                                                      Status = TopicStatus.WasAffected,
                                                   },
                                           },
                               };
@@ -225,7 +229,7 @@ namespace Naos.FileJanitor.Test
                               {
                                   FileLocation = new FileLocation { ContainerLocation = "containerLocation", Container = "container", Key = "key" },
                                   TopicToCheckAffectedItemsFor = topic,
-                                  TopicStatusReports = new[] { new TopicStatusReport { Topic = new AffectedTopic(topic.Name) } },
+                                  TopicStatusReports = new[] { new TopicStatusReport { Topic = new AffectedTopic(topic.Name), Status = TopicStatus.WasAffected } },
                               };
 
             // act
