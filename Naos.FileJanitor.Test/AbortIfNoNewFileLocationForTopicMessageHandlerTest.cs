@@ -26,12 +26,12 @@ namespace Naos.FileJanitor.Test
     {
         private static readonly ISerializeAndDeserialize Serializer = SerializerFactory.Instance.BuildSerializer(FileLocationAffectedItem.ItemSerializationDescription);
 
-        private static readonly InMemoryLogProcessor Logger = new InMemoryLogProcessor(new InMemoryLogConfiguration(LogContexts.All));
+        private static readonly InMemoryLogWriter Logger = new InMemoryLogWriter(new InMemoryLogConfig(LogItemOrigins.All));
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Best in static constructor.")]
         static AbortIfNoNewFileLocationForTopicMessageHandlerTest()
         {
-            LogProcessing.Instance.Setup(new LogProcessorSettings(), null, new[] { Logger });
+            LogWriting.Instance.Setup(new LogWritingSettings(), null, new[] { Logger });
             HandlerToolshed.InitializeSerializerFactory(() => SerializerFactory.Instance);
             HandlerToolshed.InitializeCompressorFactory(() => CompressorFactory.Instance);
         }
@@ -76,8 +76,8 @@ namespace Naos.FileJanitor.Test
             Thread.Sleep(50); // make sure all log messages get flushed
 
             // assert
-            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Message.Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
-            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Message.Contains("Found affected item: ")));
+            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Subject.DescribedSerialization.SerializedPayload.Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
+            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Subject.DescribedSerialization.SerializedPayload.Contains("Found affected item: ")));
             Assert.Equal(affectedItem.FileLocation, message.FileLocation);
 
             Assert.NotNull(ex);
@@ -125,9 +125,9 @@ namespace Naos.FileJanitor.Test
             Thread.Sleep(50); // make sure all log messages get flushed
 
             // assert
-            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Message.Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
-            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Message.Contains("Found affected item: ")));
-            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Message.Contains("Affected items did not match, NOT aborting.")));
+            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Subject.DescribedSerialization.SerializedPayload.Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
+            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Subject.DescribedSerialization.SerializedPayload.Contains("Found affected item: ")));
+            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Subject.DescribedSerialization.SerializedPayload.Contains("Affected items did not match, NOT aborting.")));
         }
 
         [Fact]
@@ -169,9 +169,9 @@ namespace Naos.FileJanitor.Test
             Thread.Sleep(50); // make sure all log messages get flushed
 
             // assert
-            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Message.Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
-            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Message.Contains("Found affected item: ")));
-            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Message.Contains("Affected items did not match, NOT aborting.")));
+            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Subject.DescribedSerialization.SerializedPayload.Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
+            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Subject.DescribedSerialization.SerializedPayload.Contains("Found affected item: ")));
+            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Subject.DescribedSerialization.SerializedPayload.Contains("Affected items did not match, NOT aborting.")));
         }
 
         [Fact]
@@ -213,9 +213,9 @@ namespace Naos.FileJanitor.Test
             Thread.Sleep(50); // make sure all log messages get flushed
 
             // assert
-            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Message.Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
-            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Message.Contains("Found affected item: ")));
-            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Message.Contains("Affected items did not match, NOT aborting.")));
+            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Subject.DescribedSerialization.SerializedPayload.Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
+            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Subject.DescribedSerialization.SerializedPayload.Contains("Found affected item: ")));
+            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Subject.DescribedSerialization.SerializedPayload.Contains("Affected items did not match, NOT aborting.")));
         }
 
         [Fact]
@@ -237,8 +237,8 @@ namespace Naos.FileJanitor.Test
             Thread.Sleep(50); // make sure all log messages get flushed
 
             // assert
-            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Message.Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
-            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Message.Contains("Did not find any affected items with expected token: ")));
+            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Subject.DescribedSerialization.SerializedPayload.Contains($"Found matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name} with affects completed on: ")));
+            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Subject.DescribedSerialization.SerializedPayload.Contains("Did not find any affected items with expected token: ")));
         }
 
         [Fact]
@@ -260,7 +260,7 @@ namespace Naos.FileJanitor.Test
             Thread.Sleep(50); // make sure all log messages get flushed
 
             // assert
-            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Message.Contains($"Did not find matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name}")));
+            Assert.NotNull(Logger.LoggedItems.SingleOrDefault(_ => _.Subject.DescribedSerialization.SerializedPayload.Contains($"Did not find matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name}")));
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Emtpy", Justification = "Spelling/name is correct.")]
@@ -281,7 +281,7 @@ namespace Naos.FileJanitor.Test
             Thread.Sleep(50); // make sure all log messages get flushed
 
             // assert
-            Assert.NotNull(Logger.LoggedItems.FirstOrDefault(_ => _.Message.Contains($"Did not find matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name}")));
+            Assert.NotNull(Logger.LoggedItems.FirstOrDefault(_ => _.Subject.DescribedSerialization.SerializedPayload.Contains($"Did not find matching reports for topic: {message.TopicToCheckAffectedItemsFor.Name}")));
         }
 
         [Fact]

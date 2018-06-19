@@ -17,7 +17,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Naos.FileJanitor.MessageBus.Scheduler;
     using Naos.MessageBus.Domain;
 
-    using Spritely.Recipes;
+    using OBeautifulCode.Validation.Recipes;
 
     using static System.FormattableString;
 
@@ -31,16 +31,16 @@ namespace Naos.FileJanitor.MessageBus.Handler
         {
             using (var log = Log.Enter(() => new { Message = message, message.FilePath }))
             {
-                new { message.FilePath }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
-                new { message.TargetFilePath }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
+                new { message.FilePath }.Must().NotBeNullNorWhiteSpace();
+                new { message.TargetFilePath }.Must().NotBeNullNorWhiteSpace();
 
-                Directory.Exists(message.FilePath).Named(Invariant($"SourceDirectory-MustExist-{message.FilePath ?? "[NULL]"}")).Must().BeTrue().OrThrowFirstFailure();
-                File.Exists(message.TargetFilePath).Named(Invariant($"TargetFile-MustNotExist-{message.TargetFilePath ?? "[NULL]"}")).Must().BeFalse().OrThrowFirstFailure();
+                Directory.Exists(message.FilePath).Named(Invariant($"SourceDirectory-MustExist-{message.FilePath ?? "[NULL]"}")).Must().BeTrue();
+                File.Exists(message.TargetFilePath).Named(Invariant($"TargetFile-MustNotExist-{message.TargetFilePath ?? "[NULL]"}")).Must().BeFalse();
 
                 log.Trace(() => Invariant($"Start archiving directory using; {nameof(DirectoryArchiveKind)}: {message.DirectoryArchiveKind}, {nameof(ArchiveCompressionKind)}: {message.ArchiveCompressionKind}"));
 
                 var archiver = ArchiverFactory.Instance.BuildArchiver(message.DirectoryArchiveKind, message.ArchiveCompressionKind);
-                new { archiver }.Must().NotBeNull().OrThrowFirstFailure();
+                new { archiver }.Must().NotBeNull();
 
                 var archivedDirectory = await archiver.ArchiveDirectoryAsync(message.FilePath, message.TargetFilePath);
 

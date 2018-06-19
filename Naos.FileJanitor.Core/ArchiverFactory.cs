@@ -10,7 +10,7 @@ namespace Naos.FileJanitor.Core
 
     using Naos.FileJanitor.Domain;
 
-    using Spritely.Recipes;
+    using OBeautifulCode.Validation.Recipes;
 
     using static System.FormattableString;
 
@@ -37,7 +37,7 @@ namespace Naos.FileJanitor.Core
         /// <inheritdoc cref="IArchiverFactory" />
         public IArchiveAndRestoreDirectory BuildArchiver(ArchivedDirectory archivedDirectory)
         {
-            new { archivedDirectory }.Must().NotBeNull().OrThrowFirstFailure();
+            new { archivedDirectory }.Must().NotBeNull();
 
             return this.BuildArchiver(archivedDirectory.DirectoryArchiveKind, archivedDirectory.ArchiveCompressionKind);
         }
@@ -45,8 +45,8 @@ namespace Naos.FileJanitor.Core
         /// <inheritdoc cref="IArchiverFactory" />
         public IArchiveAndRestoreDirectory BuildArchiver(DirectoryArchiveKind directoryArchiveKind, ArchiveCompressionKind archiveCompressionKind)
         {
-            new { directoryArchiveKind }.Must().NotBeEqualTo(DirectoryArchiveKind.Invalid).OrThrowFirstFailure();
-            new { archiveCompressionKind }.Must().NotBeEqualTo(ArchiveCompressionKind.Invalid).OrThrowFirstFailure();
+            new { directoryArchiveKind }.Must().NotBeEqualTo(DirectoryArchiveKind.Invalid);
+            new { archiveCompressionKind }.Must().NotBeEqualTo(ArchiveCompressionKind.Invalid);
 
             lock (this.sync)
             {

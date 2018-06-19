@@ -14,7 +14,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Naos.FileJanitor.MessageBus.Scheduler;
     using Naos.MessageBus.Domain;
 
-    using Spritely.Recipes;
+    using OBeautifulCode.Validation.Recipes;
 
     using static System.FormattableString;
 
@@ -26,7 +26,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
         /// <inheritdoc />
         public override async Task HandleAsync(RestoreDirectoryMessage message)
         {
-            new { message }.Must().NotBeNull().OrThrowFirstFailure();
+            new { message }.Must().NotBeNull();
 
             var filePath = message.FilePath;
             var userDefinedMetadata = message.UserDefinedMetadata;

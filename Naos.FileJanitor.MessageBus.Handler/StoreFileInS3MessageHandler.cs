@@ -18,7 +18,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
     using Naos.FileJanitor.MessageBus.Scheduler;
     using Naos.MessageBus.Domain;
 
-    using Spritely.Recipes;
+    using OBeautifulCode.Validation.Recipes;
 
     /// <summary>
     /// Message handler to store files in S3.
@@ -60,8 +60,8 @@ namespace Naos.FileJanitor.MessageBus.Handler
         /// <returns>Task to support async await execution.</returns>
         public async Task HandleAsync(StoreFileMessage message, FileJanitorMessageHandlerSettings settings)
         {
-            new { message }.Must().NotBeNull().OrThrowFirstFailure();
-            new { settings }.Must().NotBeNull().OrThrowFirstFailure();
+            new { message }.Must().NotBeNull();
+            new { settings }.Must().NotBeNull();
 
             var filePath = message.FilePath;
             var containerLocation = message.FileLocation.ContainerLocation;

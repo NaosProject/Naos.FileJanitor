@@ -6,20 +6,13 @@
 
 namespace Naos.FileJanitor.MessageBus.Handler
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
 
-    using Its.Log.Instrumentation;
-
     using Naos.FileJanitor.Core;
-    using Naos.FileJanitor.Domain;
     using Naos.FileJanitor.MessageBus.Scheduler;
     using Naos.MessageBus.Domain;
 
-    using Spritely.Recipes;
+    using OBeautifulCode.Validation.Recipes;
 
     /// <summary>
     /// Handler to handle CleanupDirectoryMessages.
@@ -29,7 +22,7 @@ namespace Naos.FileJanitor.MessageBus.Handler
         /// <inheritdoc />
         public override async Task HandleAsync(CleanupDirectoryMessage message)
         {
-            new { message }.Must().NotBeNull().OrThrowFirstFailure();
+            new { message }.Must().NotBeNull();
 
             var directoryFullPath = message.DirectoryFullPath;
             var recursive = message.Recursive;

@@ -19,6 +19,8 @@ namespace Naos.FileJanitor.Core
     using Naos.AWS.S3;
     using Naos.FileJanitor.Domain;
 
+    using OBeautifulCode.Validation.Recipes;
+
     using Spritely.Recipes;
     using Spritely.Redo;
 
@@ -192,11 +194,11 @@ namespace Naos.FileJanitor.Core
         /// <returns>Task for async.</returns>
         public static async Task RestoreDownload(string filePath, string targetFilePath, IReadOnlyCollection<MetadataItem> userDefinedMetadata)
         {
-            new { filePath }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
-            new { targetFilePath }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
+            new { filePath }.Must().NotBeNullNorWhiteSpace();
+            new { targetFilePath }.Must().NotBeNullNorWhiteSpace();
 
-            File.Exists(filePath).Named(Invariant($"SourceFile-MustExist-{filePath ?? "[NULL]"}")).Must().BeTrue().OrThrowFirstFailure();
-            Directory.Exists(targetFilePath).Named(Invariant($"TargetDirectory-MustNotExist-{targetFilePath ?? "[NULL]"}")).Must().BeFalse().OrThrowFirstFailure();
+            File.Exists(filePath).Named(Invariant($"SourceFile-MustExist-{filePath ?? "[NULL]"}")).Must().BeTrue();
+            Directory.Exists(targetFilePath).Named(Invariant($"TargetDirectory-MustNotExist-{targetFilePath ?? "[NULL]"}")).Must().BeFalse();
 
             var directoryArchiveKindRaw = userDefinedMetadata.SingleOrDefault(_ => _.Key.ToLower() == nameof(ArchivedDirectory.DirectoryArchiveKind).ToLower())?.Value
                                 ?? throw new ArgumentException(Invariant($"{nameof(userDefinedMetadata)} is missing value for {nameof(ArchivedDirectory.DirectoryArchiveKind)}"));
@@ -213,15 +215,16 @@ namespace Naos.FileJanitor.Core
             var entryNameEncodingRaw = userDefinedMetadata.SingleOrDefault(_ => _.Key.ToLower() == nameof(ArchivedDirectory.EntryNameEncoding).ToLower())?.Value
                                 ?? throw new ArgumentException(Invariant($"{nameof(userDefinedMetadata)} is missing value for {nameof(ArchivedDirectory.EntryNameEncoding)}"));
             var entryNameEncoding = Encoding.GetEncoding(entryNameEncodingRaw);
-            entryNameEncoding.Named(Invariant($"EntryNameEncoding-ParsedFrom-{nameof(userDefinedMetadata)}-key-{nameof(ArchivedDirectory.EntryNameEncoding)}")).Must().NotBeNull().OrThrowFirstFailure();
+            entryNameEncoding.Named(Invariant($"EntryNameEncoding-ParsedFrom-{nameof(userDefinedMetadata)}-key-{nameof(ArchivedDirectory.EntryNameEncoding)}"))
+                .Must().NotBeNull();
 
             var archivedDateTimeUtcRaw = userDefinedMetadata.SingleOrDefault(_ => _.Key.ToLower() == nameof(ArchivedDirectory.ArchivedDateTimeUtc).ToLower())?.Value
                                 ?? throw new ArgumentException(Invariant($"{nameof(userDefinedMetadata)} is missing value for {nameof(ArchivedDirectory.EntryNameEncoding)}"));
             var archivedDateTimeUtc = DateTime.Parse(archivedDateTimeUtcRaw);
-            archivedDateTimeUtc.Named(Invariant($"ArchivedDateTimeUtc-ParsedFrom-{nameof(userDefinedMetadata)}-key-{nameof(ArchivedDirectory.ArchivedDateTimeUtc)}")).Must().NotBeEqualTo(default(DateTime)).OrThrowFirstFailure();
+            archivedDateTimeUtc.Named(Invariant($"ArchivedDateTimeUtc-ParsedFrom-{nameof(userDefinedMetadata)}-key-{nameof(ArchivedDirectory.ArchivedDateTimeUtc)}")).Must().NotBeEqualTo(default(DateTime));
 
             var archiver = ArchiverFactory.Instance.BuildArchiver(directoryArchiveKind, archiveCompressionKind);
-            new { archiver }.Must().NotBeNull().OrThrowFirstFailure();
+            new { archiver }.Must().NotBeNull();
 
             var archivedDirectory = new ArchivedDirectory(directoryArchiveKind, archiveCompressionKind, filePath, includeBaseDirectory, entryNameEncoding, archivedDateTimeUtc);
             await archiver.RestoreDirectoryAsync(archivedDirectory, targetFilePath);

@@ -48,7 +48,7 @@ namespace Naos.FileJanitor.Console
             [DefaultValue(ArchiveCompressionKind.Fastest)] [Aliases("")] [Description("Kind of compression.")] ArchiveCompressionKind archiveCompressionKind,
             [Aliases("")] [Description("Launches the debugger.")] [DefaultValue(false)] bool debug)
         {
-            CommonSetup(debug, null, new LogProcessorSettings(new[] { new ConsoleLogConfiguration(LogContexts.All, LogContexts.None) }));
+            CommonSetup(debug, null, new LogWritingSettings(new[] { new ConsoleLogConfig(LogItemOrigins.All, LogItemOrigins.None),  }));
 
             var archiver = ArchiverFactory.Instance.BuildArchiver(directoryArchiveKind, archiveCompressionKind);
             var archivedDirectory = Run.TaskUntilCompletion(archiver.ArchiveDirectoryAsync(sourceDirectoryPath, targetFilePath, true, Encoding.UTF8));
@@ -72,7 +72,7 @@ namespace Naos.FileJanitor.Console
             [DefaultValue(ArchiveCompressionKind.Fastest)] [Aliases("")] [Description("Kind of compression.")] ArchiveCompressionKind archiveCompressionKind,
             [Aliases("")] [Description("Launches the debugger.")] [DefaultValue(false)] bool debug)
         {
-            CommonSetup(debug, null, new LogProcessorSettings(new[] { new ConsoleLogConfiguration(LogContexts.All, LogContexts.None) }));
+            CommonSetup(debug, null, new LogWritingSettings(new[] { new ConsoleLogConfig(LogItemOrigins.All, LogItemOrigins.None) }));
 
             var archiver = ArchiverFactory.Instance.BuildArchiver(directoryArchiveKind, archiveCompressionKind);
             var archivedDirectory = new ArchivedDirectory(directoryArchiveKind, archiveCompressionKind, sourceFilePath, true, Encoding.UTF8);
@@ -109,7 +109,7 @@ namespace Naos.FileJanitor.Console
             [DefaultValue(ArchiveCompressionKind.Fastest)] [Aliases("")] [Description("Kind of compression if directoryPath used.")] ArchiveCompressionKind archiveCompressionKind,
             [Aliases("")] [Description("Launches the debugger.")] [DefaultValue(false)] bool debug)
         {
-            CommonSetup(debug, null, new LogProcessorSettings(new[] { new ConsoleLogConfiguration(LogContexts.All, LogContexts.None) }));
+            CommonSetup(debug, null, new LogWritingSettings(new[] { new ConsoleLogConfig(LogItemOrigins.All, LogItemOrigins.None) }));
 
             var fileManager = new FileManager(uploadAccessKey, uploadSecretKey);
 
@@ -156,7 +156,7 @@ namespace Naos.FileJanitor.Console
             [Aliases("restore")] [Description("Restore the archive to the target path as a directory (MUST be an archive file).")] [DefaultValue(false)] bool restoreArchive,
             [Aliases("")] [Description("Launches the debugger.")] [DefaultValue(false)] bool debug)
         {
-            CommonSetup(debug, null, new LogProcessorSettings(new[] { new ConsoleLogConfiguration(LogContexts.All, LogContexts.None) }));
+            CommonSetup(debug, null, new LogWritingSettings(new[] { new ConsoleLogConfig(LogItemOrigins.All, LogItemOrigins.None) }));
 
             var fileManager = new FileManager(downloadAccessKey, downloadSecretKey);
 
@@ -208,7 +208,7 @@ namespace Naos.FileJanitor.Console
             [DefaultValue(DateRetrievalStrategy.LastUpdateDate)] [Aliases("")] [Description("The date retrieval strategy to use on files.")] DateRetrievalStrategy dateRetrievalStrategy,
             [Aliases("")] [Description("Launches the debugger.")] [DefaultValue(false)] bool debug)
         {
-            CommonSetup(debug, null, new LogProcessorSettings(new[] { new ConsoleLogConfiguration(LogContexts.All, LogContexts.None) }));
+            CommonSetup(debug, null, new LogWritingSettings(new[] { new ConsoleLogConfig(LogItemOrigins.All, LogItemOrigins.None) }));
 
             var retentionWindowTimeSpan = ParseTimeSpanFromDayHourMinuteColonDelimited(retentionWindow);
 

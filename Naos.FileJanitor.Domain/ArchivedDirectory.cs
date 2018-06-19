@@ -11,7 +11,7 @@ namespace Naos.FileJanitor.Domain
     using System.Globalization;
     using System.Text;
 
-    using Spritely.Recipes;
+    using OBeautifulCode.Validation.Recipes;
 
     /// <summary>
     /// Model object for a directory that has been converted into an arvhie file.
@@ -29,10 +29,10 @@ namespace Naos.FileJanitor.Domain
         /// <param name="archivedDateTimeUtc">Optional date time in UTC that the file was created; default is <see cref="DateTime.UtcNow" />.</param>
         public ArchivedDirectory(DirectoryArchiveKind directoryArchiveKind, ArchiveCompressionKind archiveCompressionKind, string archiveFilePath, bool includeBaseDirectory, Encoding entryNameEncoding, DateTime archivedDateTimeUtc = default(DateTime))
         {
-            new { directoryArchiveKind }.Must().NotBeEqualTo(DirectoryArchiveKind.Invalid).OrThrowFirstFailure();
-            new { archiveCompressionKind }.Must().NotBeEqualTo(ArchiveCompressionKind.Invalid).OrThrowFirstFailure();
-            new { archiveFilePath }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
-            new { entryNameEncoding }.Must().NotBeNull().OrThrowFirstFailure();
+            new { directoryArchiveKind }.Must().NotBeEqualTo(DirectoryArchiveKind.Invalid);
+            new { archiveCompressionKind }.Must().NotBeEqualTo(ArchiveCompressionKind.Invalid);
+            new { archiveFilePath }.Must().NotBeNullNorWhiteSpace();
+            new { entryNameEncoding }.Must().NotBeNull();
 
             this.DirectoryArchiveKind = directoryArchiveKind;
             this.ArchiveFilePath = archiveFilePath;
@@ -85,7 +85,7 @@ namespace Naos.FileJanitor.Domain
         /// <returns>Collection of <see cref="MetadataItem" />'s</returns>
         public static IReadOnlyCollection<MetadataItem> ToMetadataItemCollection(this ArchivedDirectory archivedDirectory)
         {
-            new { archivedDirectory }.Must().NotBeNull().OrThrowFirstFailure();
+            new { archivedDirectory }.Must().NotBeNull();
 
             var ret = new[]
                           {

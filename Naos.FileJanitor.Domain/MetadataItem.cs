@@ -9,7 +9,7 @@ namespace Naos.FileJanitor.Domain
     using System.Collections.Generic;
     using System.Linq;
 
-    using Spritely.Recipes;
+    using OBeautifulCode.Validation.Recipes;
 
     /// <summary>
     /// Model object to hold a metadata entry and allowing sharing a collection of them where <see cref="IReadOnlyDictionary{TKey,TValue}" /> cannot be used.
@@ -23,7 +23,7 @@ namespace Naos.FileJanitor.Domain
         /// <param name="value">Value value.</param>
         public MetadataItem(string key, string value)
         {
-            new { key }.Must().NotBeNull().OrThrowFirstFailure();
+            new { key }.Must().NotBeNull();
 
             this.Key = key;
             this.Value = value;

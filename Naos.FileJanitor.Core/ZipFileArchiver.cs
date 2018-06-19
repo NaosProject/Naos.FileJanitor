@@ -13,7 +13,7 @@ namespace Naos.FileJanitor.Core
 
     using Naos.FileJanitor.Domain;
 
-    using Spritely.Recipes;
+    using OBeautifulCode.Validation.Recipes;
 
     using static System.FormattableString;
 
@@ -37,7 +37,7 @@ namespace Naos.FileJanitor.Core
         /// <param name="archiveCompressionKind">Compression kind to use.</param>
         public ZipFileArchiver(ArchiveCompressionKind archiveCompressionKind)
         {
-            new { archiveCompressionKind }.Must().NotBeEqualTo(ArchiveCompressionKind.Invalid).OrThrowFirstFailure();
+            new { archiveCompressionKind }.Must().NotBeEqualTo(ArchiveCompressionKind.Invalid);
 
             this.archiveCompressionKind = archiveCompressionKind;
         }
@@ -48,8 +48,8 @@ namespace Naos.FileJanitor.Core
         /// <inheritdoc cref="IArchiveDirectory" />
         public async Task<ArchivedDirectory> ArchiveDirectoryAsync(string sourcePath, string targetFilePath, bool includeBaseDirectory = true, Encoding entryNameEncoding = null)
         {
-            new { sourcePath }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
-            new { targetFilePath }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
+            new { sourcePath }.Must().NotBeNullNorWhiteSpace();
+            new { targetFilePath }.Must().NotBeNullNorWhiteSpace();
 
             var localEntryNameEncoding = entryNameEncoding ?? DefaultEntryNameEncoding;
 
@@ -64,8 +64,8 @@ namespace Naos.FileJanitor.Core
         /// <inheritdoc cref="IRestoreDirectory" />
         public async Task RestoreDirectoryAsync(ArchivedDirectory archivedDirectory, string targetPath)
         {
-            new { archivedDirectory }.Must().NotBeNull().OrThrowFirstFailure();
-            new { targetPath }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
+            new { archivedDirectory }.Must().NotBeNull();
+            new { targetPath }.Must().NotBeNullNorWhiteSpace();
 
             ZipFile.ExtractToDirectory(archivedDirectory.ArchiveFilePath, targetPath, archivedDirectory.EntryNameEncoding);
             await Task.Run(() => { /* no-op */ });
