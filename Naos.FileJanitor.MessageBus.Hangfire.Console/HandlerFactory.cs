@@ -15,15 +15,10 @@ namespace Naos.FileJanitor.MessageBus.Hangfire.Console
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading.Tasks;
-
-    using Its.Log.Instrumentation;
 
     using Naos.FileJanitor.MessageBus.Handler;
     using Naos.FileJanitor.MessageBus.Scheduler;
     using Naos.MessageBus.Domain;
-
-    using static System.FormattableString;
 
     /// <summary>
     /// Factory builder to provide logic to resolve the appropriate <see cref="IHandleMessages" /> for a dispatched <see cref="IMessage" /> implementation.
@@ -40,33 +35,5 @@ namespace Naos.FileJanitor.MessageBus.Hangfire.Console
         /// however deriving from <see cref="MessageHandlerBase{T}" /> is recommended as it's more straightforward and easier to write.
         /// </summary>
         private static readonly IReadOnlyDictionary<Type, Type> MessageTypeToHandlerTypeMap = DiscoverHandlersInAssemblies(new[] { typeof(ArchiveDirectoryMessage).Assembly, typeof(ArchiveDirectoryMessageHandler).Assembly });
-    }
-
-    /// <summary>
-    /// Example of an <see cref="IMessage" />.
-    /// </summary>
-    public class ExampleMessage : IMessage
-    {
-        /// <inheritdoc cref="IMessage" />
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets an example of a group of work to process.
-        /// </summary>
-        public string GroupToProcess { get; set; }
-    }
-
-    /// <summary>
-    /// Handler for <see cref="ExampleMessage" />.
-    /// </summary>
-    public class ExampleMessageHandler : MessageHandlerBase<ExampleMessage>
-    {
-        /// <inheritdoc cref="MessageHandlerBase{T}" />
-        public override async Task HandleAsync(ExampleMessage message)
-        {
-            await Task.Run(() => { });
-
-            Log.Write(() => Invariant($"Finished processing group: {message.GroupToProcess}"));
-        }
     }
 }

@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExtensionsToDefaultMessageBusConsoleAbstraction.cs" company="Naos">
+// <copyright file="ExtensionsToConsoleAbstraction.cs" company="Naos">
 //    Copyright (c) Naos 2017. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -20,7 +20,6 @@ namespace Naos.FileJanitor.MessageBus.Hangfire.Console
     using Naos.FileJanitor.Core;
     using Naos.FileJanitor.Domain;
     using Naos.FileJanitor.MessageBus.Scheduler;
-    using Naos.Recipes.Configuration.Setup;
     using Naos.Recipes.RunWithRetry;
     using Naos.Serialization.Factory;
 
@@ -29,7 +28,7 @@ namespace Naos.FileJanitor.MessageBus.Hangfire.Console
     /// <summary>
     /// Abstraction for use with <see cref="CLAP" /> to provide basic command line interaction.
     /// </summary>
-    public partial class DefaultMessageBusConsoleAbstraction
+    public partial class ConsoleAbstraction
     {
         /// <summary>
         /// Archive a directory into a file.

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Naos.FileJanitor.Console
+namespace Naos.FileJanitor.MessageBus.Hangfire.Console
 {
     using System;
 

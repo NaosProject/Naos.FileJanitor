@@ -7,6 +7,7 @@
 namespace Naos.FileJanitor.Test
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
 
@@ -26,7 +27,7 @@ namespace Naos.FileJanitor.Test
     {
         private static readonly ISerializeAndDeserialize Serializer = SerializerFactory.Instance.BuildSerializer(FileLocationAffectedItem.ItemSerializationDescription);
 
-        private static readonly InMemoryLogWriter Logger = new InMemoryLogWriter(new InMemoryLogConfig(LogItemOrigins.All));
+        private static readonly InMemoryLogWriter Logger = new InMemoryLogWriter(new InMemoryLogConfig(new Dictionary<LogItemKind, IReadOnlyCollection<LogItemOrigin>>()));
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Best in static constructor.")]
         static AbortIfNoNewFileLocationForTopicMessageHandlerTest()
