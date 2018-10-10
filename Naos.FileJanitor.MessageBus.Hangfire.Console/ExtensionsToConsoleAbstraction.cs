@@ -20,6 +20,7 @@ namespace Naos.FileJanitor.MessageBus.Hangfire.Console
     using Naos.FileJanitor.Core;
     using Naos.FileJanitor.Domain;
     using Naos.FileJanitor.MessageBus.Scheduler;
+    using Naos.Logging.Domain;
     using Naos.Recipes.RunWithRetry;
     using Naos.Serialization.Factory;
 
@@ -45,10 +46,28 @@ namespace Naos.FileJanitor.MessageBus.Hangfire.Console
             [Required] [Aliases("target")] [Description("File path to archive to (must NOT exist).")] string targetFilePath,
             [DefaultValue(DirectoryArchiveKind.DotNetZipFile)] [Aliases("")] [Description("Kind of archive.")] DirectoryArchiveKind directoryArchiveKind,
             [DefaultValue(ArchiveCompressionKind.Fastest)] [Aliases("")] [Description("Kind of compression.")] ArchiveCompressionKind archiveCompressionKind,
-            [Required] [Aliases("env")] [Description("Sets the Its.Configuration precedence to use specific settings.")] string environment,
+            [Aliases("")] [Description("Sets the Its.Configuration precedence to use specific settings.")] [DefaultValue(null)] string environment,
             [Aliases("")] [Description("Launches the debugger.")] [DefaultValue(false)] bool debug)
         {
-            CommonSetup(debug, environment);
+            // Only do console logging since these are intended to be additions to the primary functionality of processing messages from a queue
+            CommonSetup(
+                debug,
+                environment,
+                new LogWritingSettings(
+                    new[]
+                        {
+                            new ConsoleLogConfig(
+                                new Dictionary<LogItemKind, IReadOnlyCollection<LogItemOrigin>>(),
+                                new Dictionary<LogItemKind, IReadOnlyCollection<LogItemOrigin>>
+                                {
+                                    { LogItemKind.String, new[] { LogItemOrigin.ItsLogEntryPosted } },
+                                    { LogItemKind.Object, new[] { LogItemOrigin.ItsLogEntryPosted } },
+                                },
+                                new Dictionary<LogItemKind, IReadOnlyCollection<LogItemOrigin>>
+                                {
+                                    { LogItemKind.Exception, null },
+                                }),
+                        }));
 
             var archiver = ArchiverFactory.Instance.BuildArchiver(directoryArchiveKind, archiveCompressionKind);
             var archivedDirectory = Run.TaskUntilCompletion(archiver.ArchiveDirectoryAsync(sourceDirectoryPath, targetFilePath, true, Encoding.UTF8));
@@ -71,10 +90,28 @@ namespace Naos.FileJanitor.MessageBus.Hangfire.Console
             [Required] [Aliases("target")] [Description("Path to restore to (must be a directory AND not exist).")] string targetDirectoryPath,
             [DefaultValue(DirectoryArchiveKind.DotNetZipFile)] [Aliases("")] [Description("Kind of archive.")] DirectoryArchiveKind directoryArchiveKind,
             [DefaultValue(ArchiveCompressionKind.Fastest)] [Aliases("")] [Description("Kind of compression.")] ArchiveCompressionKind archiveCompressionKind,
-            [Required] [Aliases("env")] [Description("Sets the Its.Configuration precedence to use specific settings.")] string environment,
+            [Aliases("")] [Description("Sets the Its.Configuration precedence to use specific settings.")] [DefaultValue(null)] string environment,
             [Aliases("")] [Description("Launches the debugger.")] [DefaultValue(false)] bool debug)
         {
-            CommonSetup(debug, environment);
+            // Only do console logging since these are intended to be additions to the primary functionality of processing messages from a queue
+            CommonSetup(
+                debug,
+                environment,
+                new LogWritingSettings(
+                    new[]
+                    {
+                        new ConsoleLogConfig(
+                            new Dictionary<LogItemKind, IReadOnlyCollection<LogItemOrigin>>(),
+                            new Dictionary<LogItemKind, IReadOnlyCollection<LogItemOrigin>>
+                            {
+                                { LogItemKind.String, new[] { LogItemOrigin.ItsLogEntryPosted } },
+                                { LogItemKind.Object, new[] { LogItemOrigin.ItsLogEntryPosted } },
+                            },
+                            new Dictionary<LogItemKind, IReadOnlyCollection<LogItemOrigin>>
+                            {
+                                { LogItemKind.Exception, null },
+                            }),
+                    }));
 
             var archiver = ArchiverFactory.Instance.BuildArchiver(directoryArchiveKind, archiveCompressionKind);
             var archivedDirectory = new ArchivedDirectory(directoryArchiveKind, archiveCompressionKind, sourceFilePath, true, Encoding.UTF8);
@@ -106,10 +143,28 @@ namespace Naos.FileJanitor.MessageBus.Hangfire.Console
             [Aliases("hash")] [Description("HashAlogirthmNames to use; MD5, SHA1, SHA256, etc.")] string[] hashingAlgorithmNames,
             [DefaultValue(DirectoryArchiveKind.DotNetZipFile)] [Aliases("")] [Description("Kind of archive if directoryPath used.")] DirectoryArchiveKind directoryArchiveKind,
             [DefaultValue(ArchiveCompressionKind.Fastest)] [Aliases("")] [Description("Kind of compression if directoryPath used.")] ArchiveCompressionKind archiveCompressionKind,
-            [Required] [Aliases("env")] [Description("Sets the Its.Configuration precedence to use specific settings.")] string environment,
+            [Aliases("")] [Description("Sets the Its.Configuration precedence to use specific settings.")] [DefaultValue(null)] string environment,
             [Aliases("")] [Description("Launches the debugger.")] [DefaultValue(false)] bool debug)
         {
-            CommonSetup(debug, environment);
+            // Only do console logging since these are intended to be additions to the primary functionality of processing messages from a queue
+            CommonSetup(
+                debug,
+                environment,
+                new LogWritingSettings(
+                    new[]
+                    {
+                        new ConsoleLogConfig(
+                            new Dictionary<LogItemKind, IReadOnlyCollection<LogItemOrigin>>(),
+                            new Dictionary<LogItemKind, IReadOnlyCollection<LogItemOrigin>>
+                            {
+                                { LogItemKind.String, new[] { LogItemOrigin.ItsLogEntryPosted } },
+                                { LogItemKind.Object, new[] { LogItemOrigin.ItsLogEntryPosted } },
+                            },
+                            new Dictionary<LogItemKind, IReadOnlyCollection<LogItemOrigin>>
+                            {
+                                { LogItemKind.Exception, null },
+                            }),
+                    }));
 
             var settings = Settings.Get<FileJanitorMessageHandlerSettings>();
 
@@ -153,10 +208,28 @@ namespace Naos.FileJanitor.MessageBus.Hangfire.Console
             [Aliases("")] [Description("Search prefix to use to file file (cannot be used with key).")] string prefix,
             [Aliases("")] [Description("Strategy on choosing file when used with prefix.")] [DefaultValue(MultipleKeysFoundStrategy.FirstSortedDescending)] MultipleKeysFoundStrategy multipleKeysFoundStrategy,
             [Aliases("restore")] [Description("Restore the archive to the target path as a directory (MUST be an archive file).")] [DefaultValue(false)] bool restoreArchive,
-            [Required] [Aliases("env")] [Description("Sets the Its.Configuration precedence to use specific settings.")] string environment,
+            [Aliases("")] [Description("Sets the Its.Configuration precedence to use specific settings.")] [DefaultValue(null)] string environment,
             [Aliases("")] [Description("Launches the debugger.")] [DefaultValue(false)] bool debug)
         {
-            CommonSetup(debug, environment);
+            // Only do console logging since these are intended to be additions to the primary functionality of processing messages from a queue
+            CommonSetup(
+                debug,
+                environment,
+                new LogWritingSettings(
+                    new[]
+                    {
+                        new ConsoleLogConfig(
+                            new Dictionary<LogItemKind, IReadOnlyCollection<LogItemOrigin>>(),
+                            new Dictionary<LogItemKind, IReadOnlyCollection<LogItemOrigin>>
+                            {
+                                { LogItemKind.String, new[] { LogItemOrigin.ItsLogEntryPosted } },
+                                { LogItemKind.Object, new[] { LogItemOrigin.ItsLogEntryPosted } },
+                            },
+                            new Dictionary<LogItemKind, IReadOnlyCollection<LogItemOrigin>>
+                            {
+                                { LogItemKind.Exception, null },
+                            }),
+                    }));
 
             var settings = Settings.Get<FileJanitorMessageHandlerSettings>();
 
@@ -209,10 +282,28 @@ namespace Naos.FileJanitor.MessageBus.Hangfire.Console
             [DefaultValue(true)] [Aliases("")] [Description("Whether or not to evaluate files recursively on the path.")] bool recursive,
             [DefaultValue(false)] [Aliases("")] [Description("Whether or not to delete directories that are or become empty during cleanup.")] bool deleteEmptyDirectories,
             [DefaultValue(DateRetrievalStrategy.LastUpdateDate)] [Aliases("")] [Description("The date retrieval strategy to use on files.")] DateRetrievalStrategy dateRetrievalStrategy,
-            [Required] [Aliases("env")] [Description("Sets the Its.Configuration precedence to use specific settings.")] string environment,
+            [Aliases("")] [Description("Sets the Its.Configuration precedence to use specific settings.")] [DefaultValue(null)] string environment,
             [Aliases("")] [Description("Launches the debugger.")] [DefaultValue(false)] bool debug)
         {
-            CommonSetup(debug, environment);
+            // Only do console logging since these are intended to be additions to the primary functionality of processing messages from a queue
+            CommonSetup(
+                debug,
+                environment,
+                new LogWritingSettings(
+                    new[]
+                    {
+                        new ConsoleLogConfig(
+                            new Dictionary<LogItemKind, IReadOnlyCollection<LogItemOrigin>>(),
+                            new Dictionary<LogItemKind, IReadOnlyCollection<LogItemOrigin>>
+                            {
+                                { LogItemKind.String, new[] { LogItemOrigin.ItsLogEntryPosted } },
+                                { LogItemKind.Object, new[] { LogItemOrigin.ItsLogEntryPosted } },
+                            },
+                            new Dictionary<LogItemKind, IReadOnlyCollection<LogItemOrigin>>
+                            {
+                                { LogItemKind.Exception, null },
+                            }),
+                    }));
 
             var retentionWindowTimeSpan = ParseTimeSpanFromDayHourMinuteColonDelimited(retentionWindow);
 
