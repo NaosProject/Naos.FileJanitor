@@ -102,17 +102,17 @@
     <Reference Include="Naos.Logging.Domain, Version=1.0.30.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Naos.Logging.Domain.1.0.30\lib\net462\Naos.Logging.Domain.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.MessageBus.Core, Version=1.2.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Naos.MessageBus.Core.1.2.3\lib\net462\Naos.MessageBus.Core.dll</HintPath>
+    <Reference Include="Naos.MessageBus.Core, Version=1.2.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.MessageBus.Core.1.2.7\lib\net462\Naos.MessageBus.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.MessageBus.Domain, Version=1.2.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Naos.MessageBus.Domain.1.2.3\lib\net462\Naos.MessageBus.Domain.dll</HintPath>
+    <Reference Include="Naos.MessageBus.Domain, Version=1.2.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.MessageBus.Domain.1.2.7\lib\net462\Naos.MessageBus.Domain.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.MessageBus.Hangfire.Sender, Version=1.2.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Naos.MessageBus.Hangfire.Sender.1.2.3\lib\net462\Naos.MessageBus.Hangfire.Sender.dll</HintPath>
+    <Reference Include="Naos.MessageBus.Hangfire.Sender, Version=1.2.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.MessageBus.Hangfire.Sender.1.2.7\lib\net462\Naos.MessageBus.Hangfire.Sender.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.MessageBus.Persistence, Version=1.2.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Naos.MessageBus.Persistence.1.2.3\lib\net462\Naos.MessageBus.Persistence.dll</HintPath>
+    <Reference Include="Naos.MessageBus.Persistence, Version=1.2.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.MessageBus.Persistence.1.2.7\lib\net462\Naos.MessageBus.Persistence.dll</HintPath>
     </Reference>
     <Reference Include="Naos.Serialization.Bson, Version=1.0.55.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Naos.Serialization.Bson.1.0.55\lib\net462\Naos.Serialization.Bson.dll</HintPath>
@@ -135,8 +135,8 @@
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="OBeautifulCode.TypeRepresentation, Version=1.0.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OBeautifulCode.TypeRepresentation.1.0.15\lib\net462\OBeautifulCode.TypeRepresentation.dll</HintPath>
+    <Reference Include="OBeautifulCode.TypeRepresentation, Version=1.0.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OBeautifulCode.TypeRepresentation.1.0.16\lib\net462\OBeautifulCode.TypeRepresentation.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -218,15 +218,7 @@
   <ItemGroup>
     <AdditionalFiles Include=".analyzers\stylecop.json" />
     <None Include=".analyzers\release.ruleset" />
-    <None Include=".config\ExampleDevelopment\HandlerFactoryConfiguration.json" />
-    <None Include=".config\ExampleDevelopment\LogWritingSettings.json" />
-    <None Include=".config\ExampleDevelopment\MessageBusConnectionConfiguration.json" />
-    <None Include=".config\ExampleDevelopment\MessageBusLaunchConfiguration.json" />
-    <None Include=".config\ExampleProduction\HandlerFactoryConfiguration.json" />
-    <None Include=".config\ExampleProduction\LogWritingSettings.json" />
-    <None Include=".config\ExampleProduction\MessageBusConnectionConfiguration.json" />
-    <None Include=".config\ExampleProduction\MessageBusLaunchConfiguration.json" />
-    <None Include=".recipes\Naos.MessageBus\ExampleApp.config" />
+    <None Include=".recipes\Naos.MessageBus\MessageBusLaunchConfiguration.Example.json" />
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
