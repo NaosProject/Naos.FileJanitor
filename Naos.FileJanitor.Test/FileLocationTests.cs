@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileLocationTests.cs" company="Naos">
-//    Copyright (c) Naos 2017. All Rights Reserved.
+// <copyright file="FileLocationTests.cs" company="Naos Project">
+//    Copyright (c) Naos Project 2019. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,10 +12,10 @@ namespace Naos.FileJanitor.Test
 
     using Xunit;
 
-    public class FileLocationTests
+    public static class FileLocationTests
     {
         [Fact]
-        public void Equal_AreEqual()
+        public static void Equal_AreEqual()
         {
             var containerLocation = Guid.NewGuid().ToString().ToUpperInvariant();
             var container = Guid.NewGuid().ToString().ToUpperInvariant();
@@ -37,7 +37,7 @@ namespace Naos.FileJanitor.Test
         }
 
         [Fact]
-        public void NotEqualAreNotEqual_ContainerLocation()
+        public static void NotEqualAreNotEqual_ContainerLocation()
         {
             var containerLocation = Guid.NewGuid().ToString().ToUpperInvariant();
             var container = Guid.NewGuid().ToString().ToUpperInvariant();
@@ -58,7 +58,7 @@ namespace Naos.FileJanitor.Test
         }
 
         [Fact]
-        public void NotEqualAreNotEqual_Container()
+        public static void NotEqualAreNotEqual_Container()
         {
             var containerLocation = Guid.NewGuid().ToString().ToUpperInvariant();
             var container = Guid.NewGuid().ToString().ToUpperInvariant();
@@ -79,7 +79,7 @@ namespace Naos.FileJanitor.Test
         }
 
         [Fact]
-        public void NotEqualAreNotEqual_Key()
+        public static void NotEqualAreNotEqual_Key()
         {
             var containerLocation = Guid.NewGuid().ToString().ToUpperInvariant();
             var container = Guid.NewGuid().ToString().ToUpperInvariant();
