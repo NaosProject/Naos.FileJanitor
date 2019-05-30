@@ -11,6 +11,7 @@ namespace OBeautifulCode.Math.Recipes
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Provides methods to help with generating hash codes for structures and classes. This handles
@@ -108,10 +109,35 @@ namespace OBeautifulCode.Math.Recipes
         }
 
         /// <summary>
+        /// Adds the hash value for all elements of the specified <see cref="IReadOnlyDictionary{TKey, TValue}"/> to the current hash and returns the new value.
+        /// </summary>
+        /// <typeparam name="TKey">The type of key objects to enumerate and hash.</typeparam>
+        /// <typeparam name="TValue">The type of value objects to enumerate and hash.</typeparam>
+        /// <param name="dictionary">The dictionary to hash.</param>
+        /// <returns>The new hash code.</returns>
+        public HashCodeHelper HashDictionary<TKey, TValue>(
+            IReadOnlyDictionary<TKey, TValue> dictionary)
+        {
+            HashCodeHelper helper = this;
+            if (dictionary == null)
+            {
+                helper = helper.Hash((IReadOnlyDictionary<TKey, TValue>)null);
+            }
+            else
+            {
+                helper = helper
+                    .HashElements(dictionary.OrderBy(_ => _.Key).Select(_ => _.Key))
+                    .HashElements(dictionary.OrderBy(_ => _.Key).Select(_ => _.Value));
+            }
+
+            return helper;
+        }
+
+        /// <summary>
         /// Adds the hash value for all elements of the specified <see cref="IEnumerable{T}"/> to the current hash and returns the new value.
         /// </summary>
         /// <typeparam name="T">The type of objects to enumerate and hash.</typeparam>
-        /// <param name="values">The values to hash.</param>
+        /// <param name="values">The dictionary to hash.</param>
         /// <returns>The new hash code.</returns>
         public HashCodeHelper HashElements<T>(
             IEnumerable<T> values)

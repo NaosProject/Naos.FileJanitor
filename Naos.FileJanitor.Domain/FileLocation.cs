@@ -48,9 +48,9 @@ namespace Naos.FileJanitor.Domain
                 return false;
             }
 
-            return first.ContainerLocation == second.ContainerLocation
-                   && first.Container == second.Container
-                   && first.Key == second.Key;
+            return string.Equals(first.ContainerLocation, second.ContainerLocation, StringComparison.OrdinalIgnoreCase) &&
+                   string.Equals(first.Container, second.Container, StringComparison.OrdinalIgnoreCase) &&
+                   string.Equals(first.Key, second.Key, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Naos.FileJanitor.Domain
         /// </summary>
         /// <param name="first">First parameter.</param>
         /// <param name="second">Second parameter.</param>
-        /// <returns>A value indicating whether or not the two items are inequal.</returns>
+        /// <returns>A value indicating whether or not the two items are unequal.</returns>
         public static bool operator !=(FileLocation first, FileLocation second) => !(first == second);
 
         /// <inheritdoc />

@@ -35,14 +35,14 @@
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoFixture, Version=4.5.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoFixture.4.5.1\lib\net452\AutoFixture.dll</HintPath>
+    <Reference Include="AutoFixture, Version=4.8.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.4.8.0\lib\net452\AutoFixture.dll</HintPath>
     </Reference>
-    <Reference Include="FakeItEasy, Version=4.0.0.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
-      <HintPath>..\packages\FakeItEasy.4.9.1\lib\net45\FakeItEasy.dll</HintPath>
+    <Reference Include="FakeItEasy, Version=5.0.0.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
+      <HintPath>..\packages\FakeItEasy.5.1.0\lib\net45\FakeItEasy.dll</HintPath>
     </Reference>
     <Reference Include="Fare, Version=2.1.0.0, Culture=neutral, PublicKeyToken=ea68d375bf33a7c8, processorArchitecture=MSIL">
-      <HintPath>..\packages\Fare.2.1.1\lib\net35\Fare.dll</HintPath>
+      <HintPath>..\packages\Fare.2.1.2\lib\net35\Fare.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions, Version=4.19.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.4.19.0\lib\net45\FluentAssertions.dll</HintPath>
@@ -53,36 +53,36 @@
     <Reference Include="MongoDB.Bson, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MongoDB.Bson.2.4.4\lib\net45\MongoDB.Bson.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.Compression.Domain, Version=1.0.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Naos.Compression.Domain.1.0.15\lib\net462\Naos.Compression.Domain.dll</HintPath>
+    <Reference Include="Naos.Compression.Domain, Version=1.0.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.Compression.Domain.1.0.16\lib\net462\Naos.Compression.Domain.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.Diagnostics.Domain, Version=1.2.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Naos.Diagnostics.Domain.1.2.13\lib\net462\Naos.Diagnostics.Domain.dll</HintPath>
+    <Reference Include="Naos.Diagnostics.Domain, Version=1.3.23.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.Diagnostics.Domain.1.3.23\lib\net462\Naos.Diagnostics.Domain.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.Serialization.Bson, Version=1.0.61.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Naos.Serialization.Bson.1.0.61\lib\net462\Naos.Serialization.Bson.dll</HintPath>
+    <Reference Include="Naos.Serialization.Bson, Version=1.0.121.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.Serialization.Bson.1.0.121\lib\net462\Naos.Serialization.Bson.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.Serialization.Domain, Version=1.0.61.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Naos.Serialization.Domain.1.0.61\lib\net462\Naos.Serialization.Domain.dll</HintPath>
+    <Reference Include="Naos.Serialization.Domain, Version=1.0.121.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.Serialization.Domain.1.0.121\lib\net462\Naos.Serialization.Domain.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.Serialization.Factory, Version=1.0.61.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Naos.Serialization.Factory.1.0.61\lib\net462\Naos.Serialization.Factory.dll</HintPath>
+    <Reference Include="Naos.Serialization.Factory, Version=1.0.121.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.Serialization.Factory.1.0.121\lib\net462\Naos.Serialization.Factory.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.Serialization.Json, Version=1.0.61.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Naos.Serialization.Json.1.0.61\lib\net462\Naos.Serialization.Json.dll</HintPath>
+    <Reference Include="Naos.Serialization.Json, Version=1.0.121.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.Serialization.Json.1.0.121\lib\net462\Naos.Serialization.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.Serialization.PropertyBag, Version=1.0.61.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Naos.Serialization.PropertyBag.1.0.61\lib\net462\Naos.Serialization.PropertyBag.dll</HintPath>
+    <Reference Include="Naos.Serialization.PropertyBag, Version=1.0.121.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.Serialization.PropertyBag.1.0.121\lib\net462\Naos.Serialization.PropertyBag.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OBeautifulCode.AutoFakeItEasy, Version=1.0.109.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OBeautifulCode.AutoFakeItEasy.1.0.109\lib\net462\OBeautifulCode.AutoFakeItEasy.dll</HintPath>
+    <Reference Include="OBeautifulCode.AutoFakeItEasy, Version=1.0.113.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OBeautifulCode.AutoFakeItEasy.1.0.113\lib\net462\OBeautifulCode.AutoFakeItEasy.dll</HintPath>
     </Reference>
-    <Reference Include="OBeautifulCode.TypeRepresentation, Version=1.0.16.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OBeautifulCode.TypeRepresentation.1.0.16\lib\net462\OBeautifulCode.TypeRepresentation.dll</HintPath>
+    <Reference Include="OBeautifulCode.Type, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OBeautifulCode.Type.1.0.4\lib\net462\OBeautifulCode.Type.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -111,7 +111,9 @@
   <ItemGroup>
     <Compile Include=".recipes\Naos.InitializeTestProject\ExampleDummyFactory.cs" />
     <Compile Include=".recipes\OBeautifulCode.AutoFakeItEasy\AutoFakeItEasyBootstrapper.cs" />
+    <Compile Include="SerializationTests.cs" />
     <Compile Include="FileArchivingTest.cs" />
+    <Compile Include="FileJanitorDummyFactory.cs" />
     <Compile Include="FileLocationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -119,12 +121,21 @@
     <AdditionalFiles Include=".analyzers\stylecop.json" />
     <None Include=".analyzers\test.ruleset" />
     <None Include="app.config" />
+    <None Include="FileJanitorDummyFactory.recipe-nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Naos.FileJanitor.Domain\Naos.FileJanitor.Domain.csproj">
       <Project>{54DC2338-D49F-4C72-A2CD-EABC6BE678AD}</Project>
       <Name>Naos.FileJanitor.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Naos.FileJanitor.Serialization.Bson\Naos.FileJanitor.Serialization.Bson.csproj">
+      <Project>{2993B5C3-5781-428A-9C20-23B1BE6B104D}</Project>
+      <Name>Naos.FileJanitor.Serialization.Bson</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Naos.FileJanitor.Serialization.Json\Naos.FileJanitor.Serialization.Json.csproj">
+      <Project>{C1F8D84D-9891-4DFA-932B-82D9E79A1A62}</Project>
+      <Name>Naos.FileJanitor.Serialization.Json</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

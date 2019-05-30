@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{24A5040F-62A9-45D0-85E6-818FD8AB4F74}</ProjectGuid>
+    <ProjectGuid>{2993B5C3-5781-428A-9C20-23B1BE6B104D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Naos.FileJanitor.S3</RootNamespace>
-    <AssemblyName>Naos.FileJanitor.S3</AssemblyName>
+    <RootNamespace>Naos.FileJanitor.Serialization.Bson</RootNamespace>
+    <AssemblyName>Naos.FileJanitor.Serialization.Bson</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -24,8 +24,7 @@
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Naos.FileJanitor.S3.xml</DocumentationFile>
-    <CodeAnalysisRuleSet />
+    <DocumentationFile>bin\Debug\Naos.FileJanitor.Serialization.Bson.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,24 +34,23 @@
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Naos.FileJanitor.S3.xml</DocumentationFile>
-    <CodeAnalysisRuleSet />
+    <DocumentationFile>bin\Release\Naos.FileJanitor.Serialization.Bson.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AWSSDK.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
-      <HintPath>..\packages\AWSSDK.Core.3.3.32.2\lib\net45\AWSSDK.Core.dll</HintPath>
+    <Reference Include="MongoDB.Bson, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Bson.2.4.4\lib\net45\MongoDB.Bson.dll</HintPath>
     </Reference>
-    <Reference Include="AWSSDK.S3, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
-      <HintPath>..\packages\AWSSDK.S3.3.3.31.24\lib\net45\AWSSDK.S3.dll</HintPath>
+    <Reference Include="Naos.Compression.Domain, Version=1.0.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.Compression.Domain.1.0.16\lib\net462\Naos.Compression.Domain.dll</HintPath>
     </Reference>
-    <Reference Include="AWSSDK.SecurityToken, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
-      <HintPath>..\packages\AWSSDK.SecurityToken.3.3.4.58\lib\net45\AWSSDK.SecurityToken.dll</HintPath>
+    <Reference Include="Naos.Serialization.Bson, Version=1.0.121.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.Serialization.Bson.1.0.121\lib\net462\Naos.Serialization.Bson.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.AWS.Domain, Version=1.0.54.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Naos.AWS.Domain.1.0.54\lib\net462\Naos.AWS.Domain.dll</HintPath>
+    <Reference Include="Naos.Serialization.Domain, Version=1.0.121.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.Serialization.Domain.1.0.121\lib\net462\Naos.Serialization.Domain.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.AWS.S3, Version=1.0.54.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Naos.AWS.S3.1.0.54\lib\net462\Naos.AWS.S3.dll</HintPath>
+    <Reference Include="OBeautifulCode.Type, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OBeautifulCode.Type.1.0.4\lib\net462\OBeautifulCode.Type.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -64,27 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include=".recipes\Naos.ByteSize\Naos.Recipes.ByteSize.cs" />
-    <Compile Include=".recipes\Naos.RunWithRetry\Run.cs" />
-    <Compile Include=".recipes\OBeautifulCode.Validation\ApplyBecause.cs" />
-    <Compile Include=".recipes\OBeautifulCode.Validation\DictionaryExtensions.cs" />
-    <Compile Include=".recipes\OBeautifulCode.Validation\Parameter.cs" />
-    <Compile Include=".recipes\OBeautifulCode.Validation\ParameterShould.cs" />
-    <Compile Include=".recipes\OBeautifulCode.Validation\ParameterValidation.cs" />
-    <Compile Include=".recipes\OBeautifulCode.Validation\ParameterValidation.Internal.cs" />
-    <Compile Include=".recipes\OBeautifulCode.Validation\ParameterValidation.Strings.cs" />
-    <Compile Include=".recipes\OBeautifulCode.Validation\ParameterValidation.TypeValidation.cs" />
-    <Compile Include=".recipes\OBeautifulCode.Validation\ParameterValidation.Utility.cs" />
-    <Compile Include=".recipes\OBeautifulCode.Validation\ParameterValidator.cs" />
-    <Compile Include=".recipes\OBeautifulCode.Validation\Range.cs" />
-    <Compile Include=".recipes\OBeautifulCode.Validation\ValidatedNotNullAttribute.cs" />
-    <Compile Include=".recipes\Spritely.Redo\BackOffStrategy.cs" />
-    <Compile Include=".recipes\Spritely.Redo\RetriableAction.cs" />
-    <Compile Include=".recipes\Spritely.Redo\RetriableActionAsync.cs" />
-    <Compile Include=".recipes\Spritely.Redo\RetriableFunction.cs" />
-    <Compile Include=".recipes\Spritely.Redo\RetriableFunctionAsync.cs" />
-    <Compile Include=".recipes\Spritely.Redo\Using.cs" />
-    <Compile Include="FileExchanger.cs" />
+    <Compile Include="FileJanitorBsonConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -93,8 +71,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\AWSSDK.S3.3.3.31.24\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
-    <Analyzer Include="..\packages\AWSSDK.SecurityToken.3.3.4.58\analyzers\dotnet\cs\AWSSDK.SecurityToken.CodeAnalysis.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.Unstable.1.1.0.47\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.Unstable.1.1.0.47\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>

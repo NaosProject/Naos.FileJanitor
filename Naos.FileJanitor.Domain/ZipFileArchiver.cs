@@ -55,7 +55,7 @@ namespace Naos.FileJanitor.Domain
 
             ZipFile.CreateFromDirectory(sourcePath, targetFilePath, compressionLevel, includeBaseDirectory, localEntryNameEncoding);
 
-            var ret = new ArchivedDirectory(this.DirectoryArchiveKind, this.archiveCompressionKind, targetFilePath, includeBaseDirectory, localEntryNameEncoding);
+            var ret = new ArchivedDirectory(this.DirectoryArchiveKind, this.archiveCompressionKind, targetFilePath, includeBaseDirectory, localEntryNameEncoding.WebName);
             return await Task.FromResult(ret);
         }
 
@@ -65,7 +65,8 @@ namespace Naos.FileJanitor.Domain
             new { archivedDirectory }.Must().NotBeNull();
             new { targetPath }.Must().NotBeNullNorWhiteSpace();
 
-            ZipFile.ExtractToDirectory(archivedDirectory.ArchiveFilePath, targetPath, archivedDirectory.EntryNameEncoding);
+            var encoding = Encoding.GetEncoding(archivedDirectory.EntryNameEncodingWebName);
+            ZipFile.ExtractToDirectory(archivedDirectory.ArchiveFilePath, targetPath, encoding);
             await Task.Run(() => { /* no-op */ });
         }
 

@@ -211,21 +211,21 @@ namespace Naos.FileJanitor.S3
                                 ?? throw new ArgumentException(Invariant($"{nameof(userDefinedMetadata)} is missing value for {nameof(ArchivedDirectory.IncludeBaseDirectory)}"));
             var includeBaseDirectory = bool.Parse(includeBaseDirectoryRaw);
 
-            var entryNameEncodingRaw = userDefinedMetadata.SingleOrDefault(_ => _.Key.ToLower() == nameof(ArchivedDirectory.EntryNameEncoding).ToLower())?.Value
-                                ?? throw new ArgumentException(Invariant($"{nameof(userDefinedMetadata)} is missing value for {nameof(ArchivedDirectory.EntryNameEncoding)}"));
+            var entryNameEncodingRaw = userDefinedMetadata.SingleOrDefault(_ => _.Key.ToLower() == nameof(ArchivedDirectory.EntryNameEncodingWebName).ToLower())?.Value
+                                ?? throw new ArgumentException(Invariant($"{nameof(userDefinedMetadata)} is missing value for {nameof(ArchivedDirectory.EntryNameEncodingWebName)}"));
             var entryNameEncoding = Encoding.GetEncoding(entryNameEncodingRaw);
-            entryNameEncoding.Named(Invariant($"EntryNameEncoding-ParsedFrom-{nameof(userDefinedMetadata)}-key-{nameof(ArchivedDirectory.EntryNameEncoding)}"))
+            entryNameEncoding.Named(Invariant($"EntryNameEncoding-ParsedFrom-{nameof(userDefinedMetadata)}-key-{nameof(ArchivedDirectory.EntryNameEncodingWebName)}"))
                 .Must().NotBeNull();
 
             var archivedDateTimeUtcRaw = userDefinedMetadata.SingleOrDefault(_ => _.Key.ToLower() == nameof(ArchivedDirectory.ArchivedDateTimeUtc).ToLower())?.Value
-                                ?? throw new ArgumentException(Invariant($"{nameof(userDefinedMetadata)} is missing value for {nameof(ArchivedDirectory.EntryNameEncoding)}"));
+                                ?? throw new ArgumentException(Invariant($"{nameof(userDefinedMetadata)} is missing value for {nameof(ArchivedDirectory.EntryNameEncodingWebName)}"));
             var archivedDateTimeUtc = DateTime.Parse(archivedDateTimeUtcRaw);
             archivedDateTimeUtc.Named(Invariant($"ArchivedDateTimeUtc-ParsedFrom-{nameof(userDefinedMetadata)}-key-{nameof(ArchivedDirectory.ArchivedDateTimeUtc)}")).Must().NotBeEqualTo(default(DateTime));
 
             var archiver = ArchiverFactory.Instance.BuildArchiver(directoryArchiveKind, archiveCompressionKind);
             new { archiver }.Must().NotBeNull();
 
-            var archivedDirectory = new ArchivedDirectory(directoryArchiveKind, archiveCompressionKind, filePath, includeBaseDirectory, entryNameEncoding, archivedDateTimeUtc);
+            var archivedDirectory = new ArchivedDirectory(directoryArchiveKind, archiveCompressionKind, filePath, includeBaseDirectory, entryNameEncoding.WebName, archivedDateTimeUtc);
             await archiver.RestoreDirectoryAsync(archivedDirectory, targetFilePath);
         }
     }

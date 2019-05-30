@@ -1,0 +1,15 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Naos.FileJanitor.Recipes.DummyFactory</id>
+    <description>A dummy factory for FileJanitor types.</description>
+    <tags>naos cron fakeiteasy autofixture dummy factory</tags>
+    <dependencies>
+      <dependency id="Naos.FileJanitor" version ="$version$" />
+      <dependency id="OBeautifulCode.AutoFakeItEasy" version ="1.0.113" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="FileJanitorDummyFactory.cs" target="content\net462\.recipes\Naos.FileJanitor\FileJanitorDummyFactory.cs" />
+  </files>
+</package>
