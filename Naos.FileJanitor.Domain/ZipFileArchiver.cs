@@ -11,7 +11,7 @@ namespace Naos.FileJanitor.Domain
     using System.Text;
     using System.Threading.Tasks;
 
-    using OBeautifulCode.Validation.Recipes;
+    using OBeautifulCode.Assertion.Recipes;
 
     using static System.FormattableString;
 
@@ -35,7 +35,7 @@ namespace Naos.FileJanitor.Domain
         /// <param name="archiveCompressionKind">Compression kind to use.</param>
         public ZipFileArchiver(ArchiveCompressionKind archiveCompressionKind)
         {
-            new { archiveCompressionKind }.Must().NotBeEqualTo(ArchiveCompressionKind.Invalid);
+            new { archiveCompressionKind }.AsArg().Must().NotBeEqualTo(ArchiveCompressionKind.Invalid);
 
             this.archiveCompressionKind = archiveCompressionKind;
         }
@@ -46,8 +46,8 @@ namespace Naos.FileJanitor.Domain
         /// <inheritdoc cref="IArchiveDirectory" />
         public async Task<ArchivedDirectory> ArchiveDirectoryAsync(string sourcePath, string targetFilePath, bool includeBaseDirectory = true, Encoding entryNameEncoding = null)
         {
-            new { sourcePath }.Must().NotBeNullNorWhiteSpace();
-            new { targetFilePath }.Must().NotBeNullNorWhiteSpace();
+            new { sourcePath }.AsArg().Must().NotBeNullNorWhiteSpace();
+            new { targetFilePath }.AsArg().Must().NotBeNullNorWhiteSpace();
 
             var localEntryNameEncoding = entryNameEncoding ?? DefaultEntryNameEncoding;
 
@@ -62,8 +62,8 @@ namespace Naos.FileJanitor.Domain
         /// <inheritdoc cref="IRestoreDirectory" />
         public async Task RestoreDirectoryAsync(ArchivedDirectory archivedDirectory, string targetPath)
         {
-            new { archivedDirectory }.Must().NotBeNull();
-            new { targetPath }.Must().NotBeNullNorWhiteSpace();
+            new { archivedDirectory }.AsArg().Must().NotBeNull();
+            new { targetPath }.AsArg().Must().NotBeNullNorWhiteSpace();
 
             var encoding = Encoding.GetEncoding(archivedDirectory.EntryNameEncodingWebName);
             ZipFile.ExtractToDirectory(archivedDirectory.ArchiveFilePath, targetPath, encoding);

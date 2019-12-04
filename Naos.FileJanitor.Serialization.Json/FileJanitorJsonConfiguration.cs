@@ -10,7 +10,7 @@ namespace Naos.FileJanitor.Serialization.Json
     using System.Collections.Generic;
     using Naos.FileJanitor;
     using Naos.FileJanitor.Domain;
-    using Naos.Serialization.Json;
+    using OBeautifulCode.Serialization.Json;
 
     /// <summary>
     /// Implementation for the <see cref="FileJanitor" /> domain.

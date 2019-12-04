@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor.Test", "Naos.FileJanitor.Test\Naos.FileJanitor.Test.csproj", "{BAF88789-58CD-44B8-B642-0919CE05F760}"
 EndProject
@@ -9,8 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor.Domain", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E1514A83-8845-4A96-880F-C99C21220FCF}"
 	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
 		LICENSE = LICENSE
 		README.md = README.md
+		RepoConfig.state = RepoConfig.state
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.FileJanitor.S3", "Naos.FileJanitor.S3\Naos.FileJanitor.S3.csproj", "{24A5040F-62A9-45D0-85E6-818FD8AB4F74}"

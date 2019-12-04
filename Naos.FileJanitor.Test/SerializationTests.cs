@@ -8,17 +8,17 @@ namespace Naos.FileJanitor.Test
 {
     using FakeItEasy;
     using FluentAssertions;
-    using Naos.Serialization.Bson;
-    using Naos.Serialization.Json;
     using Naos.FileJanitor.Domain;
     using Naos.FileJanitor.Serialization.Bson;
     using Naos.FileJanitor.Serialization.Json;
+    using OBeautifulCode.Serialization.Bson;
+    using OBeautifulCode.Serialization.Json;
     using Xunit;
 
     public static class SerializationTests
     {
-        private static readonly NaosBsonSerializer BsonSerializer = new NaosBsonSerializer(typeof(FileJanitorBsonConfiguration));
-        private static readonly NaosJsonSerializer JsonSerializer = new NaosJsonSerializer(typeof(FileJanitorJsonConfiguration));
+        private static readonly ObcBsonSerializer BsonSerializer = new ObcBsonSerializer(typeof(FileJanitorBsonConfiguration));
+        private static readonly ObcJsonSerializer JsonSerializer = new ObcJsonSerializer(typeof(FileJanitorJsonConfiguration));
 
         [Fact]
         public static void ArchivedDirectoryJanitor_Roundtrips()
@@ -73,6 +73,5 @@ namespace Naos.FileJanitor.Test
             actualBson.Should().Be(expected);
             actualJson.Should().Be(expected);
         }
-
     }
 }

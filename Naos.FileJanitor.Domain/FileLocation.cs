@@ -8,7 +8,7 @@ namespace Naos.FileJanitor.Domain
 {
     using System;
 
-    using OBeautifulCode.Math.Recipes;
+    using OBeautifulCode.Equality.Recipes;
 
     /// <summary>
     /// Model to represent a specific file.

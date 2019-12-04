@@ -9,8 +9,8 @@ namespace Naos.FileJanitor.Domain
     using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using OBeautifulCode.Math.Recipes;
-    using OBeautifulCode.Validation.Recipes;
+    using OBeautifulCode.Assertion.Recipes;
+    using OBeautifulCode.Equality.Recipes;
 
     /// <summary>
     /// Model object for a directory that has been converted into an archive file.
@@ -28,10 +28,10 @@ namespace Naos.FileJanitor.Domain
         /// <param name="archivedDateTimeUtc">Optional date time in UTC that the file was created; default is <see cref="DateTime.UtcNow" />.</param>
         public ArchivedDirectory(DirectoryArchiveKind directoryArchiveKind, ArchiveCompressionKind archiveCompressionKind, string archiveFilePath, bool includeBaseDirectory, string entryNameEncodingWebName, DateTime archivedDateTimeUtc = default(DateTime))
         {
-            new { directoryArchiveKind }.Must().NotBeEqualTo(DirectoryArchiveKind.Invalid);
-            new { archiveCompressionKind }.Must().NotBeEqualTo(ArchiveCompressionKind.Invalid);
-            new { archiveFilePath }.Must().NotBeNullNorWhiteSpace();
-            new { entryNameEncoding = entryNameEncodingWebName }.Must().NotBeNull();
+            new { directoryArchiveKind }.AsArg().Must().NotBeEqualTo(DirectoryArchiveKind.Invalid);
+            new { archiveCompressionKind }.AsArg().Must().NotBeEqualTo(ArchiveCompressionKind.Invalid);
+            new { archiveFilePath }.AsArg().Must().NotBeNullNorWhiteSpace();
+            new { entryNameEncoding = entryNameEncodingWebName }.AsArg().Must().NotBeNull();
 
             this.DirectoryArchiveKind = directoryArchiveKind;
             this.ArchiveFilePath = archiveFilePath;
@@ -123,7 +123,7 @@ namespace Naos.FileJanitor.Domain
     }
 
     /// <summary>
-    /// Extensions on <see cref="ArchivedDirectory" />
+    /// Extensions on <see cref="ArchivedDirectory" />.
     /// </summary>
     public static class ArchivedDirectoryExtensions
     {
@@ -131,10 +131,10 @@ namespace Naos.FileJanitor.Domain
         /// Extracts the properties into a collection of <see cref="MetadataItem" />'s.
         /// </summary>
         /// <param name="archivedDirectory"><see cref="ArchivedDirectory" /> to get properties from.</param>
-        /// <returns>Collection of <see cref="MetadataItem" />'s</returns>
+        /// <returns>Collection of <see cref="MetadataItem" />'s.</returns>
         public static IReadOnlyCollection<MetadataItem> ToMetadataItemCollection(this ArchivedDirectory archivedDirectory)
         {
-            new { archivedDirectory }.Must().NotBeNull();
+            new { archivedDirectory }.AsArg().Must().NotBeNull();
 
             var ret = new[]
                           {

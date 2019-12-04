@@ -9,8 +9,8 @@ namespace Naos.FileJanitor.Domain
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using OBeautifulCode.Math.Recipes;
-    using OBeautifulCode.Validation.Recipes;
+    using OBeautifulCode.Assertion.Recipes;
+    using OBeautifulCode.Equality.Recipes;
 
     /// <summary>
     /// Model object to hold a metadata entry and allowing sharing a collection of them where <see cref="IReadOnlyDictionary{TKey,TValue}" /> cannot be used.
@@ -24,7 +24,7 @@ namespace Naos.FileJanitor.Domain
         /// <param name="value">Value value.</param>
         public MetadataItem(string key, string value)
         {
-            new { key }.Must().NotBeNull();
+            new { key }.AsArg().Must().NotBeNull();
 
             this.Key = key;
             this.Value = value;
@@ -58,7 +58,7 @@ namespace Naos.FileJanitor.Domain
                 return false;
             }
 
-            return string.Equals(first.Key, second.Key, StringComparison.OrdinalIgnoreCase) && 
+            return string.Equals(first.Key, second.Key, StringComparison.OrdinalIgnoreCase) &&
                    string.Equals(first.Value, second.Value, StringComparison.OrdinalIgnoreCase);
         }
 

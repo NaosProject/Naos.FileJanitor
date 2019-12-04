@@ -8,7 +8,7 @@ namespace Naos.FileJanitor.Domain
 {
     using System;
 
-    using OBeautifulCode.Validation.Recipes;
+    using OBeautifulCode.Assertion.Recipes;
 
     using static System.FormattableString;
 
@@ -35,7 +35,7 @@ namespace Naos.FileJanitor.Domain
         /// <inheritdoc cref="IArchiverFactory" />
         public IArchiveAndRestoreDirectory BuildArchiver(ArchivedDirectory archivedDirectory)
         {
-            new { archivedDirectory }.Must().NotBeNull();
+            new { archivedDirectory }.AsArg().Must().NotBeNull();
 
             return this.BuildArchiver(archivedDirectory.DirectoryArchiveKind, archivedDirectory.ArchiveCompressionKind);
         }
@@ -43,8 +43,8 @@ namespace Naos.FileJanitor.Domain
         /// <inheritdoc cref="IArchiverFactory" />
         public IArchiveAndRestoreDirectory BuildArchiver(DirectoryArchiveKind directoryArchiveKind, ArchiveCompressionKind archiveCompressionKind)
         {
-            new { directoryArchiveKind }.Must().NotBeEqualTo(DirectoryArchiveKind.Invalid);
-            new { archiveCompressionKind }.Must().NotBeEqualTo(ArchiveCompressionKind.Invalid);
+            new { directoryArchiveKind }.AsArg().Must().NotBeEqualTo(DirectoryArchiveKind.Invalid);
+            new { archiveCompressionKind }.AsArg().Must().NotBeEqualTo(ArchiveCompressionKind.Invalid);
 
             lock (this.sync)
             {
