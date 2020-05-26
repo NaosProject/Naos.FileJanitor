@@ -17,8 +17,8 @@ namespace Naos.FileJanitor.Test
 
     public static class SerializationTests
     {
-        private static readonly ObcBsonSerializer BsonSerializer = new ObcBsonSerializer(typeof(FileJanitorBsonConfiguration));
-        private static readonly ObcJsonSerializer JsonSerializer = new ObcJsonSerializer(typeof(FileJanitorJsonConfiguration));
+        private static readonly ObcBsonSerializer BsonSerializer = new ObcBsonSerializer(typeof(FileJanitorBsonSerializationConfiguration).ToBsonSerializationConfigurationType());
+        private static readonly ObcJsonSerializer JsonSerializer = new ObcJsonSerializer(typeof(FileJanitorJsonSerializationConfiguration).ToJsonSerializationConfigurationType());
 
         [Fact]
         public static void ArchivedDirectoryJanitor_Roundtrips()
