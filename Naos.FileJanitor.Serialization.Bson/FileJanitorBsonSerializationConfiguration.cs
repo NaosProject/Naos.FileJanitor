@@ -18,6 +18,12 @@ namespace Naos.FileJanitor.Serialization.Bson
     public class FileJanitorBsonSerializationConfiguration : BsonSerializationConfigurationBase
     {
         /// <inheritdoc />
+        protected override IReadOnlyCollection<string> TypeToRegisterNamespacePrefixFilters => new[]
+                                                                                               {
+                                                                                                   typeof(ArchivedDirectory).Namespace,
+                                                                                               };
+
+        /// <inheritdoc />
         protected override IReadOnlyCollection<TypeToRegisterForBson> TypesToRegisterForBson => new[]
         {
             typeof(ArchivedDirectory).ToTypeToRegisterForBson(),

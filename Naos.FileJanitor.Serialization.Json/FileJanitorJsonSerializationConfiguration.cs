@@ -19,6 +19,12 @@ namespace Naos.FileJanitor.Serialization.Json
     public class FileJanitorJsonSerializationConfiguration : JsonSerializationConfigurationBase
     {
         /// <inheritdoc />
+        protected override IReadOnlyCollection<string> TypeToRegisterNamespacePrefixFilters => new[]
+                                                                                               {
+                                                                                                   typeof(ArchivedDirectory).Namespace,
+                                                                                               };
+
+        /// <inheritdoc />
         protected override IReadOnlyCollection<TypeToRegisterForJson> TypesToRegisterForJson => new[]
         {
             typeof(ArchivedDirectory).ToTypeToRegisterForJson(),
