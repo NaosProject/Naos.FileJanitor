@@ -25,20 +25,21 @@ namespace Naos.FileJanitor.Domain
         /// <param name="archiveFilePath">Path to archive file.</param>
         /// <param name="includeBaseDirectory">Value indicating whether or not the base directory was included.</param>
         /// <param name="entryNameEncodingWebName">Encoding used for the entry names.</param>
-        /// <param name="archivedDateTimeUtc">Optional date time in UTC that the file was created; default is <see cref="DateTime.UtcNow" />.</param>
-        public ArchivedDirectory(DirectoryArchiveKind directoryArchiveKind, ArchiveCompressionKind archiveCompressionKind, string archiveFilePath, bool includeBaseDirectory, string entryNameEncodingWebName, DateTime archivedDateTimeUtc = default(DateTime))
+        /// <param name="archivedDateTimeUtc">Date time in UTC that the file was created; should default to <see cref="DateTime.UtcNow" /> when unknown.</param>
+        public ArchivedDirectory(DirectoryArchiveKind directoryArchiveKind, ArchiveCompressionKind archiveCompressionKind, string archiveFilePath, bool includeBaseDirectory, string entryNameEncodingWebName, DateTime archivedDateTimeUtc)
         {
             new { directoryArchiveKind }.AsArg().Must().NotBeEqualTo(DirectoryArchiveKind.Invalid);
             new { archiveCompressionKind }.AsArg().Must().NotBeEqualTo(ArchiveCompressionKind.Invalid);
             new { archiveFilePath }.AsArg().Must().NotBeNullNorWhiteSpace();
-            new { entryNameEncoding = entryNameEncodingWebName }.AsArg().Must().NotBeNull();
+            new { entryNameEncodingWebName }.AsArg().Must().NotBeNull();
+            new { archivedDateTimeUtc }.AsArg().Must().BeUtcDateTime();
 
             this.DirectoryArchiveKind = directoryArchiveKind;
             this.ArchiveFilePath = archiveFilePath;
             this.ArchiveCompressionKind = archiveCompressionKind;
             this.IncludeBaseDirectory = includeBaseDirectory;
             this.EntryNameEncodingWebName = entryNameEncodingWebName;
-            this.ArchivedDateTimeUtc = archivedDateTimeUtc == default(DateTime) ? DateTime.UtcNow : archivedDateTimeUtc;
+            this.ArchivedDateTimeUtc = archivedDateTimeUtc;
         }
 
         /// <summary>

@@ -38,7 +38,7 @@ namespace Naos.FileJanitor.Recipes
             AutoFixtureBackedDummyFactory.AddDummyCreator(
                 () =>
                 {
-                    var result = new ArchivedDirectory(A.Dummy<DirectoryArchiveKind>(), A.Dummy<ArchiveCompressionKind>(), A.Dummy<string>(), A.Dummy<bool>(), A.Dummy<Encoding>().WebName, A.Dummy<DateTime>());
+                    var result = new ArchivedDirectory(A.Dummy<DirectoryArchiveKind>(), A.Dummy<ArchiveCompressionKind>(), A.Dummy<string>(), A.Dummy<bool>(), A.Dummy<Encoding>().WebName, A.Dummy<DateTime>().ToUniversalTime());
 
                     return result;
                 });

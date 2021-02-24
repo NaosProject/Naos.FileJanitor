@@ -55,7 +55,7 @@ namespace Naos.FileJanitor.Domain
 
             ZipFile.CreateFromDirectory(sourcePath, targetFilePath, compressionLevel, includeBaseDirectory, localEntryNameEncoding);
 
-            var ret = new ArchivedDirectory(this.DirectoryArchiveKind, this.archiveCompressionKind, targetFilePath, includeBaseDirectory, localEntryNameEncoding.WebName);
+            var ret = new ArchivedDirectory(this.DirectoryArchiveKind, this.archiveCompressionKind, targetFilePath, includeBaseDirectory, localEntryNameEncoding.WebName, DateTime.UtcNow);
             return await Task.FromResult(ret);
         }
 
