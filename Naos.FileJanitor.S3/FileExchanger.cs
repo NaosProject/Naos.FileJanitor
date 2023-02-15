@@ -15,7 +15,7 @@ namespace Naos.FileJanitor.S3
     using System.Threading.Tasks;
 
     using ByteSizeLib;
-
+    using Naos.AWS.Domain;
     using Naos.AWS.S3;
     using Naos.FileJanitor.Domain;
 
