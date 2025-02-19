@@ -48,11 +48,11 @@
     <Reference Include="AWSSDK.SecurityToken, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
       <HintPath>..\packages\AWSSDK.SecurityToken.3.7.201.44\lib\net45\AWSSDK.SecurityToken.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.AWS.Domain, Version=1.0.94.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Naos.AWS.Domain.1.0.94\lib\net462\Naos.AWS.Domain.dll</HintPath>
+    <Reference Include="Naos.AWS.Domain, Version=1.0.95.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.AWS.Domain.1.0.95\lib\net462\Naos.AWS.Domain.dll</HintPath>
     </Reference>
-    <Reference Include="Naos.AWS.S3, Version=1.0.94.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Naos.AWS.S3.1.0.94\lib\net462\Naos.AWS.S3.dll</HintPath>
+    <Reference Include="Naos.AWS.S3, Version=1.0.95.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.AWS.S3.1.0.95\lib\net462\Naos.AWS.S3.dll</HintPath>
     </Reference>
     <Reference Include="Naos.Database.Domain, Version=1.1.426.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Naos.Database.Domain.1.1.426\lib\net462\Naos.Database.Domain.dll</HintPath>
